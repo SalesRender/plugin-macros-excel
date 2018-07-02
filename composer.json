@@ -1,0 +1,21 @@
+{
+  "name": "leadvertex/exports",
+  "description": "Generate any type output formats with selected configuration",
+  "type": "project",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Timur Kasumov aka XAKEPEHOK",
+      "email": "timur@leadvertex.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Leadvertex\\External\\Exports\\": "src/"
+    }
+  },
+  "require": {
+    "adbario/php-dot-notation": "^2.0"
+  }
+}
