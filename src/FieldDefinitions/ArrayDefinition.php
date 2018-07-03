@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class ArrayDefinition extends FieldDefinition
@@ -16,7 +16,7 @@ class ArrayDefinition extends FieldDefinition
      */
     protected $enum;
 
-    public function __construct($names, $descriptions, $default, $required, $enum = [])
+    public function __construct(array $names, array $descriptions, $default, bool $required, array $enum = [])
     {
         parent::__construct($names, $descriptions, $default, $required);
         $this->guardFlatArray($enum);
@@ -26,7 +26,7 @@ class ArrayDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'array';
     }
@@ -35,7 +35,7 @@ class ArrayDefinition extends FieldDefinition
      * @param array $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         return $this->required === false || count($value) > 0;
     }
@@ -48,7 +48,7 @@ class ArrayDefinition extends FieldDefinition
         return $this->enum;
     }
 
-    public function toArray($language)
+    public function toArray(string $language): array
     {
         $array = parent::toArray($language);
         $array['enum'] = $this->getEnum();

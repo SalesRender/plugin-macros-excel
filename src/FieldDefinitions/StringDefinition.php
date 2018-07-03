@@ -5,13 +5,13 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class StringDefinition extends FieldDefinition
 {
 
-    public function __construct($names, $descriptions, $default, $required)
+    public function __construct(array $names, array $descriptions, $default, bool $required)
     {
         $default = (string) $default;
         parent::__construct($names, $descriptions, $default, $required);
@@ -20,7 +20,7 @@ class StringDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'string';
     }
@@ -29,7 +29,7 @@ class StringDefinition extends FieldDefinition
      * @param string $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         $value = trim($value);
         return $this->required === false || strlen($value) > 0;

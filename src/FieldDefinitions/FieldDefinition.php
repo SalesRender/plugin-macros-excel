@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 abstract class FieldDefinition
@@ -24,7 +24,7 @@ abstract class FieldDefinition
      * @param string|int|float|bool|array|null $default value
      * @param bool $required is this field required
      */
-    public function __construct($names, $descriptions, $default, $required)
+    public function __construct(array $names, array $descriptions, $default, bool $required)
     {
         $this->names = $names;
         $this->descriptions = $descriptions;
@@ -37,7 +37,7 @@ abstract class FieldDefinition
      * @param string $language
      * @return string
      */
-    public function getName($language)
+    public function getName(string $language): string
     {
         return $this->getTranslation($this->names, $language);
     }
@@ -47,7 +47,7 @@ abstract class FieldDefinition
      * @param string $language
      * @return string
      */
-    public function getDescription($language)
+    public function getDescription(string $language): string
     {
         return $this->getTranslation($this->descriptions, $language);
     }
@@ -65,7 +65,7 @@ abstract class FieldDefinition
      * Does this field will be required
      * @return bool
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return $this->required;
     }
@@ -73,15 +73,15 @@ abstract class FieldDefinition
     /**
      * @return string
      */
-    abstract public function definition();
+    abstract public function definition(): string;
 
     /**
      * @param $value
      * @return bool
      */
-    abstract public function validateValue($value);
+    abstract public function validateValue($value): bool;
 
-    public function toArray($language)
+    public function toArray(string $language): array
     {
         return [
             'definition' => $this->definition(),
@@ -92,7 +92,7 @@ abstract class FieldDefinition
         ];
     }
 
-    protected function getTranslation($array, $language)
+    protected function getTranslation(array $array, string $language): string
     {
         if (isset($array[$language])) {
             return $array[$language];

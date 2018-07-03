@@ -1,11 +1,18 @@
 <?php
 /**
  * Created for lv-exports.
- * Datetime: 02.07.2018 15:28
+ * Datetime: 03.07.2018 12:53
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-class Excel extends \Leadvertex\External\Exports\ExportDefinition
+namespace Leadvertex\External\Export\Format\Excel;
+
+
+use Leadvertex\External\Export\App\FormatDefinition;
+use Leadvertex\External\Export\App\FieldDefinitions\ArrayDefinition;
+use Leadvertex\External\Export\App\FieldDefinitions\DropdownDefinition;
+
+class Excel extends FormatDefinition
 {
 
     public function __construct()
@@ -17,7 +24,7 @@ class Excel extends \Leadvertex\External\Exports\ExportDefinition
                 'ru' => 'Выгружает заказы в excel файл',
             ],
             [
-                'columns' => new \Leadvertex\External\Exports\FieldDefinitions\ArrayDefinition(
+                'columns' => new ArrayDefinition(
                     [
                         'en' => 'Columns to export',
                         'ru' => 'Колонки для выгрузки',
@@ -30,7 +37,7 @@ class Excel extends \Leadvertex\External\Exports\ExportDefinition
                     true,
                     ['firstName', 'lastName', 'phone', 'email', 'additional_1', 'additional_2']
                 ),
-                'format' => new \Leadvertex\External\Exports\FieldDefinitions\DropdownDefinition(
+                'format' => new DropdownDefinition(
                     [
                         'en' => 'File format',
                         'ru' => 'Формат файла',

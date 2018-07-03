@@ -5,13 +5,13 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class IntegerDefinition extends FieldDefinition
 {
 
-    public function __construct(array $names, array $descriptions, $default, $required)
+    public function __construct(array $names, array $descriptions, $default, bool $required)
     {
         $default = (int) $default;
         parent::__construct($names, $descriptions, $default, $required);
@@ -20,7 +20,7 @@ class IntegerDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'integer';
     }
@@ -29,7 +29,7 @@ class IntegerDefinition extends FieldDefinition
      * @param int $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         $strValue = (string) (int) $value;
         return $this->required === false || strlen($strValue) > 0;

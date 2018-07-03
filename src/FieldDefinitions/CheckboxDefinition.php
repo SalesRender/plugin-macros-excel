@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class CheckboxDefinition extends FieldDefinition
@@ -14,7 +14,7 @@ class CheckboxDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'checkbox';
     }
@@ -23,7 +23,7 @@ class CheckboxDefinition extends FieldDefinition
      * @param bool $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         $value = (bool) $value;
         return $this->required === false || $value === true;

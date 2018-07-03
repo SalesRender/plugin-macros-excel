@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class DropdownDefinition extends FieldDefinition
@@ -26,7 +26,7 @@ class DropdownDefinition extends FieldDefinition
      * @param string|int|float|bool|null $default value
      * @param bool $required is this field required
      */
-    public function __construct($names, $descriptions, $dropdownItems, $default, $required)
+    public function __construct(array $names, array $descriptions, array $dropdownItems, $default, bool $required)
     {
         $this->dropdownItems = $dropdownItems;
         parent::__construct($names, $descriptions, $default, $required);
@@ -41,7 +41,7 @@ class DropdownDefinition extends FieldDefinition
      * @param string $language
      * @return string
      */
-    public function getDropdownItems($language)
+    public function getDropdownItems(string $language): array
     {
         return array_map(function ($value) use ($language){
             return $this->getTranslation($value, $language);
@@ -51,12 +51,12 @@ class DropdownDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'dropdown';
     }
 
-    public function toArray($language)
+    public function toArray(string $language): array
     {
         $array = parent::toArray($language);
         $array['dropdownItems'] = $this->getDropdownItems($language);
@@ -67,7 +67,7 @@ class DropdownDefinition extends FieldDefinition
      * @param string|int|float|null $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         return $this->required === false || isset($this->dropdownItems[$value]);
     }

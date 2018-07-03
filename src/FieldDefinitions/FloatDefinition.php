@@ -5,13 +5,13 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports\FieldDefinitions;
+namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
 class FloatDefinition extends FieldDefinition
 {
 
-    public function __construct(array $names, array $descriptions, $default, $required)
+    public function __construct(array $names, array $descriptions, $default, bool $required)
     {
         $default = (float) $default;
         parent::__construct($names, $descriptions, $default, $required);
@@ -20,7 +20,7 @@ class FloatDefinition extends FieldDefinition
     /**
      * @return string
      */
-    public function definition()
+    public function definition(): string
     {
         return 'float';
     }
@@ -29,7 +29,7 @@ class FloatDefinition extends FieldDefinition
      * @param float $value
      * @return bool
      */
-    public function validateValue($value)
+    public function validateValue($value): bool
     {
         $strValue = (string) (float) $value;
         return $this->required === false || strlen($strValue) > 0;

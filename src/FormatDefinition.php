@@ -5,16 +5,15 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Exports;
+namespace Leadvertex\External\Export\App;
 
 
-use Leadvertex\External\Exports\FieldDefinitions\FieldDefinition;
+use Leadvertex\External\Export\App\FieldDefinitions\FieldDefinition;
 use TypeError;
 
-abstract class ExportDefinition
+abstract class FormatDefinition
 {
 
-    protected $id;
     protected $names = [];
     protected $descriptions = [];
     protected $fields = [];
@@ -26,7 +25,7 @@ abstract class ExportDefinition
      * @param string[] $descriptions . Export description in different languages. Same behavior, as $names
      * @param FieldDefinition[] $fieldDefinitions
      */
-    public function __construct($names, $descriptions, $fieldDefinitions)
+    public function __construct(array $names, array $descriptions, array $fieldDefinitions)
     {
         $this->names = $names;
         $this->descriptions = $descriptions;
@@ -37,17 +36,6 @@ abstract class ExportDefinition
             }
             $this->fields[$fieldName] = $fieldDefinition;
         }
-
-        $this->id = substr(strrchr(get_class($this), '\\'), 1);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -55,7 +43,7 @@ abstract class ExportDefinition
      * @param string $language
      * @return string
      */
-    public function getName($language)
+    public function getName(string $language): string
     {
         return $this->getTranslation($this->names, $language);
     }
@@ -65,7 +53,7 @@ abstract class ExportDefinition
      * @param string $language
      * @return string
      */
-    public function getDescription($language)
+    public function getDescription(string $language): string
     {
         return $this->getTranslation($this->descriptions, $language);
     }
@@ -73,7 +61,7 @@ abstract class ExportDefinition
     /**
      * @return FieldDefinition[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -82,10 +70,9 @@ abstract class ExportDefinition
      * @param string $language
      * @return array
      */
-    public function toArray($language)
+    public function toArray(string $language): array
     {
         $array = [
-            'id' => $this->getId(),
             'name' => $this->getName($language),
             'description' => $this->getDescription($language),
             'fields' => [],
@@ -98,7 +85,7 @@ abstract class ExportDefinition
         return $array;
     }
 
-    protected function getTranslation($array, $language)
+    protected function getTranslation(array $array, string $language): string
     {
         if (isset($array[$language])) {
             return $array[$language];
