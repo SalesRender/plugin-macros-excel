@@ -8,63 +8,302 @@
 namespace Leadvertex\External\Export\Format\Excel;
 
 
-use Leadvertex\External\Export\App\FormatDefinition;
+use Adbar\Dot;
+use Leadvertex\External\Export\App\Components\ApiParams;
+use Leadvertex\External\Export\App\Components\StoredConfig;
+use Leadvertex\External\Export\App\Components\GenerateParams;
+use Leadvertex\External\Export\App\FieldDefinitions\CheckboxDefinition;
+use Leadvertex\External\Export\App\Scheme;
 use Leadvertex\External\Export\App\FieldDefinitions\ArrayDefinition;
 use Leadvertex\External\Export\App\FieldDefinitions\DropdownDefinition;
+use Leadvertex\External\Export\Format\FormatterInterface;
+use Softonic\GraphQL\Client;
+use Softonic\GraphQL\ClientBuilder;
 
-class Excel extends FormatDefinition
+class Excel implements FormatterInterface
 {
 
-    public function __construct()
+    /** @var Scheme */
+    private $scheme;
+    /**
+     * @var ApiParams
+     */
+    private $apiParams;
+
+    public function __construct(ApiParams $apiParams)
     {
-        parent::__construct(
-            ['Excel'],
-            [
-                'en' => 'Export orders to excel file',
-                'ru' => 'Выгружает заказы в excel файл',
-            ],
-            [
-                'columns' => new ArrayDefinition(
-                    [
-                        'en' => 'Columns to export',
-                        'ru' => 'Колонки для выгрузки',
-                    ],
-                    [
-                        'en' => 'Columns with this order will be exported to excel table',
-                        'ru' => 'Колонки будут выгружены в таблицу excel в заданной последовательности',
-                    ],
-                    ['firstName', 'lastName', 'phone'],
-                    true,
-                    ['firstName', 'lastName', 'phone', 'email', 'additional_1', 'additional_2']
-                ),
-                'format' => new DropdownDefinition(
-                    [
-                        'en' => 'File format',
-                        'ru' => 'Формат файла',
-                    ],
-                    [
-                        'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
-                        'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
-                    ],
-                    [
-                        'csv' => [
-                            'en' => '*.csv - simple plain text format',
-                            'ru' => '*.csv - простой текстовый формат',
-                        ],
-                        'xls' => [
-                            'en' => '*.xls - Excel 2003',
-                            'ru' => '*.xls - Формат Excel 2003',
-                        ],
-                        'xlsx' => [
-                            'en' => '*.xls - Excel 2007 and newer',
-                            'ru' => '*.xls - Формат Excel 2007 и новее',
-                        ],
-                    ],
-                    'csv',
-                    true
-                ),
-            ]
-        );
+        $this->apiParams = $apiParams;
     }
 
+    public function getScheme(): Scheme
+    {
+        if (!$this->scheme) {
+            $fields = $this->getFields();
+            $this->scheme = new Scheme(
+                ['Excel'],
+                [
+                    'en' => 'Export orders to excel file',
+                    'ru' => 'Выгружает заказы в excel файл',
+                ],
+                [
+                    'fields' => new ArrayDefinition(
+                        [
+                            'en' => 'Fields to export',
+                            'ru' => 'Поля для выгрузки',
+                        ],
+                        [
+                            'en' => 'Fields with this order will be exported to excel table',
+                            'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
+                        ],
+                        ['id', 'project.id', 'project.name', 'status.id', 'status.name'],
+                        true,
+                        $fields
+                    ),
+                    'format' => new DropdownDefinition(
+                        [
+                            'en' => 'File format',
+                            'ru' => 'Формат файла',
+                        ],
+                        [
+                            'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
+                            'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
+                        ],
+                        [
+                            'csv' => [
+                                'en' => '*.csv - simple plain text format',
+                                'ru' => '*.csv - простой текстовый формат',
+                            ],
+                            'xls' => [
+                                'en' => '*.xls - Excel 2003',
+                                'ru' => '*.xls - Формат Excel 2003',
+                            ],
+                            'xlsx' => [
+                                'en' => '*.xls - Excel 2007 and newer',
+                                'ru' => '*.xls - Формат Excel 2007 и новее',
+                            ],
+                        ],
+                        'csv',
+                        true
+                    ),
+                    'headers' => new CheckboxDefinition(
+                        [
+                            'en' => 'Column names',
+                            'ru' => 'Названия колонок',
+                        ],
+                        [
+                            'en' => 'Add column names at first wor',
+                            'ru' => 'Добавлять названия колонок на первой строчке',
+                        ],
+                        true,
+                        true
+                    )
+                ]
+            );
+        }
+        return $this->scheme;
+    }
+
+    public function isConfigValid(StoredConfig $config): bool
+    {
+        if (!$config->has('fields')) {
+            return false;
+        }
+
+        $fields = $config->get('fields', []);
+        if (!empty(array_diff($fields, $this->getFields()))) {
+            return false;
+        }
+
+        $useHeaders = $config->get(
+            'headers',
+            $this->getScheme()->getField('headers')->getDefaultValue()
+        );
+
+        if (!is_bool($useHeaders)) {
+            return false;
+        }
+
+        $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
+        $format = $config->get('format', $defaultFormat);
+        if (!in_array($format, ['csv', 'xls', 'xlsx'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function generate(GenerateParams $params)
+    {
+        $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
+        $format = $params->getConfig()->get('format', $defaultFormat);
+        $prefix = $params->getBatchParams()->getToken();
+        $filePath = __DIR__ . '/../../web/compiled/' . $prefix . '.' . $format;
+        switch ($format) {
+            case 'csv':
+                $csv = fopen($filePath, 'w');
+
+                $useHeaders = $params->getConfig()->get(
+                    'headers',
+                    $this->getScheme()->getField('headers')->getDefaultValue()
+                );
+
+                if ($useHeaders) {
+                    fputcsv($csv, $params->getConfig()->get('fields'));
+                }
+
+                foreach ($params->getChunkedIds()->getChunks() as $ids) {
+                    $rows = $this->getOrderDataAsArray($params->getConfig(), $ids);
+                    foreach ($rows as $row) {
+                        fputcsv($csv, $row);
+                    }
+                }
+                fclose($csv);
+                break;
+            case 'xls':
+                break;
+            case 'xlsx':
+                break;
+        }
+    }
+
+    public function getApiParams(): ApiParams
+    {
+        return $this->apiParams;
+    }
+
+    private function getOrderDataAsArray(StoredConfig $config, array $ids): array
+    {
+        $pageSize = count($ids);
+        $ids = implode(',', $ids);
+
+        $fields = [];
+        foreach ($config->get('fields') as $field) {
+            $items = array_reverse(explode('.', $field));
+            $tree = [];
+            foreach ($items as $item) {
+                if (empty($tree)) {
+                    $tree[] = $item;
+                } else {
+                    $tree = [$item => $tree];
+                }
+            }
+            $fields = array_merge_recursive($fields, $tree);
+        }
+
+        $fields = json_encode($fields);
+        $fields = preg_replace('~"\d+":~', '', $fields);
+        $fields = str_replace(['"', ':'], '', $fields);
+        $fields = str_replace(['[', ']'], ['{', '}'], $fields);
+
+        $query = <<<QUERY
+query {
+  company(token: "{$this->apiParams->getToken()}") {
+     ordersFetcher(pagination: {pageNumber: 1, pageSize: {$pageSize}}, filters: {ids: [{$ids}]}) {
+       orders {$fields}
+     }
+  }
+}
+QUERY;
+
+        $response = $this->getGraphQLClient()->query($query)->getData();
+        $orders = [];
+        foreach ($response['company']['ordersFetcher']['orders'] as $order) {
+            $dot = new Dot($order);
+            $orders[] = $dot->flatten('.');
+        }
+
+        return $orders;
+    }
+
+    private function getFields(): array
+    {
+        $query = <<<QUERY
+query {
+  company(token:"{$this->apiParams->getToken()}") {
+    fieldsFetcher {
+      fields {
+        name
+        definition {
+          __typename
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->getGraphQLClient()->query($query)->getData();
+        $fields = [];
+        foreach ($response['company']['fieldsFetcher']['fields'] as $fieldData) {
+            $name = $fieldData['name'];
+            switch ($fieldData['definition']['__typename']) {
+                case 'CheckboxFieldDefinition':
+                case 'DatetimeFieldDefinition':
+                case 'DropdownFieldDefinition':
+                case 'EmailFieldDefinition':
+                case 'FileFieldDefinition':
+                case 'FloatFieldDefinition':
+                case 'ImageFieldDefinition':
+                case 'IntFieldDefinition':
+                case 'PhoneFieldDefinition':
+                case 'StringFieldDefinition':
+                    $fields[] = "orderData.{$name}";
+                    break;
+                case 'AddressFieldDefinition':
+                    $fields[] = "orderData.{$name}.postcode";
+                    $fields[] = "orderData.{$name}.region";
+                    $fields[] = "orderData.{$name}.city";
+                    $fields[] = "orderData.{$name}.address_1";
+                    $fields[] = "orderData.{$name}.address_2";
+                    break;
+                case 'HumanNameFieldDefinition':
+                    $fields[] = "orderData.{$name}.firstName";
+                    $fields[] = "orderData.{$name}.lastName";
+                    break;
+                case 'UserFieldDefinition':
+                    $fields[] = "orderData.{$name}.id";
+                    $fields[] = "orderData.{$name}.name.firstName";
+                    $fields[] = "orderData.{$name}.name.lastName";
+                    $fields[] = "orderData.{$name}.email";
+                    break;
+            }
+        }
+
+        return array_merge([
+            'id',
+            'project.id',
+            'project.name',
+            'status.id',
+            'status.name',
+            'status.group',
+            'statusChangedAt',
+            'createdAt',
+            'updatedAt',
+            'canceledAt',
+            'approvedAt',
+            'shippedAt',
+            'deliveredAt',
+            'undeliveredAt',
+            'refundedAt',
+            'warehouse.id',
+            'warehouse.name',
+            "initCartPrice",
+            "cart.totalPrice",
+            'source.url',
+            'source.refererUrl',
+            'source.ip',
+            'source.utm_source',
+            'source.utm_medium',
+            'source.utm_campaign',
+            'source.utm_content',
+            'source.utm_term',
+            'source.subid_1',
+            'source.subid_2',
+        ], $fields);
+    }
+
+    private function getGraphQLClient(): Client
+    {
+        return ClientBuilder::build($this->apiParams->getEndpointUrl());
+    }
 }

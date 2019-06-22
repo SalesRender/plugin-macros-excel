@@ -11,7 +11,7 @@ namespace Leadvertex\External\Export\App;
 use Leadvertex\External\Export\App\FieldDefinitions\FieldDefinition;
 use TypeError;
 
-abstract class FormatDefinition
+class Scheme
 {
 
     protected $names = [];
@@ -59,6 +59,15 @@ abstract class FormatDefinition
     }
 
     /**
+     * @param string $name
+     * @return FieldDefinition
+     */
+    public function getField(string $name): FieldDefinition
+    {
+        return $this->fields[$name];
+    }
+
+    /**
      * @return FieldDefinition[]
      */
     public function getFields(): array
@@ -67,19 +76,18 @@ abstract class FormatDefinition
     }
 
     /**
-     * @param string $language
      * @return array
      */
-    public function toArray(string $language): array
+    public function toArray(): array
     {
         $array = [
-            'name' => $this->getName($language),
-            'description' => $this->getDescription($language),
+            'name' => $this->names,
+            'description' => $this->descriptions,
             'fields' => [],
         ];
 
         foreach ($this->getFields() as $fieldName => $fieldDefinition) {
-            $array['fields'][$fieldName] = $fieldDefinition->toArray($language);
+            $array['fields'][$fieldName] = $fieldDefinition->toArray();
         }
 
         return $array;

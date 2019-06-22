@@ -8,6 +8,8 @@
 namespace Leadvertex\External\Export\App\FieldDefinitions;
 
 
+use InvalidArgumentException;
+
 class ArrayDefinition extends FieldDefinition
 {
 
@@ -48,9 +50,9 @@ class ArrayDefinition extends FieldDefinition
         return $this->enum;
     }
 
-    public function toArray(string $language): array
+    public function toArray(): array
     {
-        $array = parent::toArray($language);
+        $array = parent::toArray();
         $array['enum'] = $this->getEnum();
         return $array;
     }
@@ -58,7 +60,7 @@ class ArrayDefinition extends FieldDefinition
     private function guardFlatArray($array)
     {
         if (count($array) !== count($array, COUNT_RECURSIVE)) {
-            throw new \InvalidArgumentException('Array enum should be flat');
+            throw new InvalidArgumentException('Array enum should be flat');
         }
     }
 }

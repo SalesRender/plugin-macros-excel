@@ -32,27 +32,7 @@ abstract class FieldDefinition
         $this->required = $required;
     }
 
-    /**
-     * Return property name in passed language. If passed language was not defined, will return name in default language
-     * @param string $language
-     * @return string
-     */
-    public function getName(string $language): string
-    {
-        return $this->getTranslation($this->names, $language);
-    }
-
-    /**
-     * Return property description in passed language. If passed language was not defined, will return description in default language
-     * @param string $language
-     * @return string
-     */
-    public function getDescription(string $language): string
-    {
-        return $this->getTranslation($this->descriptions, $language);
-    }
-
-    /**
+        /**
      * Value, witch will be used as default
      * @return string|int|float|bool|array|null
      */
@@ -81,12 +61,12 @@ abstract class FieldDefinition
      */
     abstract public function validateValue($value): bool;
 
-    public function toArray(string $language): array
+    public function toArray(): array
     {
         return [
             'definition' => $this->definition(),
-            'name' => $this->getName($language),
-            'description' => $this->getDescription($language),
+            'name' => $this->names,
+            'description' => $this->descriptions,
             'default' => $this->default,
             'required' => (bool) $this->required,
         ];

@@ -20,8 +20,8 @@ class DropdownDefinition extends FieldDefinition
      * @param string[] $descriptions . Property description in different languages. Same behavior, as $names
      * @param array $dropdownItems witch represent value => caption dropdown in different languages. First language are default.
      * For example (en will be default): array(
-        '01' => array('en' => 'January', 'ru' => 'Январь'),
-        '02' => array('en' => 'February', 'ru' => 'Февраль'),
+     * '01' => array('en' => 'January', 'ru' => 'Январь'),
+     * '02' => array('en' => 'February', 'ru' => 'Февраль'),
      * )
      * @param string|int|float|bool|null $default value
      * @param bool $required is this field required
@@ -33,22 +33,6 @@ class DropdownDefinition extends FieldDefinition
     }
 
     /**
-     * Return dropdown in passed language. If passed language was not defined, will return name in default language.
-     * For example: array (
-        '01' => January',
-        '02' => February',
-     * )
-     * @param string $language
-     * @return string
-     */
-    public function getDropdownItems(string $language): array
-    {
-        return array_map(function ($value) use ($language){
-            return $this->getTranslation($value, $language);
-        }, $this->dropdownItems);
-    }
-
-    /**
      * @return string
      */
     public function definition(): string
@@ -56,10 +40,10 @@ class DropdownDefinition extends FieldDefinition
         return 'dropdown';
     }
 
-    public function toArray(string $language): array
+    public function toArray(): array
     {
-        $array = parent::toArray($language);
-        $array['dropdownItems'] = $this->getDropdownItems($language);
+        $array = parent::toArray();
+        $array['dropdownItems'] = $this->dropdownItems;
         return $array;
     }
 
