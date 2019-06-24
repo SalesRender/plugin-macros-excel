@@ -1,5 +1,5 @@
 {
-  "name": "leadvertex/exports",
+  "name": "leadvertex/lv-export-app",
   "description": "Generate any type output formats with selected configuration",
   "type": "project",
   "minimum-stability": "stable",
