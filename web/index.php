@@ -103,7 +103,7 @@ $app->map(['GENERATE'], $urlPattern,function (Request $request, Response $respon
         new ChunkedIds($request->getParsedBodyParam('ids'))
     );
 
-    $tokensDir = __DIR__ . implode(DIRECTORY_SEPARATOR, ['..', 'runtime', 'tokens']);
+    $tokensDir = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..', 'runtime', 'tokens']);
     $handler = new DeferredRunner($tokensDir);
     $handler->prepend($formatter, $params);
 

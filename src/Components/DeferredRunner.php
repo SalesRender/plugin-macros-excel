@@ -19,7 +19,7 @@ class DeferredRunner
 
     public function __construct(string $directory)
     {
-        $this->directory = realpath($directory);
+        $this->directory = $directory;
         if (mb_substr($directory, -1) !== DIRECTORY_SEPARATOR) {
             $this->directory.= DIRECTORY_SEPARATOR;
         }

@@ -27,7 +27,7 @@ class BackgroundCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tokensDir = __DIR__ . implode(DIRECTORY_SEPARATOR, ['runtime', 'tokens']);
+        $tokensDir = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..','..','runtime', 'tokens']);
         $handler = new DeferredRunner($tokensDir);
         $handler->run($input->getArgument('token'));
     }
