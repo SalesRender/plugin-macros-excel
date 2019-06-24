@@ -25,6 +25,7 @@
     "symfony/console": "^4.3",
     "softonic/graphql-client": "^1.2",
     "phpoffice/phpspreadsheet": "^1.7",
-    "symfony/process": "^4.3"
+    "symfony/process": "^4.3",
+    "webmozart/path-util": "^2.3"
   }
 }

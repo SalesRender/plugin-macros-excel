@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\PathUtil\Path;
 
 class CleanUpCommand extends Command
 {
@@ -30,14 +31,14 @@ class CleanUpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->cleanUp(
-            __DIR__ . '/../../runtime',
+            Path::canonicalize(__DIR__ . '/../../runtime'),
             $input->getArgument('hours'),
             ['.gitignore'],
             $output
         );
 
         $this->cleanUp(
-            __DIR__ . '/../../web/compiled',
+            Path::canonicalize(  __DIR__ . '/../../web/compiled'),
             $input->getArgument('hours'),
             ['.gitignore'],
             $output

@@ -15,14 +15,12 @@ use Leadvertex\External\Export\App\Scheme;
 interface FormatterInterface
 {
 
-    public function __construct(ApiParams $apiParams);
+    public function __construct(ApiParams $apiParams, string $runtimeDir, string $outputDir);
 
     public function getScheme(): Scheme;
 
     public function isConfigValid(StoredConfig $config): bool;
 
     public function generate(GenerateParams $params);
-
-    public function getApiParams(): ApiParams;
 
 }

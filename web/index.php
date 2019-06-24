@@ -15,32 +15,23 @@ use Leadvertex\External\Export\Format\FormatterInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Symfony\Component\Process\Process;
+use Webmozart\PathUtil\Path;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
-$format = 'Excel';
-$lang = 'ru';
 
 $app = new Slim\App([
     'settings' => [
         'addContentLengthHeader' => true,
         'displayErrorDetails' => true,
+
     ],
 ]);
 
-$app->add(function (Request $request, Response $response, callable $next) {
-    $timezone = $request->getQueryParam('timezone', 'UTC');
-    if (!in_array($timezone, timezone_identifiers_list())) {
-        throw new InvalidArgumentException('Trying to select unavailable timezone');
-    }
-    date_default_timezone_set($timezone);
-    $response = $next($request, $response);
-    return $response;
-});
-
+$runtimeDir = Path::canonicalize(__DIR__ . '/../runtime/');
+$outputDir = Path::canonicalize(__DIR__ . '/compiled/');
 $urlPattern = '/{formatter:[a-zA-Z][a-zA-Z\d_]*}';
 
-$app->map(['CONFIG'], $urlPattern,function (Request $request, Response $response, $args) {
+$app->map(['CONFIG'], $urlPattern,function (Request $request, Response $response, $args) use ($runtimeDir, $outputDir) {
     $format = $args['formatter'];
 
     $apiParams = new ApiParams(
@@ -50,14 +41,14 @@ $app->map(['CONFIG'], $urlPattern,function (Request $request, Response $response
 
     $classname = "\Leadvertex\External\Export\Format\\{$format}\\{$format}";
     /** @var FormatterInterface $formatter */
-    $formatter = new $classname($apiParams);
+    $formatter = new $classname($apiParams, $runtimeDir, $outputDir);
     return $response->withJson(
         $formatter->getScheme()->toArray(),
         200
     );
 });
 
-$app->map(['VALIDATE'], $urlPattern,function (Request $request, Response $response, $args) {
+$app->map(['VALIDATE'], $urlPattern,function (Request $request, Response $response, $args) use ($runtimeDir, $outputDir) {
     $formatter = $args['formatter'];
 
     $apiParams = new ApiParams(
@@ -71,7 +62,7 @@ $app->map(['VALIDATE'], $urlPattern,function (Request $request, Response $respon
 
     $classname = "\Leadvertex\External\Export\Format\\{$formatter}\\{$formatter}";
     /** @var FormatterInterface $formatter */
-    $formatter = new $classname($apiParams);
+    $formatter = new $classname($apiParams, $runtimeDir, $outputDir);
     if ($formatter->isConfigValid($config)) {
         return $response->withJson(['valid' => true],200);
     } else {
@@ -79,16 +70,20 @@ $app->map(['VALIDATE'], $urlPattern,function (Request $request, Response $respon
     }
 });
 
-$app->map(['GENERATE'], $urlPattern,function (Request $request, Response $response, $args) {
+$app->map(['GENERATE'], $urlPattern,function (Request $request, Response $response, $args) use ($runtimeDir, $outputDir) {
 
     $formatter = $args['formatter'];
     $classname = "\Leadvertex\External\Export\Format\\{$formatter}\\{$formatter}";
 
     /** @var FormatterInterface $formatter */
-    $formatter = new $classname(new ApiParams(
-        $request->getParsedBodyParam('api')['token'],
-        $request->getParsedBodyParam('api')['endpointUrl']
-    ));
+    $formatter = new $classname(
+        new ApiParams(
+            $request->getParsedBodyParam('api')['token'],
+            $request->getParsedBodyParam('api')['endpointUrl']
+        ),
+        $runtimeDir,
+        $outputDir
+    );
 
     $batchToken = $request->getParsedBodyParam('batch')['token'];
     $params = new GenerateParams(
@@ -103,13 +98,11 @@ $app->map(['GENERATE'], $urlPattern,function (Request $request, Response $respon
         new ChunkedIds($request->getParsedBodyParam('ids'))
     );
 
-    $tokensDir = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..', 'runtime', 'tokens']);
+    $tokensDir = Path::canonicalize(__DIR__ . '/../runtime/tokens');
     $handler = new DeferredRunner($tokensDir);
     $handler->prepend($formatter, $params);
 
     $command = 'php ' . __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "console.php app:background {$batchToken}";
-//    $process = new Process([$command]);
-//    $process->start();
     exec($command);
 
     return $response->withJson(['result' => true],200);

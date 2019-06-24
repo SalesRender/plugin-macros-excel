@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\PathUtil\Path;
 
 class BackgroundCommand extends Command
 {
@@ -27,7 +28,7 @@ class BackgroundCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tokensDir = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..','..','runtime', 'tokens']);
+        $tokensDir = Path::canonicalize(__DIR__ . '/../../runtime/tokens');
         $handler = new DeferredRunner($tokensDir);
         $handler->run($input->getArgument('token'));
     }

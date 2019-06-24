@@ -8,6 +8,7 @@ namespace Leadvertex\External\Export\App\Components;
 
 
 use Leadvertex\External\Export\Format\FormatterInterface;
+use Webmozart\PathUtil\Path;
 
 class DeferredRunner
 {
@@ -20,9 +21,6 @@ class DeferredRunner
     public function __construct(string $directory)
     {
         $this->directory = $directory;
-        if (mb_substr($directory, -1) !== DIRECTORY_SEPARATOR) {
-            $this->directory.= DIRECTORY_SEPARATOR;
-        }
     }
 
     public function prepend(FormatterInterface $formatter, GenerateParams $params)
@@ -56,11 +54,11 @@ class DeferredRunner
 
     private function getFilePath(string $token)
     {
-        $dir = $this->directory . substr($token, 0, 2) . DIRECTORY_SEPARATOR;
+        $dir = Path::canonicalize($this->directory . '/' . substr($token, 0, 2));
         if (!is_dir($dir)) {
             mkdir($dir, 0666, true);
         }
-        $path = $dir . "{$token}.json";
+        $path = Path::canonicalize("{$dir}/{$token}.json");
         return $path;
     }
 

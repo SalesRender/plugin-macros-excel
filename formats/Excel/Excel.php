@@ -19,6 +19,7 @@ use Leadvertex\External\Export\App\FieldDefinitions\DropdownDefinition;
 use Leadvertex\External\Export\Format\FormatterInterface;
 use Softonic\GraphQL\Client;
 use Softonic\GraphQL\ClientBuilder;
+use Webmozart\PathUtil\Path;
 
 class Excel implements FormatterInterface
 {
@@ -29,10 +30,20 @@ class Excel implements FormatterInterface
      * @var ApiParams
      */
     private $apiParams;
+    /**
+     * @var string
+     */
+    private $runtimeDir;
+    /**
+     * @var string
+     */
+    private $outputDir;
 
-    public function __construct(ApiParams $apiParams)
+    public function __construct(ApiParams $apiParams, string $runtimeDir, string $outputDir)
     {
         $this->apiParams = $apiParams;
+        $this->runtimeDir = $runtimeDir;
+        $this->outputDir = $outputDir;
     }
 
     public function getScheme(): Scheme
@@ -137,7 +148,7 @@ class Excel implements FormatterInterface
         $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
         $format = $params->getConfig()->get('format', $defaultFormat);
         $prefix = $params->getBatchParams()->getToken();
-        $filePath = __DIR__ . '/../../web/compiled/' . $prefix . '.' . $format;
+        $filePath = Path::canonicalize("{$this->outputDir}/{$prefix}.{$format}");
         switch ($format) {
             case 'csv':
                 $csv = fopen($filePath, 'w');
@@ -164,11 +175,6 @@ class Excel implements FormatterInterface
             case 'xlsx':
                 break;
         }
-    }
-
-    public function getApiParams(): ApiParams
-    {
-        return $this->apiParams;
     }
 
     private function getOrderDataAsArray(StoredConfig $config, array $ids): array
