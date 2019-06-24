@@ -14,7 +14,6 @@ use Leadvertex\External\Export\App\Components\GenerateParams;
 use Leadvertex\External\Export\Format\FormatterInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Symfony\Component\Process\Process;
 use Webmozart\PathUtil\Path;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -102,8 +101,15 @@ $app->map(['GENERATE'], $urlPattern,function (Request $request, Response $respon
     $handler = new DeferredRunner($tokensDir);
     $handler->prepend($formatter, $params);
 
-    $command = 'php ' . __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "console.php app:background {$batchToken}";
-    exec($command);
+    $script = Path::canonicalize(__DIR__ . '/../console.php');
+    $command = "php {$script} app:background {$batchToken}";;
+
+    $isWindowsOS = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    if ($isWindowsOS) {
+        pclose(popen("start /B {$command}", "r"));
+    } else {
+        exec("{$command} > /dev/null &");
+    }
 
     return $response->withJson(['result' => true],200);
 });
