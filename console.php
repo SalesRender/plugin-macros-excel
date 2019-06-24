@@ -2,11 +2,11 @@
 <?php
 require __DIR__.'/vendor/autoload.php';
 
-use Leadvertex\External\Export\App\Commands\BackgroundCommand;
-use Leadvertex\External\Export\App\Commands\CleanUpCommand;
-use Symfony\Component\Console\Application;
+use Leadvertex\External\Export\Core\Apps\ConsoleApplication;
+use Webmozart\PathUtil\Path;
 
-$application = new Application();
-$application->add(new CleanUpCommand());
-$application->add(new BackgroundCommand());
+$application = new ConsoleApplication(
+    Path::canonicalize(__DIR__ . '/runtime'),
+    Path::canonicalize(__DIR__ . '/web/compiled')
+);
 $application->run();

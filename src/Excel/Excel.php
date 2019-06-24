@@ -9,14 +9,15 @@ namespace Leadvertex\External\Export\Format\Excel;
 
 
 use Adbar\Dot;
-use Leadvertex\External\Export\App\Components\ApiParams;
-use Leadvertex\External\Export\App\Components\StoredConfig;
-use Leadvertex\External\Export\App\Components\GenerateParams;
-use Leadvertex\External\Export\App\FieldDefinitions\CheckboxDefinition;
-use Leadvertex\External\Export\App\Scheme;
-use Leadvertex\External\Export\App\FieldDefinitions\ArrayDefinition;
-use Leadvertex\External\Export\App\FieldDefinitions\DropdownDefinition;
-use Leadvertex\External\Export\Format\FormatterInterface;
+use Leadvertex\External\Export\Core\Components\ApiParams;
+use Leadvertex\External\Export\Core\Components\GenerateParams;
+use Leadvertex\External\Export\Core\Components\Scheme;
+use Leadvertex\External\Export\Core\Components\StoredConfig;
+use Leadvertex\External\Export\Core\Components\Type;
+use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
+use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
+use Leadvertex\External\Export\Core\FieldDefinitions\DropdownDefinition;
+use Leadvertex\External\Export\Core\FormatterInterface;
 use Softonic\GraphQL\Client;
 use Softonic\GraphQL\ClientBuilder;
 use Webmozart\PathUtil\Path;
@@ -51,6 +52,7 @@ class Excel implements FormatterInterface
         if (!$this->scheme) {
             $fields = $this->getFields();
             $this->scheme = new Scheme(
+                new Type(Type::ORDERS),
                 ['Excel'],
                 [
                     'en' => 'Export orders to excel file',

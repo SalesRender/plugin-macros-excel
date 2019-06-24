@@ -7,24 +7,19 @@
   "authors": [
     {
       "name": "Timur Kasumov aka XAKEPEHOK",
-      "email": "timur@leadvertex.ru"
+      "email": "support@leadvertex.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Leadvertex\\External\\Export\\App\\": "src/",
-      "Leadvertex\\External\\Export\\Format\\": "formats/"
+      "Leadvertex\\External\\Export\\Format\\": "src/"
     }
   },
   "require": {
     "php": ">=7.1.0",
     "ext-json": "*",
-    "adbario/php-dot-notation": "^2.2",
-    "slim/slim": "^3.0",
-    "salsify/json-streaming-parser": "^6.0",
-    "symfony/console": "^4.3",
     "softonic/graphql-client": "^1.2",
     "phpoffice/phpspreadsheet": "^1.7",
-    "webmozart/path-util": "^2.3"
+    "leadvertex/lv-export-core": "^0.0.1"
   }
 }
