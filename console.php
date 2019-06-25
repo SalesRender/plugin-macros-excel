@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-require __DIR__ . '/const.php.example';
+require __DIR__ . '/const.php';
 
 $application = new Leadvertex\External\Export\Core\Apps\ConsoleApplication(
     LV_EXPORT_RUNTIME_DIR,

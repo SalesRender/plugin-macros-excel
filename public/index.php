@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../const.php.example';
+require_once __DIR__ . '/../const.php';
 
 $app = new Leadvertex\External\Export\Core\Apps\WebApplication(
     LV_EXPORT_RUNTIME_DIR,
