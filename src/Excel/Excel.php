@@ -10,14 +10,16 @@ namespace Leadvertex\External\Export\Format\Excel;
 
 use Adbar\Dot;
 use Leadvertex\External\Export\Core\Components\ApiParams;
+use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultInterface;
+use Leadvertex\External\Export\Core\Components\Developer;
 use Leadvertex\External\Export\Core\Components\GenerateParams;
-use Leadvertex\External\Export\Core\Components\Scheme;
 use Leadvertex\External\Export\Core\Components\StoredConfig;
-use Leadvertex\External\Export\Core\Components\Type;
 use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\DropdownDefinition;
-use Leadvertex\External\Export\Core\FormatterInterface;
+use Leadvertex\External\Export\Core\Formatter\FormatterInterface;
+use Leadvertex\External\Export\Core\Formatter\Scheme;
+use Leadvertex\External\Export\Core\Formatter\Type;
 use Softonic\GraphQL\Client;
 use Softonic\GraphQL\ClientBuilder;
 use Webmozart\PathUtil\Path;
@@ -52,6 +54,7 @@ class Excel implements FormatterInterface
         if (!$this->scheme) {
             $fields = $this->getFields();
             $this->scheme = new Scheme(
+                new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com'),
                 new Type(Type::ORDERS),
                 ['Excel'],
                 [
@@ -313,5 +316,24 @@ QUERY;
     private function getGraphQLClient(): Client
     {
         return ClientBuilder::build($this->apiParams->getEndpointUrl());
+    }
+
+    /**
+     * Should be called after every chunk handled (not every id, chunk only)
+     * @param array $ids
+     * @return mixed
+     */
+    public function sendProgress(array $ids)
+    {
+        // TODO: Implement sendProgress() method.
+    }
+
+    /**
+     * @param BatchResultInterface $batchResult
+     * @return mixed
+     */
+    public function sendResult(BatchResultInterface $batchResult)
+    {
+        // TODO: Implement sendResult() method.
     }
 }
