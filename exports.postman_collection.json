@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"api\": {\n\t\t\"token\": \"83e7e2fefb1b72a85c1fcad6334266a6.77da85f2b3568a8aa98a69529374d828\",\n\t\t\"endpointUrl\": \"http://127.0.0.1:8080/companies/1/CRM?XDEBUG_SESSION_START=1\"\t\n\t},\n\t\"config\": {\n\t\t\"fields\": [\"id\", \"createdAt\", \"orderData.name.firstName\", \"orderData.approvedBy.name.firstName\"],\n\t\t\"format\": \"csv\",\n\t\t\"headers\": true\n\t}\n}"
+					"raw": "{\n\t\"api\": {\n\t\t\"token\": \"83e7e2fefb1b72a85c1fcad6334266a6.77da85f2b3568a8aa98a69529374d828\",\n\t\t\"endpointUrl\": \"http://127.0.0.1:8080/companies/1/CRM?XDEBUG_SESSION_START=1\"\t\n\t},\n\t\"type\": \"ORDERS\",\n\t\"config\": {\n\t\t\"fields\": [\"id\", \"createdAt\", \"orderData.name.firstName\", \"orderData.approvedBy.name.firstName\"],\n\t\t\"format\": \"csv\",\n\t\t\"headers\": true\n\t}\n}"
 				},
 				"url": {
 					"raw": "http://lv-export-app/Excel?XDEBUG_SESSION_START=phpstorm",
@@ -89,7 +89,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"api\": {\n\t\t\"token\": \"83e7e2fefb1b72a85c1fcad6334266a6.77da85f2b3568a8aa98a69529374d828\",\n\t\t\"endpointUrl\": \"http://127.0.0.1:8080/companies/1/CRM?XDEBUG_SESSION_START=1\"\t\n\t},\n\t\"config\": {\n\t\t\"fields\": [\"id\", \"createdAt\", \"orderData.name.firstName\", \"orderData.approvedBy.name.firstName\"],\n\t\t\"format\": \"csv\",\n\t\t\"headers\": true\n\t},\n\t\"batch\": {\n\t\t\"token\": \"123\",\n\t\t\"successWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/success\",\n\t\t\"failsWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/fails\",\n\t\t\"resultWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/result\",\n\t\t\"errorWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/error\"\n\t},\n\t\"ids\": [\n\t\t[1, 2],\n\t\t[3, 4]\n\t]\n}"
+					"raw": "{\n\t\"api\": {\n\t\t\"token\": \"83e7e2fefb1b72a85c1fcad6334266a6.77da85f2b3568a8aa98a69529374d828\",\n\t\t\"endpointUrl\": \"http://127.0.0.1:8080/companies/1/CRM?XDEBUG_SESSION_START=1\"\t\n\t},\n\t\"type\": \"ORDERS\",\n\t\"config\": {\n\t\t\"fields\": [\"id\", \"createdAt\", \"orderData.name.firstName\", \"orderData.approvedBy.name.firstName\"],\n\t\t\"format\": \"csv\",\n\t\t\"headers\": true\n\t},\n\t\"batch\": {\n\t\t\"token\": \"123\",\n\t\t\"progressWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/success\",\n\t\t\"resultWebhookUrl\": \"http://127.0.0.1:8080/companies/1/CRM/batch/webhook/result\"\n\t},\n\t\"ids\": [\n\t\t[1, 2],\n\t\t[3, 4]\n\t]\n}"
 				},
 				"url": {
 					"raw": "http://lv-export-app/Excel?XDEBUG_SESSION_START=phpstorm",
