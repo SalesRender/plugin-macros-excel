@@ -14,6 +14,7 @@ use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultInterface;
 use Leadvertex\External\Export\Core\Components\Developer;
 use Leadvertex\External\Export\Core\Components\GenerateParams;
 use Leadvertex\External\Export\Core\Components\StoredConfig;
+use Leadvertex\External\Export\Core\Components\WebhookManager;
 use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\DropdownDefinition;
@@ -218,13 +219,13 @@ class Excel implements FormatterInterface
             $rows = $this->getOrderDataAsArray($params->getConfig(), $ids);
             foreach ($rows as $row) {
                 foreach ($row as $item) {
-                    $a[$col . $record] = $item;
                     $sheet->setCellValue($col . $record, $item);
                     $col++;
                 }
                 $record++;
                 $col = 'A';
             }
+            #
         }
 
         return $spreadsheet;
@@ -365,6 +366,25 @@ QUERY;
     {
         return ClientBuilder::build($this->apiParams->getEndpointUrl());
     }
+
+//    /**
+//     * Should be called after every chunk handled (not every id, chunk only)
+//     * @param array $ids
+//     * @return mixed
+//     */
+//    public function sendProgress(WebhookManager $manager, array $ids)
+//    {
+//        // TODO: Implement sendProgress() method.
+//    }
+//
+//    /**
+//     * @param BatchResultInterface $batchResult
+//     * @return mixed
+//     */
+//    public function sendResult(WebhookManager $manager, BatchResultInterface $batchResult)
+//    {
+//        $manager = new WebhookManager($this);
+//    }
 
     /**
      * Should be called after every chunk handled (not every id, chunk only)
