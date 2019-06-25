@@ -20,6 +20,9 @@ use Leadvertex\External\Export\Core\FieldDefinitions\DropdownDefinition;
 use Leadvertex\External\Export\Core\Formatter\FormatterInterface;
 use Leadvertex\External\Export\Core\Formatter\Scheme;
 use Leadvertex\External\Export\Core\Formatter\Type;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Softonic\GraphQL\Client;
 use Softonic\GraphQL\ClientBuilder;
 use Webmozart\PathUtil\Path;
@@ -176,10 +179,55 @@ class Excel implements FormatterInterface
                 fclose($csv);
                 break;
             case 'xls':
+                $spreadsheet = $this->prepareDataForXls($params);
+                $writter = new Xls($spreadsheet);
+                $writter->save($filePath);
+
                 break;
             case 'xlsx':
+                $spreadsheet = $this->prepareDataForXls($params);
+                $writter = new Xlsx($spreadsheet);
+                $writter->save($filePath);
+
                 break;
         }
+    }
+
+    private function prepareDataForXls($params)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $useHeaders = $params->getConfig()->get(
+            'headers',
+            $this->getScheme()->getField('headers')->getDefaultValue()
+        );
+
+        $record = 1;
+        $col = 'A';
+        if ($useHeaders) {
+            foreach ($params->getConfig()->get('fields') as $item) {
+                $sheet->setCellValue($col . $record, $item);
+                $col++;
+            }
+            $record++;
+            $col = 'A';
+        }
+
+        foreach ($params->getChunkedIds()->getChunks() as $ids) {
+            $rows = $this->getOrderDataAsArray($params->getConfig(), $ids);
+            foreach ($rows as $row) {
+                foreach ($row as $item) {
+                    $a[$col . $record] = $item;
+                    $sheet->setCellValue($col . $record, $item);
+                    $col++;
+                }
+                $record++;
+                $col = 'A';
+            }
+        }
+
+        return $spreadsheet;
     }
 
     private function getOrderDataAsArray(StoredConfig $config, array $ids): array
