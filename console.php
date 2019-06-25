@@ -1,12 +1,9 @@
 #!/usr/bin/env php
 <?php
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/const.php.example';
 
-use Leadvertex\External\Export\Core\Apps\ConsoleApplication;
-use Webmozart\PathUtil\Path;
-
-$application = new ConsoleApplication(
-    Path::canonicalize(__DIR__ . '/runtime'),
-    Path::canonicalize(__DIR__ . '/web/compiled')
+$application = new Leadvertex\External\Export\Core\Apps\ConsoleApplication(
+    LV_EXPORT_RUNTIME_DIR,
+    LV_EXPORT_PUBLIC_DIR
 );
 $application->run();

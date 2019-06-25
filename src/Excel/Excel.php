@@ -44,13 +44,18 @@ class Excel implements FormatterInterface
     /**
      * @var string
      */
-    private $outputDir;
+    private $publicDir;
+    /**
+     * @var string
+     */
+    private $publicUrl;
 
-    public function __construct(ApiParams $apiParams, string $runtimeDir, string $outputDir)
+    public function __construct(ApiParams $apiParams, string $runtimeDir, string $publicDir, string $publicUrl)
     {
         $this->apiParams = $apiParams;
         $this->runtimeDir = $runtimeDir;
-        $this->outputDir = $outputDir;
+        $this->publicDir = $publicDir;
+        $this->publicUrl = $publicUrl;
     }
 
     public function getScheme(): Scheme
@@ -157,7 +162,7 @@ class Excel implements FormatterInterface
         $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
         $format = $params->getConfig()->get('format', $defaultFormat);
         $prefix = $params->getBatchParams()->getToken();
-        $filePath = Path::canonicalize("{$this->outputDir}/{$prefix}.{$format}");
+        $filePath = Path::canonicalize("{$this->publicDir}/{$prefix}.{$format}");
         switch ($format) {
             case 'csv':
                 $csv = fopen($filePath, 'w');
@@ -388,19 +393,21 @@ QUERY;
 
     /**
      * Should be called after every chunk handled (not every id, chunk only)
+     * @param WebhookManager $manager
      * @param array $ids
      * @return mixed
      */
-    public function sendProgress(array $ids)
+    public function sendProgress(WebhookManager $manager, array $ids)
     {
         // TODO: Implement sendProgress() method.
     }
 
     /**
+     * @param WebhookManager $manager
      * @param BatchResultInterface $batchResult
      * @return mixed
      */
-    public function sendResult(BatchResultInterface $batchResult)
+    public function sendResult(WebhookManager $manager, BatchResultInterface $batchResult)
     {
         // TODO: Implement sendResult() method.
     }
