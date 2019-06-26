@@ -11,6 +11,7 @@ namespace Leadvertex\External\Export\Format\Excel;
 use Adbar\Dot;
 use Leadvertex\External\Export\Core\Components\ApiParams;
 use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultInterface;
+use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultSuccess;
 use Leadvertex\External\Export\Core\Components\Developer;
 use Leadvertex\External\Export\Core\Components\GenerateParams;
 use Leadvertex\External\Export\Core\Components\StoredConfig;
@@ -157,12 +158,17 @@ class Excel implements FormatterInterface
         return true;
     }
 
+    /**
+     * @param GenerateParams $params
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function generate(GenerateParams $params)
     {
         $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
         $format = $params->getConfig()->get('format', $defaultFormat);
         $prefix = $params->getBatchParams()->getToken();
         $filePath = Path::canonicalize("{$this->publicDir}/{$prefix}.{$format}");
+        $webHookManager = new WebhookManager($params->getBatchParams());
         switch ($format) {
             case 'csv':
                 $csv = fopen($filePath, 'w');
@@ -181,25 +187,28 @@ class Excel implements FormatterInterface
                     foreach ($rows as $row) {
                         fputcsv($csv, $row);
                     }
+                    $this->sendProgress($webHookManager, $ids);
                 }
                 fclose($csv);
                 break;
             case 'xls':
-                $spreadsheet = $this->prepareDataForXls($params);
+                $spreadsheet = $this->prepareDataForXls($params, $webHookManager);
                 $writter = new Xls($spreadsheet);
                 $writter->save($filePath);
-
                 break;
             case 'xlsx':
-                $spreadsheet = $this->prepareDataForXls($params);
+                $spreadsheet = $this->prepareDataForXls($params, $webHookManager);
                 $writter = new Xlsx($spreadsheet);
                 $writter->save($filePath);
-
                 break;
         }
+
+        $batchResult = new BatchResultSuccess(LV_EXPORT_PUBLIC_URL);
+
+        $this->sendResult($webHookManager, $batchResult);
     }
 
-    private function prepareDataForXls($params)
+    private function prepareDataForXls(GenerateParams $params, WebhookManager $webHookManager)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -230,7 +239,7 @@ class Excel implements FormatterInterface
                 $record++;
                 $col = 'A';
             }
-            #
+            $this->sendProgress($webHookManager, $ids);
         }
 
         return $spreadsheet;
@@ -372,43 +381,22 @@ QUERY;
         return ClientBuilder::build($this->apiParams->getEndpointUrl());
     }
 
-//    /**
-//     * Should be called after every chunk handled (not every id, chunk only)
-//     * @param array $ids
-//     * @return mixed
-//     */
-//    public function sendProgress(WebhookManager $manager, array $ids)
-//    {
-//        // TODO: Implement sendProgress() method.
-//    }
-//
-//    /**
-//     * @param BatchResultInterface $batchResult
-//     * @return mixed
-//     */
-//    public function sendResult(WebhookManager $manager, BatchResultInterface $batchResult)
-//    {
-//        $manager = new WebhookManager($this);
-//    }
-
     /**
      * Should be called after every chunk handled (not every id, chunk only)
      * @param WebhookManager $manager
      * @param array $ids
-     * @return mixed
      */
     public function sendProgress(WebhookManager $manager, array $ids)
     {
-        // TODO: Implement sendProgress() method.
+        $manager->progress($ids);
     }
 
     /**
      * @param WebhookManager $manager
      * @param BatchResultInterface $batchResult
-     * @return mixed
      */
     public function sendResult(WebhookManager $manager, BatchResultInterface $batchResult)
     {
-        // TODO: Implement sendResult() method.
+        $manager->result($batchResult);
     }
 }
