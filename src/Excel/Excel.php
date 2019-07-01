@@ -14,15 +14,17 @@ use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultInterface;
 use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultSuccess;
 use Leadvertex\External\Export\Core\Components\Developer;
 use Leadvertex\External\Export\Core\Components\GenerateParams;
+use Leadvertex\External\Export\Core\Components\MultiLang;
 use Leadvertex\External\Export\Core\Components\StoredConfig;
 use Leadvertex\External\Export\Core\Components\WebhookManager;
 use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
-use Leadvertex\External\Export\Core\FieldDefinitions\DropdownDefinition;
+use Leadvertex\External\Export\Core\FieldDefinitions\EnumDefinition;
 use Leadvertex\External\Export\Core\Formatter\FormatterInterface;
 use Leadvertex\External\Export\Core\Formatter\Scheme;
 use Leadvertex\External\Export\Core\Formatter\Type;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Softonic\GraphQL\Client;
@@ -34,21 +36,17 @@ class Excel implements FormatterInterface
 
     /** @var Scheme */
     private $scheme;
-    /**
-     * @var ApiParams
-     */
+
+    /** @var ApiParams */
     private $apiParams;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $runtimeDir;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $publicDir;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $publicUrl;
 
     public function __construct(ApiParams $apiParams, string $runtimeDir, string $publicDir, string $publicUrl)
@@ -59,6 +57,10 @@ class Excel implements FormatterInterface
         $this->publicUrl = $publicUrl;
     }
 
+    /**
+     * @return Scheme
+     * @throws \Exception
+     */
     public function getScheme(): Scheme
     {
         if (!$this->scheme) {
@@ -66,60 +68,90 @@ class Excel implements FormatterInterface
             $this->scheme = new Scheme(
                 new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com'),
                 new Type(Type::ORDERS),
-                ['Excel'],
-                [
-                    'en' => 'Export orders to excel file',
-                    'ru' => 'Выгружает заказы в excel файл',
-                ],
+                new MultiLang(
+                    [
+                        'en' => 'Excel'
+                    ]
+                ),
+                new MultiLang(
+                    [
+                        'en' => 'Export orders to excel file',
+                        'ru' => 'Выгружает заказы в excel файл',
+                    ]
+                ),
                 [
                     'fields' => new ArrayDefinition(
+                        new MultiLang(
+                            [
+                                'en' => 'Fields to export',
+                                'ru' => 'Поля для выгрузки',
+                            ]
+                        ),
+                        new MultiLang(
+                            [
+                                'en' => 'Fields with this order will be exported to excel table',
+                                'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
+                            ]
+                        ),
                         [
-                            'en' => 'Fields to export',
-                            'ru' => 'Поля для выгрузки',
+                            'id' => new MultiLang(['en' => 'ID', 'ru' => 'ID']),
+                            'project.id' => new MultiLang(['en' => 'Project ID', 'ru' => 'ID проекта']),
+                            'project.name' => new MultiLang(['en' => 'Project name', 'ru' => 'Имя проекта']),
+                            'status.id' => new MultiLang(['en' => 'Status ID', 'ru' => 'ID статуса']),
+                            'status.name' => new MultiLang(['en' => 'Status name', 'ru' => 'Имя статуса']),
                         ],
-                        [
-                            'en' => 'Fields with this order will be exported to excel table',
-                            'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
-                        ],
-                        ['id', 'project.id', 'project.name', 'status.id', 'status.name'],
-                        true,
-                        $fields
+                        $fields,
+                        true
                     ),
-                    'format' => new DropdownDefinition(
+                    'format' => new EnumDefinition(
+                        new MultiLang(
+                            [
+                                'en' => 'File format',
+                                'ru' => 'Формат файла',
+                            ]
+                        ),
+                        new MultiLang(
+                            [
+                                'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
+                                'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
+                            ]
+                        ),
                         [
-                            'en' => 'File format',
-                            'ru' => 'Формат файла',
-                        ],
-                        [
-                            'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
-                            'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
-                        ],
-                        [
-                            'csv' => [
-                                'en' => '*.csv - simple plain text format',
-                                'ru' => '*.csv - простой текстовый формат',
-                            ],
-                            'xls' => [
-                                'en' => '*.xls - Excel 2003',
-                                'ru' => '*.xls - Формат Excel 2003',
-                            ],
-                            'xlsx' => [
-                                'en' => '*.xls - Excel 2007 and newer',
-                                'ru' => '*.xls - Формат Excel 2007 и новее',
-                            ],
+                            'csv' => new MultiLang(
+                                    [
+                                        'en' => '*.csv - simple plain text format',
+                                        'ru' => '*.csv - простой текстовый формат',
+                                    ]
+                                ),
+                            'xls' => new MultiLang(
+                                [
+                                    'en' => '*.xls - Excel 2003',
+                                    'ru' => '*.xls - Формат Excel 2003',
+                                ]
+                            ),
+                            'xlsx' => new MultiLang(
+                                [
+                                    'en' => '*.xls - Excel 2007 and newer',
+                                    'ru' => '*.xls - Формат Excel 2007 и новее',
+                                ]
+                            )
                         ],
                         'csv',
                         true
                     ),
                     'headers' => new CheckboxDefinition(
-                        [
-                            'en' => 'Column names',
-                            'ru' => 'Названия колонок',
-                        ],
-                        [
-                            'en' => 'Add column names at first wor',
-                            'ru' => 'Добавлять названия колонок на первой строчке',
-                        ],
+                        new MultiLang(
+                            [
+                                'en' => 'Column names',
+                                'ru' => 'Названия колонок',
+                            ]
+                        ),
+                        new MultiLang(
+                            [
+                                'en' => 'Add column names at first wor',
+                                'ru' => 'Добавлять названия колонок на первой строчке',
+                            ]
+                        ),
                         true,
                         true
                     )
@@ -129,14 +161,21 @@ class Excel implements FormatterInterface
         return $this->scheme;
     }
 
+    /**
+     * @param StoredConfig $config
+     * @return bool
+     * @throws \Exception
+     */
     public function isConfigValid(StoredConfig $config): bool
     {
         if (!$config->has('fields')) {
             return false;
         }
 
-        $fields = $config->get('fields', []);
-        if (!empty(array_diff($fields, $this->getFields()))) {
+        $schemeFields = array_keys($this->getFields());
+        $storedFields = $config->get('fields', []);
+
+        if (!empty(array_diff($storedFields, $schemeFields))) {
             return false;
         }
 
@@ -160,7 +199,7 @@ class Excel implements FormatterInterface
 
     /**
      * @param GenerateParams $params
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     public function generate(GenerateParams $params)
     {
@@ -208,6 +247,12 @@ class Excel implements FormatterInterface
         $this->sendResult($webHookManager, $batchResult);
     }
 
+    /**
+     * @param GenerateParams $params
+     * @param WebhookManager $webHookManager
+     * @return Spreadsheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     private function prepareDataForXls(GenerateParams $params, WebhookManager $webHookManager)
     {
         $spreadsheet = new Spreadsheet();
@@ -310,6 +355,7 @@ QUERY;
         $fields = [];
         foreach ($response['company']['fieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
+            $label = $fieldData['definition']['label'];
             switch ($fieldData['definition']['__typename']) {
                 case 'CheckboxFieldDefinition':
                 case 'DatetimeFieldDefinition':
@@ -321,58 +367,181 @@ QUERY;
                 case 'IntFieldDefinition':
                 case 'PhoneFieldDefinition':
                 case 'StringFieldDefinition':
-                    $fields[] = "orderData.{$name}";
+                    $fields["orderData.{$name}"] = new MultiLang([
+                        'en' => $name,
+                        'ru' => $name
+                    ]);
                     break;
                 case 'AddressFieldDefinition':
-                    $fields[] = "orderData.{$name}.postcode";
-                    $fields[] = "orderData.{$name}.region";
-                    $fields[] = "orderData.{$name}.city";
-                    $fields[] = "orderData.{$name}.address_1";
-                    $fields[] = "orderData.{$name}.address_2";
+                    $fields["orderData.{$name}.postcode"] = new MultiLang([
+                        'en' => "{$label}: Address postcode",
+                        'ru' => "{$label}: Почтовый индекс"
+                    ]);
+                    $fields["orderData.{$name}.region"] = new MultiLang([
+                        'en' => "{$label}: Region",
+                        'ru' => "{$label}: Регион"
+                    ]);
+                    $fields["orderData.{$name}.city"] = new MultiLang([
+                        'en' => "{$label}: City",
+                        'ru' => "{$label}: Город"
+                    ]);
+                    $fields["orderData.{$name}.address_1"] = new MultiLang([
+                        'en' => "{$label}: First address",
+                        'ru' => "{$label}: Первый адрес"
+                    ]);
+                    $fields["orderData.{$name}.address_2"] = new MultiLang([
+                        'en' => "{$label}: Second address",
+                        'ru' => "{$label}: Второй адрес"
+                    ]);
                     break;
                 case 'HumanNameFieldDefinition':
-                    $fields[] = "orderData.{$name}.firstName";
-                    $fields[] = "orderData.{$name}.lastName";
+                    $fields["orderData.{$name}.firstName"] = new MultiLang([
+                        'en' => "{$label}: User first name",
+                        'ru' => "{$label}: Имя"
+                    ]);
+                    $fields["orderData.{$name}.lastName"] = new MultiLang([
+                        'en' => "{$label}: User last name",
+                        'ru' => "{$label}: Фамилия"
+                    ]);
                     break;
                 case 'UserFieldDefinition':
-                    $fields[] = "orderData.{$name}.id";
-                    $fields[] = "orderData.{$name}.name.firstName";
-                    $fields[] = "orderData.{$name}.name.lastName";
-                    $fields[] = "orderData.{$name}.email";
+                    $fields["orderData.{$name}.id"] = new MultiLang([
+                        'en' => "{$label}: User ID",
+                        'ru' => "{$label}: ID пользователя"
+                    ]);
+                    $fields["orderData.{$name}.name.firstName"] = new MultiLang([
+                        'en' => "{$label}: User first name",
+                        'ru' => "{$label}: Имя пользователя"
+                    ]);
+                    $fields["orderData.{$name}.name.lastName"] = new MultiLang([
+                        'en' => "{$label}: User last name",
+                        'ru' => "{$label}: Фамилия пользователя"
+                    ]);
+                    $fields["orderData.{$name}.email"] = new MultiLang([
+                        'en' => "{$label}: User email",
+                        'ru' => "{$label}: Электронаня почта пользователя"
+                    ]);
                     break;
             }
         }
 
         return array_merge([
-            'id',
-            'project.id',
-            'project.name',
-            'status.id',
-            'status.name',
-            'status.group',
-            'statusChangedAt',
-            'createdAt',
-            'updatedAt',
-            'canceledAt',
-            'approvedAt',
-            'shippedAt',
-            'deliveredAt',
-            'undeliveredAt',
-            'refundedAt',
-            'warehouse.id',
-            'warehouse.name',
-            "initCartPrice",
-            "cart.totalPrice",
-            'source.url',
-            'source.refererUrl',
-            'source.ip',
-            'source.utm_source',
-            'source.utm_medium',
-            'source.utm_campaign',
-            'source.utm_content',
-            'source.utm_term',
-            'source.subid_1',
-            'source.subid_2',
+            'id' => new MultiLang([
+                'en' => 'ID',
+                'ru' => 'ID'
+            ]),
+            'project.id' => new MultiLang([
+                'en' => 'Project ID',
+                'ru' => 'ID проекта'
+            ]),
+            'project.name' => new MultiLang([
+                'en' => 'Project name',
+                'ru' => 'Название проекта'
+            ]),
+            'status.id' => new MultiLang([
+                'en' => 'Status ID',
+                'ru' => 'ID статуса'
+            ]),
+            'status.name' => new MultiLang([
+                'en' => 'Status name',
+                'ru' => 'Название статуса'
+            ]),
+            'status.group' => new MultiLang([
+                'en' => 'Status group',
+                'ru' => 'Группа статуса'
+            ]),
+            'statusChangedAt' => new MultiLang([
+                'en' => 'Status changed At',
+                'ru' => 'Дата изменения статуса'
+            ]),
+            'createdAt' => new MultiLang([
+                'en' => 'Created At',
+                'ru' => 'Дата создания'
+            ]),
+            'updatedAt' => new MultiLang([
+                'en' => 'Updated At',
+                'ru' => 'Дата обновления'
+            ]),
+            'canceledAt' => new MultiLang([
+                'en' => 'Canceled At',
+                'ru' => 'Дата отмены'
+            ]),
+            'approvedAt' => new MultiLang([
+                'en' => 'Approved At',
+                'ru' => 'Дата подтверждения'
+            ]),
+            'shippedAt' => new MultiLang([
+                'en' => 'Shipped At',
+                'ru' => 'Дата отправки'
+            ]),
+            'deliveredAt' => new MultiLang([
+                'en' => 'Delivered At',
+                'ru' => 'Дата доставки'
+            ]),
+            'undeliveredAt' => new MultiLang([
+                'en' => 'Undelivered At',
+                'ru' => 'Дата недоставки'
+            ]),
+            'refundedAt' => new MultiLang([
+                'en' => 'Refunded At',
+                'ru' => 'Дата возврата'
+            ]),
+            'warehouse.id' => new MultiLang([
+                'en' => 'Warehouse id',
+                'ru' => 'ID склада'
+            ]),
+            'warehouse.name' => new MultiLang([
+                'en' => 'Warehouse name',
+                'ru' => 'Название склада'
+            ]),
+            "initCartPrice" => new MultiLang([
+                'en' => 'Order price: initial',
+                'ru' => 'Цена заказа: начальная'
+            ]),
+            "cart.totalPrice" => new MultiLang([
+                'en' => 'Order price: current',
+                'ru' => 'Цена заказа: текущая'
+            ]),
+            'source.url' => new MultiLang([
+                'en' => 'Source: URL',
+                'ru' => 'Ресурс: URL'
+            ]),
+            'source.refererUrl' => new MultiLang([
+                'en' => 'Source: referer URL',
+                'ru' => 'Ресурс: URL референта'
+            ]),
+            'source.ip' => new MultiLang([
+                'en' => 'Source: IP',
+                'ru' => 'Ресурс: IP'
+            ]),
+            'source.utm_source' => new MultiLang([
+                'en' => 'Source: UTM-source',
+                'ru' => 'Ресурс: UTM-source'
+            ]),
+            'source.utm_medium' => new MultiLang([
+                'en' => 'Source: UTM-medium',
+                'ru' => 'Ресурс: UTM-medium'
+            ]),
+            'source.utm_campaign' => new MultiLang([
+                'en' => 'Source: UTM-campaign',
+                'ru' => 'Ресурс: UTM-campaign'
+            ]),
+            'source.utm_content' => new MultiLang([
+                'en' => 'Source: UTM-content',
+                'ru' => 'Ресурс: UTM-content'
+            ]),
+            'source.utm_term' => new MultiLang([
+                'en' => 'Source: UTM-term',
+                'ru' => 'Ресурс: UTM-term'
+            ]),
+            'source.subid_1' => new MultiLang([
+                'en' => 'Source: first sub-id',
+                'ru' => 'Ресурс: первый дополнительный id'
+            ]),
+            'source.subid_2' => new MultiLang([
+                'en' => 'Source: second sub-id',
+                'ru' => 'Ресурс: второй дополнительный id'
+            ]),
         ], $fields);
     }
 
