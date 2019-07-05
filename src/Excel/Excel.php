@@ -222,7 +222,6 @@ class Excel implements FormatterInterface
                 $useHeaders = $params->getConfig()->get(
                     'headers',
                     $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
-//                    $this->getScheme()->getField('headers')->getDefaultValue()
                 );
 
                 if ($useHeaders) {
