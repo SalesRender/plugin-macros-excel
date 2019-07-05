@@ -59,6 +59,30 @@ class Excel implements FormatterInterface
     }
 
     /**
+     * Should return human-friendly name of this exporter
+     * @return MultiLang
+     */
+    public static function getName(): MultiLang
+    {
+        return new MultiLang([
+            'en' => 'Excel',
+            'ru' => 'Excel',
+        ]);
+    }
+
+    /**
+     * Should return human-friendly description of this exporter
+     * @return MultiLang
+     */
+    public static function getDescription(): MultiLang
+    {
+        return new MultiLang([
+            'en' => 'Export orders to excel file',
+            'ru' => 'Выгружает заказы в excel файл',
+        ]);
+    }
+
+    /**
      * @return Scheme
      * @throws \Exception
      */
@@ -69,13 +93,8 @@ class Excel implements FormatterInterface
             $this->scheme = new Scheme(
                 new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com'),
                 new Type(Type::ORDERS),
-                new MultiLang([
-                        'en' => 'Excel'
-                ]),
-                new MultiLang([
-                    'en' => 'Export orders to excel file',
-                    'ru' => 'Выгружает заказы в excel файл',
-                ]),
+                self::getName(),
+                self::getDescription(),
                 [
                     'main' => new FieldGroup(
                         new MultiLang([
