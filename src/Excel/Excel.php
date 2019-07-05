@@ -20,6 +20,7 @@ use Leadvertex\External\Export\Core\Components\WebhookManager;
 use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
 use Leadvertex\External\Export\Core\FieldDefinitions\EnumDefinition;
+use Leadvertex\External\Export\Core\Formatter\FieldGroup;
 use Leadvertex\External\Export\Core\Formatter\FormatterInterface;
 use Leadvertex\External\Export\Core\Formatter\Scheme;
 use Leadvertex\External\Export\Core\Formatter\Type;
@@ -68,96 +69,98 @@ class Excel implements FormatterInterface
             $this->scheme = new Scheme(
                 new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com'),
                 new Type(Type::ORDERS),
-                new MultiLang(
-                    [
+                new MultiLang([
                         'en' => 'Excel'
-                    ]
-                ),
-                new MultiLang(
-                    [
-                        'en' => 'Export orders to excel file',
-                        'ru' => 'Выгружает заказы в excel файл',
-                    ]
-                ),
+                ]),
+                new MultiLang([
+                    'en' => 'Export orders to excel file',
+                    'ru' => 'Выгружает заказы в excel файл',
+                ]),
                 [
-                    'fields' => new ArrayDefinition(
-                        new MultiLang(
-                            [
-                                'en' => 'Fields to export',
-                                'ru' => 'Поля для выгрузки',
-                            ]
-                        ),
-                        new MultiLang(
-                            [
-                                'en' => 'Fields with this order will be exported to excel table',
-                                'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
-                            ]
-                        ),
+                    'main' => new FieldGroup(
+                        new MultiLang([
+                            'en' => 'Main settings',
+                            'ru' => 'Основные настройки'
+                        ]),
                         [
-                            'id' => new MultiLang(['en' => 'ID', 'ru' => 'ID']),
-                            'project.id' => new MultiLang(['en' => 'Project ID', 'ru' => 'ID проекта']),
-                            'project.name' => new MultiLang(['en' => 'Project name', 'ru' => 'Имя проекта']),
-                            'status.id' => new MultiLang(['en' => 'Status ID', 'ru' => 'ID статуса']),
-                            'status.name' => new MultiLang(['en' => 'Status name', 'ru' => 'Имя статуса']),
-                        ],
-                        $fields,
-                        true
-                    ),
-                    'format' => new EnumDefinition(
-                        new MultiLang(
-                            [
-                                'en' => 'File format',
-                                'ru' => 'Формат файла',
-                            ]
-                        ),
-                        new MultiLang(
-                            [
-                                'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
-                                'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
-                            ]
-                        ),
-                        [
-                            'csv' => new MultiLang(
-                                    [
+                            'fields' => new ArrayDefinition(
+                                new MultiLang([
+                                    'en' => 'Fields to export',
+                                    'ru' => 'Поля для выгрузки',
+                                ]),
+                                new MultiLang([
+                                    'en' => 'Fields with this order will be exported to excel table',
+                                    'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
+                                ]),
+                                [
+                                    'id' => new MultiLang([
+                                        'en' => 'ID',
+                                        'ru' => 'ID'
+                                    ]),
+                                    'project.id' => new MultiLang([
+                                        'en' => 'Project ID',
+                                        'ru' => 'ID проекта'
+                                    ]),
+                                    'project.name' => new MultiLang([
+                                        'en' => 'Project name',
+                                        'ru' => 'Имя проекта'
+                                    ]),
+                                    'status.id' => new MultiLang([
+                                        'en' => 'Status ID',
+                                        'ru' => 'ID статуса'
+                                    ]),
+                                    'status.name' => new MultiLang([
+                                        'en' => 'Status name',
+                                        'ru' => 'Имя статуса'
+                                    ]),
+                                ],
+                                $fields,
+                                true
+                            ),
+                            'format' => new EnumDefinition(
+                                new MultiLang([
+                                    'en' => 'File format',
+                                    'ru' => 'Формат файла',
+                                ]),
+                                new MultiLang([
+                                    'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
+                                    'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
+                                ]),
+                                [
+                                    'csv' => new MultiLang([
                                         'en' => '*.csv - simple plain text format',
                                         'ru' => '*.csv - простой текстовый формат',
-                                    ]
-                                ),
-                            'xls' => new MultiLang(
-                                [
-                                    'en' => '*.xls - Excel 2003',
-                                    'ru' => '*.xls - Формат Excel 2003',
-                                ]
+                                    ]),
+                                    'xls' => new MultiLang([
+                                        'en' => '*.xls - Excel 2003',
+                                        'ru' => '*.xls - Формат Excel 2003',
+                                    ]),
+                                    'xlsx' => new MultiLang([
+                                        'en' => '*.xls - Excel 2007 and newer',
+                                        'ru' => '*.xls - Формат Excel 2007 и новее',
+                                    ])
+                                ],
+                                'csv',
+                                true
                             ),
-                            'xlsx' => new MultiLang(
-                                [
-                                    'en' => '*.xls - Excel 2007 and newer',
-                                    'ru' => '*.xls - Формат Excel 2007 и новее',
-                                ]
+                            'headers' => new CheckboxDefinition(
+                                new MultiLang([
+                                    'en' => 'Column names',
+                                    'ru' => 'Названия колонок',
+                                ]),
+                                new MultiLang([
+                                    'en' => 'Add column names at first wor',
+                                    'ru' => 'Добавлять названия колонок на первой строчке',
+                                ]),
+                                true,
+                                true
                             )
-                        ],
-                        'csv',
-                        true
+                        ]
                     ),
-                    'headers' => new CheckboxDefinition(
-                        new MultiLang(
-                            [
-                                'en' => 'Column names',
-                                'ru' => 'Названия колонок',
-                            ]
-                        ),
-                        new MultiLang(
-                            [
-                                'en' => 'Add column names at first wor',
-                                'ru' => 'Добавлять названия колонок на первой строчке',
-                            ]
-                        ),
-                        true,
-                        true
-                    )
                 ]
             );
         }
+
         return $this->scheme;
     }
 
@@ -179,16 +182,17 @@ class Excel implements FormatterInterface
             return false;
         }
 
+
         $useHeaders = $config->get(
             'headers',
-            $this->getScheme()->getField('headers')->getDefaultValue()
+            $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
         );
 
         if (!is_bool($useHeaders)) {
             return false;
         }
 
-        $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
+        $defaultFormat = $this->getScheme()->getGroup('main')->getField('format')->getDefaultValue();
         $format = $config->get('format', $defaultFormat);
         if (!in_array($format, ['csv', 'xls', 'xlsx'])) {
             return false;
@@ -200,21 +204,25 @@ class Excel implements FormatterInterface
     /**
      * @param GenerateParams $params
      * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Exception
      */
     public function generate(GenerateParams $params)
     {
-        $defaultFormat = $this->getScheme()->getField('format')->getDefaultValue();
+        $defaultFormat = $this->getScheme()->getGroup('main')->getField('format')->getDefaultValue();
         $format = $params->getConfig()->get('format', $defaultFormat);
         $prefix = $params->getBatchParams()->getToken();
         $filePath = Path::canonicalize("{$this->publicDir}/{$prefix}.{$format}");
         $webHookManager = new WebhookManager($params->getBatchParams());
+
         switch ($format) {
             case 'csv':
                 $csv = fopen($filePath, 'w');
 
                 $useHeaders = $params->getConfig()->get(
                     'headers',
-                    $this->getScheme()->getField('headers')->getDefaultValue()
+                    $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
+//                    $this->getScheme()->getField('headers')->getDefaultValue()
                 );
 
                 if ($useHeaders) {
@@ -232,13 +240,13 @@ class Excel implements FormatterInterface
                 break;
             case 'xls':
                 $spreadsheet = $this->prepareDataForXls($params, $webHookManager);
-                $writter = new Xls($spreadsheet);
-                $writter->save($filePath);
+                $writer = new Xls($spreadsheet);
+                $writer->save($filePath);
                 break;
             case 'xlsx':
                 $spreadsheet = $this->prepareDataForXls($params, $webHookManager);
-                $writter = new Xlsx($spreadsheet);
-                $writter->save($filePath);
+                $writer = new Xlsx($spreadsheet);
+                $writer->save($filePath);
                 break;
         }
 
@@ -252,6 +260,7 @@ class Excel implements FormatterInterface
      * @param WebhookManager $webHookManager
      * @return Spreadsheet
      * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \Exception
      */
     private function prepareDataForXls(GenerateParams $params, WebhookManager $webHookManager)
     {
@@ -260,7 +269,7 @@ class Excel implements FormatterInterface
 
         $useHeaders = $params->getConfig()->get(
             'headers',
-            $this->getScheme()->getField('headers')->getDefaultValue()
+            $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
         );
 
         $record = 1;
