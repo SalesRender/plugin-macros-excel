@@ -171,17 +171,16 @@ class Excel implements FormatterInterface
      */
     public function isConfigValid(StoredConfig $config): bool
     {
-        if (!$config->has('fields')) {
+        if (!$config->has('main')) {
             return false;
         }
 
         $schemeFields = array_keys($this->getFields());
-        $storedFields = $config->get('fields', []);
+        $storedFields = $config->get('main', [])['fields'];
 
         if (!empty(array_diff($storedFields, $schemeFields))) {
             return false;
         }
-
 
         $useHeaders = $config->get(
             'headers',
