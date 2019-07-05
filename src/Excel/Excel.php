@@ -195,7 +195,11 @@ class Excel implements FormatterInterface
         }
 
         $schemeFields = array_keys($this->getFields());
-        $storedFields = $config->get('main', [])['fields'];
+        $storedFields = $config->get('main.fields', []);
+
+        if (empty($storedFields)) {
+            return false;
+        }
 
         if (!empty(array_diff($storedFields, $schemeFields))) {
             return false;
