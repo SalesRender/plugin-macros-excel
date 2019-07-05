@@ -20,6 +20,6 @@
     "ext-json": "*",
     "softonic/graphql-client": "^1.2",
     "phpoffice/phpspreadsheet": "^1.7",
-    "leadvertex/lv-export-core": "^0.1.0"
+    "leadvertex/lv-export-core": "^0.2.0"
   }
 }
