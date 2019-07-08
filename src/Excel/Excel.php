@@ -5,25 +5,25 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\External\Export\Format\Excel;
+namespace Leadvertex\Plugin\Export\Format\Excel;
 
 
 use Adbar\Dot;
-use Leadvertex\External\Export\Core\Components\ApiParams;
-use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultInterface;
-use Leadvertex\External\Export\Core\Components\BatchResult\BatchResultSuccess;
-use Leadvertex\External\Export\Core\Components\Developer;
-use Leadvertex\External\Export\Core\Components\GenerateParams;
-use Leadvertex\External\Export\Core\Components\MultiLang;
-use Leadvertex\External\Export\Core\Components\StoredConfig;
-use Leadvertex\External\Export\Core\Components\WebhookManager;
-use Leadvertex\External\Export\Core\FieldDefinitions\ArrayDefinition;
-use Leadvertex\External\Export\Core\FieldDefinitions\CheckboxDefinition;
-use Leadvertex\External\Export\Core\FieldDefinitions\EnumDefinition;
-use Leadvertex\External\Export\Core\Formatter\FieldGroup;
-use Leadvertex\External\Export\Core\Formatter\FormatterInterface;
-use Leadvertex\External\Export\Core\Formatter\Scheme;
-use Leadvertex\External\Export\Core\Formatter\Type;
+use Leadvertex\Plugin\Export\Core\Components\ApiParams;
+use Leadvertex\Plugin\Export\Core\Components\BatchResult\BatchResultInterface;
+use Leadvertex\Plugin\Export\Core\Components\BatchResult\BatchResultSuccess;
+use Leadvertex\Plugin\Export\Core\Components\Developer;
+use Leadvertex\Plugin\Export\Core\Components\GenerateParams;
+use Leadvertex\Plugin\Export\Core\Components\MultiLang;
+use Leadvertex\Plugin\Export\Core\Components\StoredConfig;
+use Leadvertex\Plugin\Export\Core\Components\WebhookManager;
+use Leadvertex\Plugin\Export\Core\FieldDefinitions\ArrayDefinition;
+use Leadvertex\Plugin\Export\Core\FieldDefinitions\BooleanDefinition;
+use Leadvertex\Plugin\Export\Core\FieldDefinitions\EnumDefinition;
+use Leadvertex\Plugin\Export\Core\Formatter\FieldGroup;
+use Leadvertex\Plugin\Export\Core\Formatter\FormatterInterface;
+use Leadvertex\Plugin\Export\Core\Formatter\Scheme;
+use Leadvertex\Plugin\Export\Core\Formatter\Type;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -162,7 +162,7 @@ class Excel implements FormatterInterface
                                 'csv',
                                 true
                             ),
-                            'headers' => new CheckboxDefinition(
+                            'headers' => new BooleanDefinition(
                                 new MultiLang([
                                     'en' => 'Column names',
                                     'ru' => 'Названия колонок',
@@ -206,7 +206,7 @@ class Excel implements FormatterInterface
         }
 
         $useHeaders = $config->get(
-            'headers',
+            'main.headers',
             $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
         );
 
@@ -215,7 +215,7 @@ class Excel implements FormatterInterface
         }
 
         $defaultFormat = $this->getScheme()->getGroup('main')->getField('format')->getDefaultValue();
-        $format = $config->get('format', $defaultFormat);
+        $format = $config->get('main.format', $defaultFormat);
         if (!in_array($format, ['csv', 'xls', 'xlsx'])) {
             return false;
         }
@@ -232,7 +232,7 @@ class Excel implements FormatterInterface
     public function generate(GenerateParams $params)
     {
         $defaultFormat = $this->getScheme()->getGroup('main')->getField('format')->getDefaultValue();
-        $format = $params->getConfig()->get('format', $defaultFormat);
+        $format = $params->getConfig()->get('main.format', $defaultFormat);
         $prefix = $params->getBatchParams()->getToken();
         $filePath = Path::canonicalize("{$this->publicDir}/{$prefix}.{$format}");
         $webHookManager = new WebhookManager($params->getBatchParams());
@@ -242,12 +242,12 @@ class Excel implements FormatterInterface
                 $csv = fopen($filePath, 'w');
 
                 $useHeaders = $params->getConfig()->get(
-                    'headers',
+                    'main.headers',
                     $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
                 );
 
                 if ($useHeaders) {
-                    fputcsv($csv, $params->getConfig()->get('fields'));
+                    fputcsv($csv, $params->getConfig()->get('main.fields'));
                 }
 
                 foreach ($params->getChunkedIds()->getChunks() as $ids) {
@@ -289,14 +289,14 @@ class Excel implements FormatterInterface
         $sheet = $spreadsheet->getActiveSheet();
 
         $useHeaders = $params->getConfig()->get(
-            'headers',
+            'main.headers',
             $this->getScheme()->getGroup('main')->getField('headers')->getDefaultValue()
         );
 
         $record = 1;
         $col = 'A';
         if ($useHeaders) {
-            foreach ($params->getConfig()->get('fields') as $item) {
+            foreach ($params->getConfig()->get('main.fields') as $item) {
                 $sheet->setCellValue($col . $record, $item);
                 $col++;
             }
@@ -326,7 +326,7 @@ class Excel implements FormatterInterface
         $ids = implode(',', $ids);
 
         $fields = [];
-        foreach ($config->get('fields') as $field) {
+        foreach ($config->get('main.fields') as $field) {
             $items = array_reverse(explode('.', $field));
             $tree = [];
             foreach ($items as $item) {

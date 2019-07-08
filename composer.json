@@ -1,6 +1,6 @@
 {
-  "name": "leadvertex/lv-export-app",
-  "description": "Generate any type output formats with selected configuration",
+  "name": "leadvertex/plugin-export-excel",
+  "description": "Plugin for export orders from leadvertex.com in Excel (xlsx, xls, csv) format",
   "type": "project",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -12,7 +12,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Leadvertex\\External\\Export\\Format\\": "src/"
+      "Leadvertex\\Plugin\\Export\\Format\\": "src/"
     }
   },
   "require": {
@@ -20,6 +20,6 @@
     "ext-json": "*",
     "softonic/graphql-client": "^1.2",
     "phpoffice/phpspreadsheet": "^1.7",
-    "leadvertex/lv-export-core": "^0.3.0"
+    "leadvertex/plugin-export-core": "^0.5.0"
   }
 }
