@@ -12,18 +12,19 @@ use Adbar\Dot;
 use Leadvertex\Plugin\Export\Core\Components\ApiParams;
 use Leadvertex\Plugin\Export\Core\Components\BatchResult\BatchResultInterface;
 use Leadvertex\Plugin\Export\Core\Components\BatchResult\BatchResultSuccess;
-use Leadvertex\Plugin\Export\Core\Components\Developer;
 use Leadvertex\Plugin\Export\Core\Components\GenerateParams;
-use Leadvertex\Plugin\Export\Core\Components\MultiLang;
 use Leadvertex\Plugin\Export\Core\Components\StoredConfig;
 use Leadvertex\Plugin\Export\Core\Components\WebhookManager;
-use Leadvertex\Plugin\Export\Core\FieldDefinitions\ArrayDefinition;
-use Leadvertex\Plugin\Export\Core\FieldDefinitions\BooleanDefinition;
-use Leadvertex\Plugin\Export\Core\FieldDefinitions\EnumDefinition;
-use Leadvertex\Plugin\Export\Core\Formatter\FieldGroup;
 use Leadvertex\Plugin\Export\Core\Formatter\FormatterInterface;
-use Leadvertex\Plugin\Export\Core\Formatter\Scheme;
 use Leadvertex\Plugin\Export\Core\Formatter\Type;
+use Leadvertex\Plugin\Scheme\Components\i18n;
+use Leadvertex\Plugin\Scheme\Components\Lang;
+use Leadvertex\Plugin\Scheme\Developer;
+use Leadvertex\Plugin\Scheme\FieldDefinitions\ArrayDefinition;
+use Leadvertex\Plugin\Scheme\FieldDefinitions\BooleanDefinition;
+use Leadvertex\Plugin\Scheme\FieldDefinitions\EnumDefinition;
+use Leadvertex\Plugin\Scheme\FieldGroup;
+use Leadvertex\Plugin\Scheme\Scheme;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -60,26 +61,34 @@ class Excel implements FormatterInterface
 
     /**
      * Should return human-friendly name of this exporter
-     * @return MultiLang
+     * @return i18n
      */
-    public static function getName(): MultiLang
+    public static function getName(): i18n
     {
-        return new MultiLang([
-            'en' => 'Excel',
-            'ru' => 'Excel',
+        return i18n::instance([
+            new Lang('en', 'Excel'),
+            new Lang('ru', 'Excel'),
         ]);
     }
 
     /**
      * Should return human-friendly description of this exporter
-     * @return MultiLang
+     * @return i18n
      */
-    public static function getDescription(): MultiLang
+    public static function getDescription(): i18n
     {
-        return new MultiLang([
-            'en' => 'Export orders to excel file',
-            'ru' => 'Выгружает заказы в excel файл',
+        return i18n::instance([
+            new Lang('en', 'Export orders to excel file'),
+            new Lang('ru', 'Выгружает заказы в excel файл'),
         ]);
+    }
+
+    /**
+     * @return Type of entities, that can be exported by plugin
+     */
+    public function getType(): Type
+    {
+        return new Type(Type::ORDERS);
     }
 
     /**
@@ -92,84 +101,62 @@ class Excel implements FormatterInterface
             $fields = $this->getFields();
             $this->scheme = new Scheme(
                 new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com'),
-                new Type(Type::ORDERS),
                 self::getName(),
                 self::getDescription(),
                 [
                     'main' => new FieldGroup(
-                        new MultiLang([
-                            'en' => 'Main settings',
-                            'ru' => 'Основные настройки'
+                        i18n::instance([
+                            new Lang('en', 'Main settings'),
+                            new Lang('ru', 'Основные настройки'),
                         ]),
                         [
                             'fields' => new ArrayDefinition(
-                                new MultiLang([
-                                    'en' => 'Fields to export',
-                                    'ru' => 'Поля для выгрузки',
+                                i18n::instance([
+                                    new Lang('en', 'Fields to export'),
+                                    new Lang('ru', 'Поля для выгрузки'),
                                 ]),
-                                new MultiLang([
-                                    'en' => 'Fields with this order will be exported to excel table',
-                                    'ru' => 'Поля будут выгружены в таблицу excel в заданной последовательности',
+                                i18n::instance([
+                                    new Lang('en', 'Fields with this order will be exported to excel table'),
+                                    new Lang('ru', 'Поля будут выгружены в таблицу excel в заданной последовательности'),
                                 ]),
-                                [
-                                    'id' => new MultiLang([
-                                        'en' => 'ID',
-                                        'ru' => 'ID'
-                                    ]),
-                                    'project.id' => new MultiLang([
-                                        'en' => 'Project ID',
-                                        'ru' => 'ID проекта'
-                                    ]),
-                                    'project.name' => new MultiLang([
-                                        'en' => 'Project name',
-                                        'ru' => 'Имя проекта'
-                                    ]),
-                                    'status.id' => new MultiLang([
-                                        'en' => 'Status ID',
-                                        'ru' => 'ID статуса'
-                                    ]),
-                                    'status.name' => new MultiLang([
-                                        'en' => 'Status name',
-                                        'ru' => 'Имя статуса'
-                                    ]),
-                                ],
                                 $fields,
+                                ['id', 'project.id', 'project.name', 'status.id', 'status.name'],
                                 true
                             ),
                             'format' => new EnumDefinition(
-                                new MultiLang([
-                                    'en' => 'File format',
-                                    'ru' => 'Формат файла',
+                                i18n::instance([
+                                    new Lang('en', 'File format'),
+                                    new Lang('ru', 'Формат файла'),
                                 ]),
-                                new MultiLang([
-                                    'en' => 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format',
-                                    'ru' => 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel',
+                                i18n::instance([
+                                    new Lang('en', 'csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format'),
+                                    new Lang('ru', 'csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel'),
                                 ]),
                                 [
-                                    'csv' => new MultiLang([
-                                        'en' => '*.csv - simple plain text format',
-                                        'ru' => '*.csv - простой текстовый формат',
+                                    'csv' => i18n::instance([
+                                        new Lang('en', '*.csv - simple plain text format'),
+                                        new Lang('ru', '*.csv - простой текстовый формат'),
                                     ]),
-                                    'xls' => new MultiLang([
-                                        'en' => '*.xls - Excel 2003',
-                                        'ru' => '*.xls - Формат Excel 2003',
+                                    'xls' => i18n::instance([
+                                        new Lang('en', '*.xls - Excel 2003'),
+                                        new Lang('ru', '*.xls - Формат Excel 2003'),
                                     ]),
-                                    'xlsx' => new MultiLang([
-                                        'en' => '*.xls - Excel 2007 and newer',
-                                        'ru' => '*.xls - Формат Excel 2007 и новее',
+                                    'xlsx' => i18n::instance([
+                                        new Lang('en', '*.xls - Excel 2007 and newer'),
+                                        new Lang('ru', '*.xls - Формат Excel 2007 и новее'),
                                     ])
                                 ],
                                 'csv',
                                 true
                             ),
                             'headers' => new BooleanDefinition(
-                                new MultiLang([
-                                    'en' => 'Column names',
-                                    'ru' => 'Названия колонок',
+                                i18n::instance([
+                                    new Lang('en', 'Column names'),
+                                    new Lang('ru', 'Названия колонок'),
                                 ]),
-                                new MultiLang([
-                                    'en' => 'Add column names at first wor',
-                                    'ru' => 'Добавлять названия колонок на первой строчке',
+                                i18n::instance([
+                                    new Lang('en', 'Add column names at first wor'),
+                                    new Lang('ru', 'Добавлять названия колонок на первой строчке'),
                                 ]),
                                 true,
                                 true
@@ -397,180 +384,180 @@ QUERY;
                 case 'IntFieldDefinition':
                 case 'PhoneFieldDefinition':
                 case 'StringFieldDefinition':
-                    $fields["orderData.{$name}"] = new MultiLang([
-                        'en' => $name,
-                        'ru' => $name
+                    $fields["orderData.{$name}"] = i18n::instance([
+                        new Lang('en', $name),
+                        new Lang('ru', $name),
                     ]);
                     break;
                 case 'AddressFieldDefinition':
-                    $fields["orderData.{$name}.postcode"] = new MultiLang([
-                        'en' => "{$label}: Address postcode",
-                        'ru' => "{$label}: Почтовый индекс"
+                    $fields["orderData.{$name}.postcode"] = i18n::instance([
+                        new Lang('en', "{$label}: Address postcode"),
+                        new Lang('ru', "{$label}: Почтовый индекс"),
                     ]);
-                    $fields["orderData.{$name}.region"] = new MultiLang([
-                        'en' => "{$label}: Region",
-                        'ru' => "{$label}: Регион"
+                    $fields["orderData.{$name}.region"] = i18n::instance([
+                        new Lang('en', "{$label}: Region"),
+                        new Lang('ru', "{$label}: Регион"),
                     ]);
-                    $fields["orderData.{$name}.city"] = new MultiLang([
-                        'en' => "{$label}: City",
-                        'ru' => "{$label}: Город"
+                    $fields["orderData.{$name}.city"] = i18n::instance([
+                        new Lang('en', "{$label}: City"),
+                        new Lang('ru', "{$label}: Город"),
                     ]);
-                    $fields["orderData.{$name}.address_1"] = new MultiLang([
-                        'en' => "{$label}: First address",
-                        'ru' => "{$label}: Первый адрес"
+                    $fields["orderData.{$name}.address_1"] = i18n::instance([
+                        new Lang('en', "{$label}: First address"),
+                        new Lang('ru', "{$label}: Первый адрес"),
                     ]);
-                    $fields["orderData.{$name}.address_2"] = new MultiLang([
-                        'en' => "{$label}: Second address",
-                        'ru' => "{$label}: Второй адрес"
+                    $fields["orderData.{$name}.address_2"] = i18n::instance([
+                        new Lang('en', "{$label}: Second address"),
+                        new Lang('ru', "{$label}: Второй адрес"),
                     ]);
                     break;
                 case 'HumanNameFieldDefinition':
-                    $fields["orderData.{$name}.firstName"] = new MultiLang([
-                        'en' => "{$label}: User first name",
-                        'ru' => "{$label}: Имя"
+                    $fields["orderData.{$name}.firstName"] = i18n::instance([
+                        new Lang('en', "{$label}: User first name"),
+                        new Lang('ru', "{$label}: Имя"),
                     ]);
-                    $fields["orderData.{$name}.lastName"] = new MultiLang([
-                        'en' => "{$label}: User last name",
-                        'ru' => "{$label}: Фамилия"
+                    $fields["orderData.{$name}.lastName"] = i18n::instance([
+                        new Lang('en', "{$label}: User last name"),
+                        new Lang('ru', "{$label}: Фамилия"),
                     ]);
                     break;
                 case 'UserFieldDefinition':
-                    $fields["orderData.{$name}.id"] = new MultiLang([
-                        'en' => "{$label}: User ID",
-                        'ru' => "{$label}: ID пользователя"
+                    $fields["orderData.{$name}.id"] = i18n::instance([
+                        new Lang('en', "{$label}: User ID"),
+                        new Lang('ru', "{$label}: ID пользователя"),
                     ]);
-                    $fields["orderData.{$name}.name.firstName"] = new MultiLang([
-                        'en' => "{$label}: User first name",
-                        'ru' => "{$label}: Имя пользователя"
+                    $fields["orderData.{$name}.name.firstName"] = i18n::instance([
+                        new Lang('en', "{$label}: User first name"),
+                        new Lang('ru', "{$label}: Имя пользователя"),
                     ]);
-                    $fields["orderData.{$name}.name.lastName"] = new MultiLang([
-                        'en' => "{$label}: User last name",
-                        'ru' => "{$label}: Фамилия пользователя"
+                    $fields["orderData.{$name}.name.lastName"] = i18n::instance([
+                        new Lang('en', "{$label}: User last name"),
+                        new Lang('ru', "{$label}: Фамилия пользователя"),
                     ]);
-                    $fields["orderData.{$name}.email"] = new MultiLang([
-                        'en' => "{$label}: User email",
-                        'ru' => "{$label}: Электронаня почта пользователя"
+                    $fields["orderData.{$name}.email"] = i18n::instance([
+                        new Lang('en', "{$label}: User email"),
+                        new Lang('ru', "{$label}: Электронаня почта пользователя"),
                     ]);
                     break;
             }
         }
 
         return array_merge([
-            'id' => new MultiLang([
-                'en' => 'ID',
-                'ru' => 'ID'
+            'id' => i18n::instance([
+                new Lang('en', 'ID'),
+                new Lang('ru', 'ID'),
             ]),
-            'project.id' => new MultiLang([
-                'en' => 'Project ID',
-                'ru' => 'ID проекта'
+            'project.id' => i18n::instance([
+                new Lang('en', 'Project ID'),
+                new Lang('ru', 'ID проекта'),
             ]),
-            'project.name' => new MultiLang([
-                'en' => 'Project name',
-                'ru' => 'Название проекта'
+            'project.name' => i18n::instance([
+                new Lang('en', 'Project name'),
+                new Lang('ru', 'Название проекта'),
             ]),
-            'status.id' => new MultiLang([
-                'en' => 'Status ID',
-                'ru' => 'ID статуса'
+            'status.id' => i18n::instance([
+                new Lang('en', 'Status ID'),
+                new Lang('ru', 'ID статуса'),
             ]),
-            'status.name' => new MultiLang([
-                'en' => 'Status name',
-                'ru' => 'Название статуса'
+            'status.name' => i18n::instance([
+                new Lang('en', 'Status name'),
+                new Lang('ru', 'Название статуса'),
             ]),
-            'status.group' => new MultiLang([
-                'en' => 'Status group',
-                'ru' => 'Группа статуса'
+            'status.group' => i18n::instance([
+                new Lang('en', 'Status group'),
+                new Lang('ru', 'Группа статуса'),
             ]),
-            'statusChangedAt' => new MultiLang([
-                'en' => 'Status changed At',
-                'ru' => 'Дата изменения статуса'
+            'statusChangedAt' => i18n::instance([
+                new Lang('en', 'Status changed At'),
+                new Lang('ru', 'Дата изменения статуса'),
             ]),
-            'createdAt' => new MultiLang([
-                'en' => 'Created At',
-                'ru' => 'Дата создания'
+            'createdAt' => i18n::instance([
+                new Lang('en', 'Created At'),
+                new Lang('ru', 'Дата создания'),
             ]),
-            'updatedAt' => new MultiLang([
-                'en' => 'Updated At',
-                'ru' => 'Дата обновления'
+            'updatedAt' => i18n::instance([
+                new Lang('en', 'Updated At'),
+                new Lang('ru', 'Дата обновления'),
             ]),
-            'canceledAt' => new MultiLang([
-                'en' => 'Canceled At',
-                'ru' => 'Дата отмены'
+            'canceledAt' => i18n::instance([
+                new Lang('en', 'Canceled At'),
+                new Lang('ru', 'Дата отмены'),
             ]),
-            'approvedAt' => new MultiLang([
-                'en' => 'Approved At',
-                'ru' => 'Дата подтверждения'
+            'approvedAt' => i18n::instance([
+                new Lang('en', 'Approved At'),
+                new Lang('ru', 'Дата подтверждения'),
             ]),
-            'shippedAt' => new MultiLang([
-                'en' => 'Shipped At',
-                'ru' => 'Дата отправки'
+            'shippedAt' => i18n::instance([
+                new Lang('en', 'Shipped At'),
+                new Lang('ru', 'Дата отправки'),
             ]),
-            'deliveredAt' => new MultiLang([
-                'en' => 'Delivered At',
-                'ru' => 'Дата доставки'
+            'deliveredAt' => i18n::instance([
+                new Lang('en', 'Delivered At'),
+                new Lang('ru', 'Дата доставки'),
             ]),
-            'undeliveredAt' => new MultiLang([
-                'en' => 'Undelivered At',
-                'ru' => 'Дата недоставки'
+            'undeliveredAt' => i18n::instance([
+                new Lang('en', 'Undelivered At'),
+                new Lang('ru', 'Дата недоставки'),
             ]),
-            'refundedAt' => new MultiLang([
-                'en' => 'Refunded At',
-                'ru' => 'Дата возврата'
+            'refundedAt' => i18n::instance([
+                new Lang('en', 'Refunded At'),
+                new Lang('ru', 'Дата возврата'),
             ]),
-            'warehouse.id' => new MultiLang([
-                'en' => 'Warehouse id',
-                'ru' => 'ID склада'
+            'warehouse.id' => i18n::instance([
+                new Lang('en', 'Warehouse id'),
+                new Lang('ru', 'ID склада'),
             ]),
-            'warehouse.name' => new MultiLang([
-                'en' => 'Warehouse name',
-                'ru' => 'Название склада'
+            'warehouse.name' => i18n::instance([
+                new Lang('en', 'Warehouse name'),
+                new Lang('ru', 'Название склада'),
             ]),
-            "initCartPrice" => new MultiLang([
-                'en' => 'Order price: initial',
-                'ru' => 'Цена заказа: начальная'
+            "initCartPrice" => i18n::instance([
+                new Lang('en', 'Order price: initial'),
+                new Lang('ru', 'Цена заказа: начальная'),
             ]),
-            "cart.totalPrice" => new MultiLang([
-                'en' => 'Order price: current',
-                'ru' => 'Цена заказа: текущая'
+            "cart.totalPrice" => i18n::instance([
+                new Lang('en', 'Order price: current'),
+                new Lang('ru', 'Цена заказа: текущая'),
             ]),
-            'source.url' => new MultiLang([
-                'en' => 'Source: URL',
-                'ru' => 'Ресурс: URL'
+            'source.url' => i18n::instance([
+                new Lang('en', 'Source: URL'),
+                new Lang('ru', 'Ресурс: URL'),
             ]),
-            'source.refererUrl' => new MultiLang([
-                'en' => 'Source: referer URL',
-                'ru' => 'Ресурс: URL референта'
+            'source.refererUrl' => i18n::instance([
+                new Lang('en', 'Source: referer URL'),
+                new Lang('ru', 'Ресурс: URL референта'),
             ]),
-            'source.ip' => new MultiLang([
-                'en' => 'Source: IP',
-                'ru' => 'Ресурс: IP'
+            'source.ip' => i18n::instance([
+                new Lang('en', 'Source: IP'),
+                new Lang('ru', 'Ресурс: IP'),
             ]),
-            'source.utm_source' => new MultiLang([
-                'en' => 'Source: UTM-source',
-                'ru' => 'Ресурс: UTM-source'
+            'source.utm_source' => i18n::instance([
+                new Lang('en', 'Source: UTM-source'),
+                new Lang('ru', 'Ресурс: UTM-source'),
             ]),
-            'source.utm_medium' => new MultiLang([
-                'en' => 'Source: UTM-medium',
-                'ru' => 'Ресурс: UTM-medium'
+            'source.utm_medium' => i18n::instance([
+                new Lang('en', 'Source: UTM-medium'),
+                new Lang('ru', 'Ресурс: UTM-medium'),
             ]),
-            'source.utm_campaign' => new MultiLang([
-                'en' => 'Source: UTM-campaign',
-                'ru' => 'Ресурс: UTM-campaign'
+            'source.utm_campaign' => i18n::instance([
+                new Lang('en', 'Source: UTM-campaign'),
+                new Lang('ru', 'Ресурс: UTM-campaign'),
             ]),
-            'source.utm_content' => new MultiLang([
-                'en' => 'Source: UTM-content',
-                'ru' => 'Ресурс: UTM-content'
+            'source.utm_content' => i18n::instance([
+                new Lang('en', 'Source: UTM-content'),
+                new Lang('ru', 'Ресурс: UTM-content'),
             ]),
-            'source.utm_term' => new MultiLang([
-                'en' => 'Source: UTM-term',
-                'ru' => 'Ресурс: UTM-term'
+            'source.utm_term' => i18n::instance([
+                new Lang('en', 'Source: UTM-term'),
+                new Lang('ru', 'Ресурс: UTM-term'),
             ]),
-            'source.subid_1' => new MultiLang([
-                'en' => 'Source: first sub-id',
-                'ru' => 'Ресурс: первый дополнительный id'
+            'source.subid_1' => i18n::instance([
+                new Lang('en', 'Source: first sub-id'),
+                new Lang('ru', 'Ресурс: первый дополнительный id'),
             ]),
-            'source.subid_2' => new MultiLang([
-                'en' => 'Source: second sub-id',
-                'ru' => 'Ресурс: второй дополнительный id'
+            'source.subid_2' => i18n::instance([
+                new Lang('en', 'Source: second sub-id'),
+                new Lang('ru', 'Ресурс: второй дополнительный id'),
             ]),
         ], $fields);
     }
