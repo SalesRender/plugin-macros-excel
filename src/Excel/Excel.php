@@ -361,11 +361,51 @@ query {
         name
         definition {
           __typename
+          ... on CheckboxFieldDefinition {
+            label
+          }
+          ... on DatetimeFieldDefinition {
+            label
+          }
+          ... on DropdownFieldDefinition {
+            label
+          }
+          ... on EmailFieldDefinition {
+            label
+          }
+          ... on FileFieldDefinition {
+            label
+          }
+          ... on FloatFieldDefinition {
+            label
+          }
+          ... on ImageFieldDefinition {
+            label
+          }
+          ... on IntFieldDefinition {
+            label
+          }
+          ... on PhoneFieldDefinition {
+            label
+          }
+          ... on StringFieldDefinition {
+            label
+          }
+          ... on AddressFieldDefinition {
+            label
+          }
+          ... on HumanNameFieldDefinition {
+            label
+          }
+          ... on UserFieldDefinition {
+            label
+          }
         }
       }
     }
   }
 }
+
 QUERY;
 
         $response = $this->getGraphQLClient()->query($query)->getData();
