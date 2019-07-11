@@ -561,43 +561,43 @@ QUERY;
             ]),
             'source.url' => i18n::instance([
                 new Lang('en', 'Source: URL'),
-                new Lang('ru', 'Ресурс: URL'),
+                new Lang('ru', 'Источник: URL'),
             ]),
             'source.refererUrl' => i18n::instance([
-                new Lang('en', 'Source: referer URL'),
-                new Lang('ru', 'Ресурс: URL референта'),
+                new Lang('en', 'Source: Referer URL'),
+                new Lang('ru', 'Источник: Referer URL'),
             ]),
             'source.ip' => i18n::instance([
                 new Lang('en', 'Source: IP'),
-                new Lang('ru', 'Ресурс: IP'),
+                new Lang('ru', 'Источник: IP'),
             ]),
             'source.utm_source' => i18n::instance([
                 new Lang('en', 'Source: UTM-source'),
-                new Lang('ru', 'Ресурс: UTM-source'),
+                new Lang('ru', 'Источник: UTM-source'),
             ]),
             'source.utm_medium' => i18n::instance([
                 new Lang('en', 'Source: UTM-medium'),
-                new Lang('ru', 'Ресурс: UTM-medium'),
+                new Lang('ru', 'Источник: UTM-medium'),
             ]),
             'source.utm_campaign' => i18n::instance([
                 new Lang('en', 'Source: UTM-campaign'),
-                new Lang('ru', 'Ресурс: UTM-campaign'),
+                new Lang('ru', 'Источник: UTM-campaign'),
             ]),
             'source.utm_content' => i18n::instance([
                 new Lang('en', 'Source: UTM-content'),
-                new Lang('ru', 'Ресурс: UTM-content'),
+                new Lang('ru', 'Источник: UTM-content'),
             ]),
             'source.utm_term' => i18n::instance([
                 new Lang('en', 'Source: UTM-term'),
-                new Lang('ru', 'Ресурс: UTM-term'),
+                new Lang('ru', 'Источник: UTM-term'),
             ]),
             'source.subid_1' => i18n::instance([
-                new Lang('en', 'Source: first sub-id'),
-                new Lang('ru', 'Ресурс: первый дополнительный id'),
+                new Lang('en', 'Source: subid_1'),
+                new Lang('ru', 'Источник: subid_1'),
             ]),
             'source.subid_2' => i18n::instance([
-                new Lang('en', 'Source: second sub-id'),
-                new Lang('ru', 'Ресурс: второй дополнительный id'),
+                new Lang('en', 'Source: subid_2'),
+                new Lang('ru', 'Источник: subid_2'),
             ]),
         ], $fields);
     }
