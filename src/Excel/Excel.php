@@ -361,13 +361,13 @@ query {
         name
         definition {
           __typename
-          ... on CheckboxFieldDefinition {
+          ... on BooleanFieldDefinition {
             label
           }
           ... on DatetimeFieldDefinition {
             label
           }
-          ... on DropdownFieldDefinition {
+          ... on EnumFieldDefinition {
             label
           }
           ... on EmailFieldDefinition {
@@ -414,9 +414,9 @@ QUERY;
             $name = $fieldData['name'];
             $label = $fieldData['definition']['label'];
             switch ($fieldData['definition']['__typename']) {
-                case 'CheckboxFieldDefinition':
+                case 'BooleanFieldDefinition':
                 case 'DatetimeFieldDefinition':
-                case 'DropdownFieldDefinition':
+                case 'EnumFieldDefinition':
                 case 'EmailFieldDefinition':
                 case 'FileFieldDefinition':
                 case 'FloatFieldDefinition':
