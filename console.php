@@ -1,9 +1,8 @@
 #!/usr/bin/env php
 <?php
-require __DIR__ . '/const.php';
 
-$application = new Leadvertex\Plugin\Export\Core\Apps\ConsoleApplication(
-    LV_EXPORT_RUNTIME_DIR,
-    LV_EXPORT_PUBLIC_DIR
-);
+use Leadvertex\Plugin\Exporter\Core\Apps\ConsoleApplication;
+
+require __DIR__ . '/const.php';
+$application = new ConsoleApplication();
 $application->run();
