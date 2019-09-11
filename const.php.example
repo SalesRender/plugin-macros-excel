@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Webmozart\PathUtil\Path;
 
-define('LV_EXPORT_RUNTIME_DIR', Path::canonicalize(__DIR__ . '/runtime'));
-define('LV_EXPORT_PUBLIC_DIR', Path::canonicalize(__DIR__ . '/public/compiled'));
-define('LV_EXPORT_CONSOLE_SCRIPT', Path::canonicalize(__DIR__ . '/console.php'));
-
-define('LV_EXPORT_PUBLIC_URL', 'http://plugin-exporter-excel/compiled');
-define('LV_EXPORT_DEBUG', false);
+define('LV_PLUGIN_DIR', __DIR__);
+define('LV_PLUGIN_URL', 'http://plugin-exporter-excel/');
+define('LV_PLUGIN_DEBUG', true);

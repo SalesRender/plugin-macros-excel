@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteRule ^compiled - [L]
+RewriteRule ^output - [L]
 RewriteCond %{REQUEST_FILENAME}  -f [OR]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [L,QSA]

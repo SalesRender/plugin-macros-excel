@@ -1,7 +1,8 @@
 <?php
-
-use Leadvertex\Plugin\Exporter\Core\Apps\WebApplication;
+use Leadvertex\Plugin\Handler\Factories\AppFactory;
 
 require_once __DIR__ . '/../const.php';
-$app = new WebApplication();
-$app->run();
+
+$factory = new AppFactory();
+$application = $factory->web();
+$application->run();

@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\Plugin\Exporter\Handler\Excel;
+namespace Leadvertex\Plugin\Handler\Excel\Components;
 
 
 use Exception;
@@ -15,9 +15,9 @@ use Leadvertex\Plugin\Components\Form\FieldDefinitions\BooleanDefinition;
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\EnumDefinition;
 use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Exporter\Handler\Components\Lang;
+use Leadvertex\Plugin\Handler\Excel\Excel;
 
-class ExcelForm extends Form
+class ExcelSettingsForm extends Form
 {
 
     /**

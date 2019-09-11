@@ -5,14 +5,17 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\Plugin\Exporter\Handler\Excel;
+namespace Leadvertex\Plugin\Handler\Excel;
 
 
 use Adbar\Dot;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Leadvertex\Plugin\Components\ApiClient\ApiClient;
+use Leadvertex\Plugin\Components\ApiClient\ApiFilterSortPaginate;
 use Leadvertex\Plugin\Components\Developer\Developer;
+use Leadvertex\Plugin\Components\Form\FieldDefinitions\EnumDefinition;
+use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\I18n\I18nInterface;
 use Leadvertex\Plugin\Components\Process\Components\Error;
@@ -21,23 +24,27 @@ use Leadvertex\Plugin\Components\Process\Components\Result\ResultFailed;
 use Leadvertex\Plugin\Components\Process\Components\Result\ResultUrl;
 use Leadvertex\Plugin\Components\Process\Exceptions\NotInitializedException;
 use Leadvertex\Plugin\Components\Process\Process;
+use Leadvertex\Plugin\Components\Purpose\PluginClass;
 use Leadvertex\Plugin\Components\Purpose\PluginEntity;
-use Leadvertex\Plugin\Exporter\Core\Components\GenerateParams;
-use Leadvertex\Plugin\Exporter\Core\ExporterInterface;
-use Leadvertex\Plugin\Exporter\Handler\Components\ExporterException;
-use Leadvertex\Plugin\Exporter\Handler\Components\Lang;
-use Leadvertex\Plugin\Exporter\Handler\Components\OrdersFetcherIterator;
+use Leadvertex\Plugin\Components\Purpose\PluginPurpose;
+use Leadvertex\Plugin\Handler\Excel\Components\Lang;
+use Leadvertex\Plugin\Handler\Excel\Components\OrdersFetcherIterator;
+use Leadvertex\Plugin\Handler\Excel\Components\ExcelSettingsForm;
+use Leadvertex\Plugin\Handler\PluginInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Webmozart\PathUtil\Path;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
 
-class Excel implements ExporterInterface
+class Excel implements PluginInterface
 {
 
     /** @var Form */
-    private $form;
+    private $settingsForm;
+
+    /** @var Form */
+    private $optionsForm;
 
     /** @var ApiClient */
     private $apiClient;
@@ -46,17 +53,17 @@ class Excel implements ExporterInterface
     private $runtimeDir;
 
     /** @var string */
-    private $publicDir;
+    private $outputDir;
 
     /** @var string */
-    private $publicUrl;
+    private $outputUrl;
 
-    public function __construct(ApiClient $apiClient, string $runtimeDir, string $publicDir, string $publicUrl)
+    public function __construct(ApiClient $apiClient, string $runtimeDir, string $outputDir, string $outputUrl)
     {
         $this->apiClient = $apiClient;
         $this->runtimeDir = $runtimeDir;
-        $this->publicDir = $publicDir;
-        $this->publicUrl = $publicUrl;
+        $this->outputDir = $outputDir;
+        $this->outputUrl = $outputUrl;
     }
 
     /**
@@ -70,7 +77,7 @@ class Excel implements ExporterInterface
 
     public static function getDefaultLanguage(): string
     {
-        return 'en';
+        return I18nInterface::en_US;
     }
 
     /**
@@ -99,52 +106,111 @@ class Excel implements ExporterInterface
 
     public function getDeveloper(): Developer
     {
-        return new Developer('LeadVertex', 'support@leadvertex.com', 'exports.leadvertex.com');
+        return new Developer('LeadVertex', 'support@leadvertex.com', 'plugins.leadvertex.com');
     }
 
     /**
-     * @return PluginEntity of entities, that can be exported by plugin
+     * @return PluginPurpose of entities, that can be handled by plugin
      * @throws OutOfEnumException
      */
-    public function getEntity(): PluginEntity
+    public function getPurpose(): PluginPurpose
     {
-        return new PluginEntity(PluginEntity::ENTITY_ORDER);
+        return new PluginPurpose(
+            new PluginClass(PluginClass::CLASS_EXPORTER),
+            new PluginEntity(PluginEntity::ENTITY_ORDER)
+        );
+    }
+
+    public function hasSettingsForm(): bool
+    {
+        return true;
     }
 
     /**
+     * Should return settings form for plugin configs
      * @return Form
      * @throws Exception
      */
-    public function getForm(): Form
+    public function getSettingsForm(): Form
     {
-        if (!$this->form) {
-            $this->form = new ExcelForm($this->apiClient);
+        if (!$this->settingsForm) {
+            $this->settingsForm = new ExcelSettingsForm($this->apiClient);
         }
 
-        return $this->form;
+        return $this->settingsForm;
+    }
+
+    public function hasOptionsForm(): bool
+    {
+        return true;
     }
 
     /**
-     * @param GenerateParams $params
-     * @throws ExporterException
+     * Should return form for plugin options (before-handle form)
+     * @return Form
+     * @throws Exception
+     */
+    public function getOptionsForm(): Form
+    {
+        if (!$this->optionsForm) {
+            $this->optionsForm = new Form(
+                new Lang('Export options', 'Опции выгрузки'),
+                new Lang('One-time export options', 'Единоразовые опции выгрузки'),
+                [
+                    'main' => new FieldGroup(
+                        new Lang('Excel', 'Excel'),
+                        [
+                            'format' => new EnumDefinition(
+                                new Lang(
+                                    "File format",
+                                    "Формат файла"
+                                ),
+                                new Lang(
+                                    "csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format",
+                                    "csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel"
+                                ),
+                                [
+                                    'csv' => new Lang(
+                                        "*.csv - simple plain text format",
+                                        "*.csv - простой текстовый формат"
+                                    ),
+                                    'xls' => new Lang(
+                                        "*.xls - Excel 2003",
+                                        "*.xls - Формат Excel 2003"
+                                    ),
+                                    'xlsx' => new Lang(
+                                        "*.xls - Excel 2007 and newer",
+                                        "*.xls - Формат Excel 2007 и новее"
+                                    ),
+                                ],
+                                $this->getSettingsForm()->getData()->get('main.format'),
+                                true
+                            ),
+                        ]
+                    )
+                ]
+            );
+        }
+        return $this->optionsForm;
+    }
+
+    /**
+     * @param Process $process
+     * @param ApiFilterSortPaginate|null $fsp
      * @throws GuzzleException
      * @throws NotInitializedException
      */
-    public function generate(GenerateParams $params)
+    public function handle(Process $process, ?ApiFilterSortPaginate $fsp)
     {
-        if (!$this->getForm()->setData($params->getFormData())) {
-            throw new ExporterException('Invalid form data');
-        }
+        $settingsData = $this->settingsForm->getData();
+        $optionsData = $this->optionsForm->getData();
 
-        $data = $this->getForm()->getData();
+        $format = $optionsData->get('main.format');
+        $fileName = "{$process->getId()}.{$format}";
+        $filePath = Path::canonicalize("{$this->outputDir}/{$fileName}");
+        $fileUrl = $this->outputUrl . "/{$fileName}";
 
-        $format = $data->get('main.format');
-        $fileName = "{$params->getProcess()->getId()}.{$format}";
-        $filePath = Path::canonicalize("{$this->publicDir}/{$fileName}");
-        $fileUrl = $this->publicUrl . "/{$fileName}";
-
-        $process = $params->getProcess();
-        $iterator = new OrdersFetcherIterator($process, $this->apiClient, $params->getFsp());
+        $iterator = new OrdersFetcherIterator($process, $this->apiClient, $fsp);
 
         try {
             switch ($format) {
@@ -152,8 +218,8 @@ class Excel implements ExporterInterface
                     $csv = fopen($filePath, 'w');
 
                     //First row is the column captions
-                    if ($data->get('main.headers')) {
-                        fputcsv($csv, $data->get('main.fields'));
+                    if ($settingsData->get('main.headers')) {
+                        fputcsv($csv, $settingsData->get('main.fields'));
                     }
 
                     $iterator->iterator($this->getOrderBodyFields(), function (array $data) use ($csv) {
@@ -167,14 +233,13 @@ class Excel implements ExporterInterface
                 case 'xls':
                 case 'xlsx':
                     $spreadsheet = new Spreadsheet();
-                    $spreadsheet->getProperties()->setCategory($this->getEntity()->get());
 
                     $sheet = $spreadsheet->getActiveSheet();
                     $currentRow = 1;
 
                     //First row is the column captions
-                    if ($data->get('main.headers')) {
-                        $sheet->fromArray($data->get('main.fields'), null, 'A' . $currentRow++);
+                    if ($settingsData->get('main.headers')) {
+                        $sheet->fromArray($settingsData->get('main.fields'), null, 'A' . $currentRow++);
                     }
 
                     $iterator->iterator($this->getOrderBodyFields(), function (array $data) use ($sheet, &$currentRow) {
@@ -202,7 +267,7 @@ class Excel implements ExporterInterface
     private function getOrderBodyFields(): array
     {
         $fields = [];
-        foreach ($this->getForm()->getData()->get('main.fields') as $field) {
+        foreach ($this->getSettingsForm()->getData()->get('main.fields') as $field) {
             $items = array_reverse(explode('.', $field));
             $tree = [];
             foreach ($items as $item) {
@@ -219,11 +284,16 @@ class Excel implements ExporterInterface
         return ['orders' => $fields];
     }
 
+    /**
+     * @param array $data
+     * @return array
+     * @throws Exception
+     */
     private function getOrderDataAsFlatArray(array $data): array
     {
         $dot = new Dot($data);
         $result = [];
-        foreach ($this->getForm()->getData()->get('main.fields') as $field) {
+        foreach ($this->getSettingsForm()->getData()->get('main.fields') as $field) {
             $result[] = $dot->get($field, '');
         }
         return  $result;

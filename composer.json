@@ -12,14 +12,14 @@
   ],
   "autoload": {
     "psr-4": {
-      "Leadvertex\\Plugin\\Exporter\\Handler\\": "src/"
+      "Leadvertex\\Plugin\\Handler\\Excel\\": "src/"
     }
   },
   "require": {
     "php": ">=7.1.0",
     "ext-json": "*",
     "phpoffice/phpspreadsheet": "^1.7",
-    "leadvertex/plugin-core-exporter": "^0.9.0",
+    "leadvertex/plugin-core": "^0.12.0",
     "xakepehok/array-graphql": "^0.0.1"
   }
 }

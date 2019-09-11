@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-use Leadvertex\Plugin\Exporter\Core\Apps\ConsoleApplication;
+use Leadvertex\Plugin\Handler\Factories\AppFactory;
 
 require __DIR__ . '/const.php';
-$application = new ConsoleApplication();
+
+$factory = new AppFactory();
+$application = $factory->console();
 $application->run();
