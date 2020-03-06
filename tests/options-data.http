@@ -1,0 +1,29 @@
+PUT http://{{host}}/Excel/data/options/1
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "options": {
+    "format": [
+      "csv"
+    ]
+  }
+}
+
+###
+
+PUT http://{{host}}/Excel/data/options/1
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "options": {
+    "format": [
+      "csv2"
+    ]
+  }
+}
+
+###

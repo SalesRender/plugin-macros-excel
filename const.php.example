@@ -1,6 +1,0 @@
-<?php
-require_once __DIR__ . '/vendor/autoload.php';
-
-define('LV_PLUGIN_DIR', __DIR__);
-define('LV_PLUGIN_URL', 'http://plugin-exporter-excel/');
-define('LV_PLUGIN_DEBUG', true);

@@ -1,0 +1,6 @@
+GET http://{{host}}/Excel/forms/options/1
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+###

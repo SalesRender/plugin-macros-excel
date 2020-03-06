@@ -1,119 +1,90 @@
 <?php
 /**
- * Created for lv-exporter-excel
- * Datetime: 03.07.2018 12:53
- * @author Timur Kasumov aka XAKEPEHOK
+ * Created for plugin-core
+ * Date: 02.03.2020
+ * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Handler\Excel;
+namespace Leadvertex\Plugin\Instance\Macros\Excel;
 
 
 use Adbar\Dot;
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Leadvertex\Plugin\Components\ApiClient\ApiClient;
 use Leadvertex\Plugin\Components\ApiClient\ApiFilterSortPaginate;
 use Leadvertex\Plugin\Components\Developer\Developer;
-use Leadvertex\Plugin\Components\Form\FieldDefinitions\EnumDefinition;
-use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Components\I18n\I18nInterface;
-use Leadvertex\Plugin\Components\Process\Components\Error;
-use Leadvertex\Plugin\Components\Process\Components\Handled;
-use Leadvertex\Plugin\Components\Process\Components\Result\ResultFailed;
-use Leadvertex\Plugin\Components\Process\Components\Result\ResultUrl;
-use Leadvertex\Plugin\Components\Process\Exceptions\NotInitializedException;
 use Leadvertex\Plugin\Components\Process\Process;
 use Leadvertex\Plugin\Components\Purpose\PluginClass;
 use Leadvertex\Plugin\Components\Purpose\PluginEntity;
 use Leadvertex\Plugin\Components\Purpose\PluginPurpose;
-use Leadvertex\Plugin\Handler\Excel\Components\Lang;
-use Leadvertex\Plugin\Handler\Excel\Components\OrdersFetcherIterator;
-use Leadvertex\Plugin\Handler\Excel\Components\ExcelSettingsForm;
-use Leadvertex\Plugin\Handler\PluginInterface;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Webmozart\PathUtil\Path;
-use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
+use Leadvertex\Plugin\Components\Translations\Translator;
+use Leadvertex\Plugin\Core\Macros\Components\AutocompleteInterface;
+use Leadvertex\Plugin\Core\Macros\Helpers\PathHelper;
+use Leadvertex\Plugin\Core\Macros\Models\Session;
+use Leadvertex\Plugin\Core\Macros\PluginInterface;
+use Leadvertex\Plugin\Instance\Macros\Excel\Components\Columns;
+use Leadvertex\Plugin\Instance\Macros\Excel\Components\FieldParser;
+use Leadvertex\Plugin\Instance\Macros\Excel\Components\OrdersFetcherIterator;
+use Leadvertex\Plugin\Instance\Macros\Excel\Forms\OptionsForm;
+use Leadvertex\Plugin\Instance\Macros\Excel\Forms\SettingsForm;
+use XAKEPEHOK\Path\Path;
 
 class Excel implements PluginInterface
 {
 
-    /** @var Form */
-    private $settingsForm;
-
-    /** @var Form */
-    private $optionsForm;
-
     /** @var ApiClient */
     private $apiClient;
 
-    /** @var string */
-    private $runtimeDir;
+    /** @var SettingsForm */
+    private $settings;
 
-    /** @var string */
-    private $outputDir;
+    /** @var Form */
+    private $run_1;
 
-    /** @var string */
-    private $outputUrl;
-
-    public function __construct(ApiClient $apiClient, string $runtimeDir, string $outputDir, string $outputUrl)
+    public function __construct(ApiClient $apiClient)
     {
         $this->apiClient = $apiClient;
-        $this->runtimeDir = $runtimeDir;
-        $this->outputDir = $outputDir;
-        $this->outputUrl = $outputUrl;
     }
 
     /**
-     * @see \Leadvertex\Plugin\Components\I18n\I18nInterface::getLanguages
-     * @return array
+     * @inheritDoc
      */
     public static function getLanguages(): array
     {
-        return Lang::getLanguages();
+        return [
+            'ru_RU'
+        ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function getDefaultLanguage(): string
     {
-        return I18nInterface::en_US;
+        return 'ru_RU';
     }
 
     /**
-     * Should return human-friendly name of this exporter
-     * @return I18nInterface
+     * @inheritDoc
      */
-    public static function getName(): I18nInterface
+    public static function getName(): string
     {
-        return new Lang(
-            "Excel",
-            "Excel"
-        );
+        return Translator::get('info', 'Excel');
     }
 
     /**
-     * Should return human-friendly description of this exporter
-     * @return I18nInterface
+     * @inheritDoc
      */
-    public static function getDescription(): I18nInterface
+    public static function getDescription(): string
     {
-        return new Lang(
-            "Export orders to excel file",
-            "Выгружает заказы в excel файл"
-        );
-    }
-
-    public function getDeveloper(): Developer
-    {
-        return new Developer('LeadVertex', 'support@leadvertex.com', 'plugins.leadvertex.com');
+        return Translator::get('info', 'Позволяет осуществлять выгрузку заказов в Excel');
     }
 
     /**
-     * @return PluginPurpose of entities, that can be handled by plugin
-     * @throws OutOfEnumException
+     * @inheritDoc
      */
-    public function getPurpose(): PluginPurpose
+    public static function getPurpose(): PluginPurpose
     {
         return new PluginPurpose(
             new PluginClass(PluginClass::CLASS_EXPORTER),
@@ -121,197 +92,134 @@ class Excel implements PluginInterface
         );
     }
 
-    public function hasSettingsForm(): bool
+    /**
+     * @inheritDoc
+     */
+    public static function getDeveloper(): Developer
     {
-        return true;
+        return new Developer(
+            'LeadVertex',
+            'support@leadvertex.com',
+            'https://leadvertex.com'
+        );
     }
 
     /**
-     * Should return settings form for plugin configs
-     * @return Form
-     * @throws Exception
+     * @inheritDoc
      */
     public function getSettingsForm(): Form
     {
-        if (!$this->settingsForm) {
-            $this->settingsForm = new ExcelSettingsForm($this->apiClient);
+        if (is_null($this->settings)) {
+            $this->settings = new SettingsForm();
         }
 
-        return $this->settingsForm;
-    }
-
-    public function hasOptionsForm(): bool
-    {
-        return true;
+        return $this->settings;
     }
 
     /**
-     * Should return form for plugin options (before-handle form)
-     * @return Form
-     * @throws Exception
+     * @inheritDoc
      */
-    public function getOptionsForm(): Form
+    public function getRunForm_1(?ApiFilterSortPaginate $fsp): ?Form
     {
-        if (!$this->optionsForm) {
-            $this->optionsForm = new Form(
-                new Lang('Export options', 'Опции выгрузки'),
-                new Lang('One-time export options', 'Единоразовые опции выгрузки'),
-                [
-                    'main' => new FieldGroup(
-                        new Lang('Excel', 'Excel'),
-                        [
-                            'format' => new EnumDefinition(
-                                new Lang(
-                                    "File format",
-                                    "Формат файла"
-                                ),
-                                new Lang(
-                                    "csv - simple plain-text format, xls - old excel 2003 format, xlsx - new excel format",
-                                    "csv - простой текстовый формат, xls - формат excel 2003, xlsx - новый формат excel"
-                                ),
-                                [
-                                    'csv' => new Lang(
-                                        "*.csv - simple plain text format",
-                                        "*.csv - простой текстовый формат"
-                                    ),
-                                    'xls' => new Lang(
-                                        "*.xls - Excel 2003",
-                                        "*.xls - Формат Excel 2003"
-                                    ),
-                                    'xlsx' => new Lang(
-                                        "*.xls - Excel 2007 and newer",
-                                        "*.xls - Формат Excel 2007 и новее"
-                                    ),
-                                ],
-                                $this->getSettingsForm()->getData()->get('main.format'),
-                                true
-                            ),
-                        ]
-                    )
-                ]
-            );
+        if (is_null($this->run_1)) {
+            $this->run_1 = new OptionsForm();
         }
-        return $this->optionsForm;
+        return $this->run_1;
     }
 
     /**
-     * @param Process $process
-     * @param ApiFilterSortPaginate|null $fsp
-     * @throws GuzzleException
-     * @throws NotInitializedException
+     * @inheritDoc
      */
-    public function handle(Process $process, ?ApiFilterSortPaginate $fsp)
+    public function getRunForm_2(?ApiFilterSortPaginate $fsp): ?Form
     {
-        $settingsData = $this->settingsForm->getData();
-        $optionsData = $this->optionsForm->getData();
+        return null;
+    }
 
-        $format = $optionsData->get('main.format');
-        $fileName = "{$process->getId()}.{$format}";
-        $filePath = Path::canonicalize("{$this->outputDir}/{$fileName}");
-        $fileUrl = $this->outputUrl . "/{$fileName}";
+    /**
+     * @inheritDoc
+     */
+    public function autocomplete(string $name): ?AutocompleteInterface
+    {
+        return null;
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public function run(Process $process, ?ApiFilterSortPaginate $fsp)
+    {
         $iterator = new OrdersFetcherIterator($process, $this->apiClient, $fsp);
 
-        try {
-            switch ($format) {
-                case 'csv':
-                    $csv = fopen($filePath, 'w');
+        $session = Session::current();
+        $settings = $session->getSettings()->getData();
+        $options = $session->getOptions_1();
+        $fields = $settings->get('main.fields');
 
-                    //First row is the column captions
-                    if ($settingsData->get('main.headers')) {
-                        fputcsv($csv, $settingsData->get('main.fields'));
-                    }
+        $format = current($options->get('options.format'));
+        $ext = '.' . $format;
+        $filePath = PathHelper::getPublicOutput()->down($session->getId() . $ext);
+        $fileUri = (new Path($_ENV['LV_PLUGIN_SELF_URI']))->down('output')->down($session->getId() . $ext);
 
-                    $iterator->iterator($this->getOrderBodyFields(), function (array $data) use ($csv) {
-                        $row = $this->getOrderDataAsFlatArray($data);
-                        fputcsv($csv, $row);
-                        return new Handled(1);
-                    });
-
-                    fclose($csv);
-                    break;
-                case 'xls':
-                case 'xlsx':
-                    $spreadsheet = new Spreadsheet();
-
-                    $sheet = $spreadsheet->getActiveSheet();
-                    $currentRow = 1;
-
-                    //First row is the column captions
-                    if ($settingsData->get('main.headers')) {
-                        $sheet->fromArray($settingsData->get('main.fields'), null, 'A' . $currentRow++);
-                    }
-
-                    $iterator->iterator($this->getOrderBodyFields(), function (array $data) use ($sheet, &$currentRow) {
-                        $row = $this->getOrderDataAsFlatArray($data);
-                        $sheet->fromArray($row, null, 'A' . $currentRow++);
-                        return new Handled(1);
-                    });
-
-                    $writer = $format === 'xls' ? new Xlsx($spreadsheet) : new Xls($spreadsheet);
-                    $writer->save($filePath);
-                    break;
-            }
-
-            $process->resultWebhook(new ResultUrl($fileUrl));
-        } catch (Exception $exception) {
-            $this->processFatalError($process);
-            throw $exception;
+        switch ($format) {
+            case 'xlsx':
+                $writer = WriterEntityFactory::createXLSXWriter();
+                break;
+            case 'ods':
+                $writer = WriterEntityFactory::createODSWriter();
+                break;
+            case 'csv':
+                $writer = WriterEntityFactory::createCSVWriter();
+                break;
         }
-    }
 
-    /**
-     * @return array
-     * @throws Exception
-     */
-    private function getOrderBodyFields(): array
-    {
-        $fields = [];
-        foreach ($this->getSettingsForm()->getData()->get('main.fields') as $field) {
-            $items = array_reverse(explode('.', $field));
-            $tree = [];
-            foreach ($items as $item) {
-                if (empty($tree)) {
-                    $tree[] = $item;
-                } else {
-                    $tree = [$item => $tree];
+        $writer->openToFile((string) $filePath);
+
+        if ($settings->get('main.headers')) {
+            $headers = [];
+            $columns = (new Columns())->getList();
+            foreach ($fields as $field) {
+                $headers[] = $columns[$field]['title'];
+            }
+            $writer->addRow(
+                WriterEntityFactory::createRowFromArray($headers)
+            );
+        }
+
+        $iterator->iterator(
+            Columns::getQueryColumns($fields),
+            function (array $item, Process $process) use ($fields, $writer) {
+                $dot = new Dot($item);
+                $row = [];
+                foreach ($fields as $field) {
+                    if (FieldParser::hasFilter($field)) {
+                        $field = new FieldParser($field);
+                        $array = $dot->get($field->getLeftPart());
+                        foreach ($array as $value) {
+                            if (!is_array($value)) {
+                                continue;
+                            }
+                            $part = new Dot($value);
+                            if ($part->get($field->getFilterProperty()) == $field->getFilterValue()) {
+                                $row[] = $part->get($field->getRightPart());
+                                break;
+                            }
+                            $row[] = '';
+                        }
+                    } else {
+                        $row[] = $dot->get($field);
+                    }
                 }
+
+                $writer->addRow(
+                    WriterEntityFactory::createRowFromArray($row)
+                );
+
+                $process->handle();
             }
-            $fields = array_merge_recursive($fields, $tree);
-        }
+        );
 
-        $fields[] = 'id';
-        return ['orders' => $fields];
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     * @throws Exception
-     */
-    private function getOrderDataAsFlatArray(array $data): array
-    {
-        $dot = new Dot($data);
-        $result = [];
-        foreach ($this->getSettingsForm()->getData()->get('main.fields') as $field) {
-            $result[] = $dot->get($field, '');
-        }
-        return  $result;
-    }
-
-    /**
-     * @param Process $process
-     * @throws GuzzleException
-     * @throws NotInitializedException
-     */
-    private function processFatalError(Process $process)
-    {
-        $error = new Error(new Lang(
-            'An unknown error occurred during exporting data. Exporting are stopped',
-            'Во время выгрузки произошла неизвестная ошибка. Выгрузка прекращена'
-        ));
-
-        $process->errorWebhook([$error]);
-        $process->resultWebhook(new ResultFailed());
+        $writer->close();
+        $process->finish((string) $fileUri);
+        $process->save();
     }
 }

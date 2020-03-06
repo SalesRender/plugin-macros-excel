@@ -1,0 +1,53 @@
+GET http://{{host}}/Excel/data/settings
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+###
+
+PUT http://{{host}}/Excel/data/settings
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "main": {
+    "headers": true,
+    "fields": [
+      "id",
+      "createdAt",
+      "updatedAt",
+      "orderData.UserFields.[field=approvedBy].value.email",
+      "id",
+      "cart.totalPrice"
+    ],
+    "format": [
+      "csv"
+    ]
+  }
+}
+
+###
+
+PUT http://{{host}}/Excel/data/settings
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "main": {
+    "headers": false,
+    "fields": [
+      "id",
+      "qwerty",
+      "createdAt",
+      "updatedAt",
+      "cart.totalPrice"
+    ],
+    "format": [
+      "xlsx", "xls"
+    ]
+  }
+}
+
+###
