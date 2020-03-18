@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Excel\Forms;
+namespace Leadvertex\Plugin\Instance\Macros\Forms;
 
 
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\BooleanDefinition;
@@ -16,8 +16,8 @@ use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnumDefinition;
 use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\Columns;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\Values\FormatValues;
+use Leadvertex\Plugin\Instance\Macros\Components\Columns;
+use Leadvertex\Plugin\Instance\Macros\Components\Values\FormatValues;
 
 class SettingsForm extends Form
 {

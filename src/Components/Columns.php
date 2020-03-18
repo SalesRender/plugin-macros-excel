@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Excel\Components;
+namespace Leadvertex\Plugin\Instance\Macros\Components;
 
 
 use Leadvertex\Plugin\Components\ApiClient\ApiClient;

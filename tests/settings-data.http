@@ -1,11 +1,11 @@
-GET http://{{host}}/Excel/data/settings
+GET http://{{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/Excel/data/settings
+PUT http://{{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
@@ -29,7 +29,7 @@ X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/Excel/data/settings
+PUT http://{{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

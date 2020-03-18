@@ -5,12 +5,11 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Excel;
+namespace Leadvertex\Plugin\Instance\Macros;
 
 
 use Adbar\Dot;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Leadvertex\Plugin\Components\ApiClient\ApiClient;
 use Leadvertex\Plugin\Components\ApiClient\ApiFilterSortPaginate;
 use Leadvertex\Plugin\Components\Developer\Developer;
 use Leadvertex\Plugin\Components\Form\Form;
@@ -21,31 +20,23 @@ use Leadvertex\Plugin\Components\Purpose\PluginPurpose;
 use Leadvertex\Plugin\Components\Translations\Translator;
 use Leadvertex\Plugin\Core\Macros\Components\AutocompleteInterface;
 use Leadvertex\Plugin\Core\Macros\Helpers\PathHelper;
+use Leadvertex\Plugin\Core\Macros\MacrosPlugin;
 use Leadvertex\Plugin\Core\Macros\Models\Session;
-use Leadvertex\Plugin\Core\Macros\PluginInterface;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\Columns;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\FieldParser;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\OrdersFetcherIterator;
-use Leadvertex\Plugin\Instance\Macros\Excel\Forms\OptionsForm;
-use Leadvertex\Plugin\Instance\Macros\Excel\Forms\SettingsForm;
+use Leadvertex\Plugin\Instance\Macros\Components\Columns;
+use Leadvertex\Plugin\Instance\Macros\Components\FieldParser;
+use Leadvertex\Plugin\Instance\Macros\Components\OrdersFetcherIterator;
+use Leadvertex\Plugin\Instance\Macros\Forms\OptionsForm;
+use Leadvertex\Plugin\Instance\Macros\Forms\SettingsForm;
 use XAKEPEHOK\Path\Path;
 
-class Excel implements PluginInterface
+class Plugin extends MacrosPlugin
 {
-
-    /** @var ApiClient */
-    private $apiClient;
 
     /** @var SettingsForm */
     private $settings;
 
     /** @var Form */
     private $run_1;
-
-    public function __construct(ApiClient $apiClient)
-    {
-        $this->apiClient = $apiClient;
-    }
 
     /**
      * @inheritDoc
@@ -148,14 +139,14 @@ class Excel implements PluginInterface
      */
     public function run(Process $process, ?ApiFilterSortPaginate $fsp)
     {
-        $iterator = new OrdersFetcherIterator($process, $this->apiClient, $fsp);
-
         $session = Session::current();
-        $settings = $session->getSettings()->getData();
-        $options = $session->getOptions_1();
+
+        $iterator = new OrdersFetcherIterator($process, $session->getApiClient(), $fsp);
+
+        $settings = $this->getSettingsForm()->getData();
         $fields = $settings->get('main.fields');
 
-        $format = current($options->get('options.format'));
+        $format = current($this->getRunForm_1($fsp)->getData()->get('options.format'));
         $ext = '.' . $format;
         $filePath = PathHelper::getPublicOutput()->down($session->getId() . $ext);
         $fileUri = (new Path($_ENV['LV_PLUGIN_SELF_URI']))->down('output')->down($session->getId() . $ext);
@@ -215,6 +206,8 @@ class Excel implements PluginInterface
                 );
 
                 $process->handle();
+                $process->save();
+                sleep(3);
             }
         );
 

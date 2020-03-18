@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Excel\Forms;
+namespace Leadvertex\Plugin\Instance\Macros\Forms;
 
 
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Limit;
@@ -14,7 +14,7 @@ use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\Translations\Translator;
 use Leadvertex\Plugin\Core\Macros\Models\Session;
-use Leadvertex\Plugin\Instance\Macros\Excel\Components\Values\FormatValues;
+use Leadvertex\Plugin\Instance\Macros\Components\Values\FormatValues;
 
 class OptionsForm extends Form
 {
@@ -46,7 +46,7 @@ class OptionsForm extends Form
                             $format->getValidator(),
                             $format,
                             new Limit(1, 1),
-                            [$settings->getData()->get('main.format')]
+                            $settings->getData()->get('main.format')
                         ),
                     ]
                 )

@@ -1,0 +1,12 @@
+POST http://{{host}}/upload
+Content-Type: multipart/form-data; boundary=abcd
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+--abcd
+Content-Disposition: form-data; name="file"; filename="info.http"
+
+< ./info.http
+--abcd--
+
+###
