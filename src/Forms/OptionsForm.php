@@ -19,7 +19,10 @@ use Leadvertex\Plugin\Instance\Macros\Components\Values\FormatValues;
 class OptionsForm extends Form
 {
 
-    public function __construct()
+    /** @var self */
+    private static $instance;
+
+    private function __construct()
     {
         $settings = Session::current()->getSettings();
         $format = new FormatValues();
@@ -52,6 +55,14 @@ class OptionsForm extends Form
                 )
             ]
         );
+    }
+
+    public static function getInstance(): self
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new static();
+        }
+        return static::$instance;
     }
 
 }

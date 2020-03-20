@@ -27,3 +27,18 @@ X-PLUGIN-TOKEN: {{token}}
 }
 
 ###
+
+PUT http://{{host}}/data/options/2
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "options": {
+    "format": [
+      "csv2"
+    ]
+  }
+}
+
+###

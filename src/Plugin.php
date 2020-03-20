@@ -35,8 +35,8 @@ class Plugin extends MacrosPlugin
     /** @var SettingsForm */
     private $settings;
 
-    /** @var Form */
-    private $run_1;
+    /** @var Form[] */
+    private $forms;
 
     /**
      * @inheritDoc
@@ -110,20 +110,15 @@ class Plugin extends MacrosPlugin
     /**
      * @inheritDoc
      */
-    public function getRunForm_1(?ApiFilterSortPaginate $fsp): ?Form
+    public function getRunForm(int $number): ?Form
     {
-        if (is_null($this->run_1)) {
-            $this->run_1 = new OptionsForm();
+        switch ($number) {
+            case 1:
+                return OptionsForm::getInstance();
+                break;
+            default:
+                return null;
         }
-        return $this->run_1;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRunForm_2(?ApiFilterSortPaginate $fsp): ?Form
-    {
-        return null;
     }
 
     /**
@@ -146,7 +141,7 @@ class Plugin extends MacrosPlugin
         $settings = $this->getSettingsForm()->getData();
         $fields = $settings->get('main.fields');
 
-        $format = current($this->getRunForm_1($fsp)->getData()->get('options.format'));
+        $format = current($this->getRunForm(1)->getData()->get('options.format'));
         $ext = '.' . $format;
         $filePath = PathHelper::getPublicOutput()->down($session->getId() . $ext);
         $fileUri = (new Path($_ENV['LV_PLUGIN_SELF_URI']))->down('output')->down($session->getId() . $ext);
@@ -207,7 +202,7 @@ class Plugin extends MacrosPlugin
 
                 $process->handle();
                 $process->save();
-                sleep(3);
+                sleep(5);
             }
         );
 

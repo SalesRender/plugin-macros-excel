@@ -30,6 +30,7 @@
     "box/spout": "^3.1",
     "xakepehok/array-graphql": "^0.0.1",
     "leadvertex/plugin-core-macros": "^0.13.0",
-    "leadvertex/plugin-component-translations": "^0.1.1"
+    "leadvertex/plugin-component-translations": "^0.1.1",
+    "khill/php-duration": "^1.0"
   }
 }
