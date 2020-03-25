@@ -1,3 +1,3 @@
-GET http://{{host}}/process?id={{id}}&companyId=1
+GET {{host}}/process?id={{id}}&companyId=1
 
 ###

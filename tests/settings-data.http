@@ -1,11 +1,11 @@
-GET http://{{host}}/data/settings
+GET {{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/data/settings
+PUT {{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
@@ -17,7 +17,7 @@ X-PLUGIN-TOKEN: {{token}}
       "id",
       "createdAt",
       "updatedAt",
-      "orderData.UserFields.[field=approvedBy].value.email",
+      "orderData.UserFields.[field.name=approvedBy].value.email",
       "id",
       "cart.totalPrice"
     ],
@@ -29,7 +29,7 @@ X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/data/settings
+PUT {{host}}/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

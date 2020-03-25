@@ -1,6 +1,6 @@
 {
   "name": "leadvertex/plugin-macros-excel",
-  "description": "Plugin for export orders from leadvertex.com in Excel (xlsx, xls, csv) format",
+  "description": "Plugin for export orders from leadvertex.com in Excel (xlsx, ods, csv) format",
   "type": "project",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -15,22 +15,12 @@
       "Leadvertex\\Plugin\\Instance\\Macros\\": "src/"
     }
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../plugin-core",
-      "options": {
-        "symlink": true
-      }
-    }
-  ],
   "require": {
     "php": ">=7.2.0",
     "ext-json": "*",
     "box/spout": "^3.1",
     "xakepehok/array-graphql": "^0.0.1",
     "leadvertex/plugin-core-macros": "^0.13.0",
-    "leadvertex/plugin-component-translations": "^0.1.1",
-    "khill/php-duration": "^1.0"
+    "leadvertex/plugin-component-translations": "^0.1.1"
   }
 }

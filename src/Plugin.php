@@ -35,9 +35,6 @@ class Plugin extends MacrosPlugin
     /** @var SettingsForm */
     private $settings;
 
-    /** @var Form[] */
-    private $forms;
-
     /**
      * @inheritDoc
      */
@@ -202,7 +199,6 @@ class Plugin extends MacrosPlugin
 
                 $process->handle();
                 $process->save();
-                sleep(5);
             }
         );
 

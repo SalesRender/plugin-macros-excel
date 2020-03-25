@@ -130,8 +130,6 @@ class Columns
     {
         $fields = [
             'cart.totalPrice' => Translator::get('fields', 'Корзина (сумма)'),
-            'cart.singleItems' => Translator::get('fields', 'Корзина (товары вне акций)'),
-            'cart.promotionalItems' => Translator::get('fields', 'Корзина (товары по акциям)'),
         ];
 
         $result = [];
@@ -152,48 +150,8 @@ query {
     fieldsFetcher {
       fields {
         name
-        definition {
-          __typename
-          ... on BooleanFieldDefinition {
-            label
-          }
-          ... on DatetimeFieldDefinition {
-            label
-          }
-          ... on EnumFieldDefinition {
-            label
-          }
-          ... on EmailFieldDefinition {
-            label
-          }
-          ... on FileFieldDefinition {
-            label
-          }
-          ... on FloatFieldDefinition {
-            label
-          }
-          ... on ImageFieldDefinition {
-            label
-          }
-          ... on IntFieldDefinition {
-            label
-          }
-          ... on PhoneFieldDefinition {
-            label
-          }
-          ... on StringFieldDefinition {
-            label
-          }
-          ... on AddressFieldDefinition {
-            label
-          }
-          ... on HumanNameFieldDefinition {
-            label
-          }
-          ... on UserFieldDefinition {
-            label
-          }
-        }
+        label
+        __typename
       }
     }
   }
@@ -206,149 +164,177 @@ QUERY;
         $groups = [];
         foreach ($response['company']['fieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
-            $label = $fieldData['definition']['label'];
-            $typename = str_replace('Definition', 's', $fieldData['definition']['__typename']);
-            switch ($fieldData['definition']['__typename']) {
-                case 'BooleanFieldDefinition':
+            $label = $fieldData['label'];
+            $typename = $fieldData['__typename'] . 's';
+            switch ($fieldData['__typename']) {
+                case 'BooleanField':
                     $groups[Translator::get('fields', 'Логический (да/нет)')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'DatetimeFieldDefinition':
+                case 'DatetimeField':
                     $groups[Translator::get('fields', 'Дата и время')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'EnumFieldDefinition':
+                case 'EnumField':
                     $groups[Translator::get('fields', 'Списки')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'EmailFieldDefinition':
+                case 'EmailField':
                     $groups[Translator::get('fields', 'Email')] = [
-                        "orderData.{$typename}.[field={$name}].value.raw" => $label,
-                        "orderData.{$typename}.[field={$name}].value.duplicates" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.raw" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
                         ),
                     ];
                     break;
-                case 'FileFieldDefinition':
+                case 'FileField':
                     $groups[Translator::get('fields', 'Файлы')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label, //todo will be changed
+                        "orderData.{$typename}.[field.name={$name}].value.clientFileName" => Translator::get(
+                            'fields',
+                            '{label} (исходное имя файла)',
+                            ['label' => $label]
+                        ),
+                        "orderData.{$typename}.[field.name={$name}].value.size" => Translator::get(
+                            'fields',
+                            '{label} (размер в байтах)',
+                            ['label' => $label]
+                        ),
+                        "orderData.{$typename}.[field.name={$name}].value.uri" => Translator::get(
+                            'fields',
+                            '{label} (ссылка)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
-                case 'FloatFieldDefinition':
+                case 'FloatField':
                     $groups[Translator::get('fields', 'Дробные числа')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'ImageFieldDefinition':
+                case 'ImageField':
                     $groups[Translator::get('fields', 'Изображения')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label, //todo will be changed
+                        "orderData.{$typename}.[field.name={$name}].value.large.uri" => Translator::get(
+                            'fields',
+                            '{label} (большой размер)',
+                            ['label' => $label]
+                        ),
+                        "orderData.{$typename}.[field.name={$name}].value.medium.uri" => Translator::get(
+                            'fields',
+                            '{label} (средний размер)',
+                            ['label' => $label]
+                        ),
+                        "orderData.{$typename}.[field.name={$name}].value.small.uri" => Translator::get(
+                            'fields',
+                            '{label} (маленький размер)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
-                case 'IntFieldDefinition':
+                case 'IntegerField':
                     $groups[Translator::get('fields', 'Целые числа')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'PhoneFieldDefinition':
+                case 'PhoneField':
                     $groups[Translator::get('fields', 'Телефоны')] = [
-                        "orderData.{$typename}.[field={$name}].value.raw" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.international" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.international" => Translator::get(
                             'fields',
                             '{label} (международный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.national" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.national" => Translator::get(
                             'fields',
                             '{label} (локальный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.country" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.country" => Translator::get(
                             'fields',
                             '{label} (код страны)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.duplicates" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
                         ),
                     ];
                     break;
-                case 'StringFieldDefinition':
+                case 'StringField':
                     $groups[Translator::get('fields', 'Строки')] = [
-                        "orderData.{$typename}.[field={$name}].value" => $label,
+                        "orderData.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'AddressFieldDefinition':
+                case 'AddressField':
                     $groups[Translator::get('fields', 'Адреса')] = [
-                        "orderData.{$typename}.[field={$name}].value.postcode" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.postcode" => Translator::get(
                             'fields',
                             '{label} (почтовый индекс)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.region" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.region" => Translator::get(
                             'fields',
                             '{label} (регион)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.city" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.city" => Translator::get(
                             'fields',
                             '{label} (город)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.address_1" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.address_1" => Translator::get(
                             'fields',
                             '{label} (адрес 1)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.address_2" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.address_2" => Translator::get(
                             'fields',
                             '{label} (адрес 2)',
                             ['label' => $label]
                         ),
                     ];
                     break;
-                case 'HumanNameFieldDefinition':
+                case 'HumanNameField':
                     $groups[Translator::get('fields', 'Ф.И.О')] = [
-                        "orderData.{$typename}.[field={$name}].value.firstName" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.lastName" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]
                         ),
                     ];
                     break;
-                case 'UserFieldDefinition':
+                case 'UserField':
                     $groups[Translator::get('fields', 'Пользователи')] = [
-                        "orderData.{$typename}.[field={$name}].value.id" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.id" => Translator::get(
                             'fields',
                             '{label} (ID)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.email" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.email" => Translator::get(
                             'fields',
                             '{label} (email)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.name.firstName" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.name.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field={$name}].value.name.lastName" => Translator::get(
+                        "orderData.{$typename}.[field.name={$name}].value.name.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]

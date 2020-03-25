@@ -1,4 +1,4 @@
-PUT http://{{host}}/data/options/1
+PUT {{host}}/data/options/1
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
@@ -13,7 +13,7 @@ X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/data/options/1
+PUT {{host}}/data/options/1
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
@@ -28,7 +28,7 @@ X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT http://{{host}}/data/options/2
+PUT {{host}}/data/options/2
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

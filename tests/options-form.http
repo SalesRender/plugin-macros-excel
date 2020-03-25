@@ -1,11 +1,11 @@
-GET http://{{host}}/forms/options/1
+GET {{host}}/forms/options/1
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-GET http://{{host}}/forms/options/2
+GET {{host}}/forms/options/2
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

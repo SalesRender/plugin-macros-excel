@@ -1,4 +1,4 @@
-POST http://{{host}}/upload
+POST {{host}}/upload
 Content-Type: multipart/form-data; boundary=abcd
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

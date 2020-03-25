@@ -13,7 +13,7 @@ use InvalidArgumentException;
 class FieldParser
 {
 
-    private const REGEXP = '~(.+)\.\[([a-z\d_]+)=([^\]]+)\]\.(.+)~';
+    private const REGEXP = '~(.+)\.\[([a-z\d_\.]+)=([^\]]+)\]\.(.+)~';
 
     /** @var string */
     private $field;
