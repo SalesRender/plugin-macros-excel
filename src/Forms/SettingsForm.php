@@ -119,7 +119,11 @@ class SettingsForm extends Form
                         ),
                     ]
                 )
-            ]
+            ],
+            Translator::get(
+                'settings',
+                'Сохранить настройки'
+            )
         );
     }
 

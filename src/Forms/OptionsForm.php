@@ -53,7 +53,11 @@ class OptionsForm extends Form
                         ),
                     ]
                 )
-            ]
+            ],
+            Translator::get(
+                'settings',
+                'Выгрузка'
+            )
         );
     }
 
