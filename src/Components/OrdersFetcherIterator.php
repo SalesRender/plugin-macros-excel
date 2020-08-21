@@ -25,9 +25,7 @@ class OrdersFetcherIterator extends ApiFetcherIterator
         $fields = ArrayGraphQL::convert($body);
         return '
             query($pagination: Pagination!, $filters: OrderFilter, $sort: OrderSort) {
-                company {
-                    ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . $fields . '
-                }
+                ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . $fields . '
             }
         ';
     }
@@ -38,7 +36,7 @@ class OrdersFetcherIterator extends ApiFetcherIterator
      */
     protected function getQueryPath(): string
     {
-        return 'company.ordersFetcher';
+        return 'ordersFetcher';
     }
 
     protected function getIdentity(array $array): string

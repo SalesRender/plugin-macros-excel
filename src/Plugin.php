@@ -112,7 +112,6 @@ class Plugin extends MacrosPlugin
         switch ($number) {
             case 1:
                 return OptionsForm::getInstance();
-                break;
             default:
                 return null;
         }

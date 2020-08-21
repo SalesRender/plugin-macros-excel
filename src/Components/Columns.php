@@ -129,7 +129,7 @@ class Columns
     private function getCartColumns(): array
     {
         $fields = [
-            'cart.totalPrice' => Translator::get('fields', 'Корзина (сумма)'),
+            'cart.total' => Translator::get('fields', 'Корзина (сумма)'),
         ];
 
         $result = [];
@@ -146,13 +146,11 @@ class Columns
     {
         $query = <<<QUERY
 query {
-  company {
-    fieldsFetcher {
-      fields {
-        name
-        label
-        __typename
-      }
+  fieldsFetcher {
+    fields {
+      name
+      label
+      __typename
     }
   }
 }
@@ -162,30 +160,30 @@ QUERY;
         $response = $this->client->query($query, [])->getData();
 
         $groups = [];
-        foreach ($response['company']['fieldsFetcher']['fields'] as $fieldData) {
+        foreach ($response['fieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
             $label = $fieldData['label'];
-            $typename = $fieldData['__typename'] . 's';
+            $typename = lcfirst($fieldData['__typename'] . 's');
             switch ($fieldData['__typename']) {
                 case 'BooleanField':
                     $groups[Translator::get('fields', 'Логический (да/нет)')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'DatetimeField':
                     $groups[Translator::get('fields', 'Дата и время')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EnumField':
                     $groups[Translator::get('fields', 'Списки')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EmailField':
                     $groups[Translator::get('fields', 'Email')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.raw" => $label,
-                        "orderData.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.raw" => $label,
+                        "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
@@ -194,17 +192,17 @@ QUERY;
                     break;
                 case 'FileField':
                     $groups[Translator::get('fields', 'Файлы')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.clientFileName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.clientFileName" => Translator::get(
                             'fields',
                             '{label} (исходное имя файла)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.size" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.size" => Translator::get(
                             'fields',
                             '{label} (размер в байтах)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.uri" => Translator::get(
                             'fields',
                             '{label} (ссылка)',
                             ['label' => $label]
@@ -213,22 +211,22 @@ QUERY;
                     break;
                 case 'FloatField':
                     $groups[Translator::get('fields', 'Дробные числа')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'ImageField':
                     $groups[Translator::get('fields', 'Изображения')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.large.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.large.uri" => Translator::get(
                             'fields',
                             '{label} (большой размер)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.medium.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.medium.uri" => Translator::get(
                             'fields',
                             '{label} (средний размер)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.small.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.small.uri" => Translator::get(
                             'fields',
                             '{label} (маленький размер)',
                             ['label' => $label]
@@ -237,32 +235,32 @@ QUERY;
                     break;
                 case 'IntegerField':
                     $groups[Translator::get('fields', 'Целые числа')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'PhoneField':
                     $groups[Translator::get('fields', 'Телефоны')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.raw" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.international" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.international" => Translator::get(
                             'fields',
                             '{label} (международный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.national" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.national" => Translator::get(
                             'fields',
                             '{label} (локальный)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.country" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
                             'fields',
                             '{label} (код страны)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
@@ -271,32 +269,32 @@ QUERY;
                     break;
                 case 'StringField':
                     $groups[Translator::get('fields', 'Строки')] = [
-                        "orderData.{$typename}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'AddressField':
                     $groups[Translator::get('fields', 'Адреса')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.postcode" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.postcode" => Translator::get(
                             'fields',
                             '{label} (почтовый индекс)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.region" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.region" => Translator::get(
                             'fields',
                             '{label} (регион)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.city" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.city" => Translator::get(
                             'fields',
                             '{label} (город)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.address_1" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.address_1" => Translator::get(
                             'fields',
                             '{label} (адрес 1)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.address_2" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.address_2" => Translator::get(
                             'fields',
                             '{label} (адрес 2)',
                             ['label' => $label]
@@ -305,12 +303,12 @@ QUERY;
                     break;
                 case 'HumanNameField':
                     $groups[Translator::get('fields', 'Ф.И.О')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.firstName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.lastName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]
@@ -319,22 +317,22 @@ QUERY;
                     break;
                 case 'UserField':
                     $groups[Translator::get('fields', 'Пользователи')] = [
-                        "orderData.{$typename}.[field.name={$name}].value.id" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.id" => Translator::get(
                             'fields',
                             '{label} (ID)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.email" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.email" => Translator::get(
                             'fields',
                             '{label} (email)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.name.firstName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.name.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "orderData.{$typename}.[field.name={$name}].value.name.lastName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.name.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]

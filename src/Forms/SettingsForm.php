@@ -101,7 +101,7 @@ class SettingsForm extends Form
                             },
                             new StaticValues($columns->getList()),
                             new Limit(1, null),
-                            ['id', 'createdAt', 'cart.totalPrice']
+                            ['id', 'createdAt', 'cart.total']
                         ),
                         'format' => new ListOfEnumDefinition(
                             Translator::get(

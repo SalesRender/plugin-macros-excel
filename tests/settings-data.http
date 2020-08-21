@@ -17,12 +17,11 @@ X-PLUGIN-TOKEN: {{token}}
       "id",
       "createdAt",
       "updatedAt",
-      "orderData.UserFields.[field.name=approvedBy].value.email",
-      "id",
-      "cart.totalPrice"
+      "data.addressFields.[field.name=address_1].value.city",
+      "cart.total"
     ],
     "format": [
-      "csv"
+      "xlsx"
     ]
   }
 }
