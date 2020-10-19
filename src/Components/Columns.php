@@ -170,22 +170,38 @@ QUERY;
             $typename = lcfirst($fieldData['__typename'] . 's');
             switch ($fieldData['__typename']) {
                 case 'BooleanField':
-                    $groups[Translator::get('fields', 'Логический (да/нет)')] = [
+                    $key = Translator::get('fields', 'Логический (да/нет)');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'DatetimeField':
-                    $groups[Translator::get('fields', 'Дата и время')] = [
+                    $key = Translator::get('fields', 'Дата и время');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EnumField':
-                    $groups[Translator::get('fields', 'Списки')] = [
+                    $key = Translator::get('fields', 'Списки');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EmailField':
-                    $groups[Translator::get('fields', 'Email')] = [
+                    $key = Translator::get('fields', 'Email');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.raw" => $label,
                         "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
@@ -195,7 +211,11 @@ QUERY;
                     ];
                     break;
                 case 'FileField':
-                    $groups[Translator::get('fields', 'Файлы')] = [
+                    $key = Translator::get('fields', 'Файлы');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.clientFileName" => Translator::get(
                             'fields',
                             '{label} (исходное имя файла)',
@@ -214,12 +234,20 @@ QUERY;
                     ];
                     break;
                 case 'FloatField':
-                    $groups[Translator::get('fields', 'Дробные числа')] = [
+                    $key = Translator::get('fields', 'Дробные числа');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'ImageField':
-                    $groups[Translator::get('fields', 'Изображения')] = [
+                    $key = Translator::get('fields', 'Изображения');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.large.uri" => Translator::get(
                             'fields',
                             '{label} (большой размер)',
@@ -238,12 +266,20 @@ QUERY;
                     ];
                     break;
                 case 'IntegerField':
-                    $groups[Translator::get('fields', 'Целые числа')] = [
+                    $key = Translator::get('fields', 'Целые числа');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'PhoneField':
-                    $groups[Translator::get('fields', 'Телефоны')] = [
+                    $key = Translator::get('fields', 'Телефоны');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
@@ -272,12 +308,20 @@ QUERY;
                     ];
                     break;
                 case 'StringField':
-                    $groups[Translator::get('fields', 'Строки')] = [
+                    $key = Translator::get('fields', 'Строки');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'AddressField':
-                    $groups[Translator::get('fields', 'Адреса')] = [
+                    $key = Translator::get('fields', 'Адреса');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.postcode" => Translator::get(
                             'fields',
                             '{label} (почтовый индекс)',
@@ -306,7 +350,11 @@ QUERY;
                     ];
                     break;
                 case 'HumanNameField':
-                    $groups[Translator::get('fields', 'Ф.И.О')] = [
+                    $key = Translator::get('fields', 'Ф.И.О');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
@@ -320,7 +368,11 @@ QUERY;
                     ];
                     break;
                 case 'UserField':
-                    $groups[Translator::get('fields', 'Пользователи')] = [
+                    $key = Translator::get('fields', 'Пользователи');
+                    if (!key_exists($key, $groups)) {
+                        $groups[$key] = [];
+                    }
+                    $groups[$key] += [
                         "data.{$typename}.[field.name={$name}].value.id" => Translator::get(
                             'fields',
                             '{label} (ID)',
