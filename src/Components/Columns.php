@@ -9,8 +9,8 @@ namespace Leadvertex\Plugin\Instance\Macros\Components;
 
 
 use Leadvertex\Plugin\Components\ApiClient\ApiClient;
+use Leadvertex\Plugin\Components\Token\GraphqlInputToken;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Core\Macros\Models\Session;
 
 class Columns
 {
@@ -20,7 +20,11 @@ class Columns
 
     public function __construct()
     {
-        $this->client = Session::current()->getApiClient();
+        $token = GraphqlInputToken::getInstance();
+        $this->client = new ApiClient(
+            $token->getBackendUri() . 'companies/stark-industries/CRM',
+            (string) $token->getOutputToken()
+        );
     }
 
     public function getList(): array

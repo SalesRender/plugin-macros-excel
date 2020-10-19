@@ -1,4 +1,4 @@
-POST {{host}}/run
+POST {{host}}/batch/run
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
