@@ -17,7 +17,7 @@ X-PLUGIN-TOKEN: {{token}}
       "id",
       "createdAt",
       "updatedAt",
-      "data.addressFields.[field.name=address_1].value.city",
+      "data.addressFields.[field.name=address_one].value.city",
       "cart.total"
     ],
     "format": [

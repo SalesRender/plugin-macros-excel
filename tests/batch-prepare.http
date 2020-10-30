@@ -1,0 +1,9 @@
+POST {{host}}/batch/prepare
+Content-Type: application/json
+Accept-Language: ru_RU
+X-PLUGIN-TOKEN: {{token}}
+
+{
+  "filters": {"ids": ["1", "2", "10"]},
+  "sort": {"field": "id", "direction": "ASC"}
+}

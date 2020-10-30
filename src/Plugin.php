@@ -10,18 +10,17 @@ namespace Leadvertex\Plugin\Instance\Macros;
 
 use Adbar\Dot;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Leadvertex\Plugin\Components\ApiClient\ApiFilterSortPaginate;
+use Leadvertex\Plugin\Components\Batch\Batch;
 use Leadvertex\Plugin\Components\Developer\Developer;
+use Leadvertex\Plugin\Components\Form\Components\AutocompleteInterface;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\Process\Process;
 use Leadvertex\Plugin\Components\Purpose\PluginClass;
 use Leadvertex\Plugin\Components\Purpose\PluginEntity;
 use Leadvertex\Plugin\Components\Purpose\PluginPurpose;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Core\Macros\Components\AutocompleteInterface;
 use Leadvertex\Plugin\Core\Macros\Helpers\PathHelper;
 use Leadvertex\Plugin\Core\Macros\MacrosPlugin;
-use Leadvertex\Plugin\Core\Macros\Models\Session;
 use Leadvertex\Plugin\Instance\Macros\Components\Columns;
 use Leadvertex\Plugin\Instance\Macros\Components\FieldParser;
 use Leadvertex\Plugin\Instance\Macros\Components\OrdersFetcherIterator;
@@ -104,10 +103,7 @@ class Plugin extends MacrosPlugin
         return $this->settings;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getRunForm(int $number): ?Form
+    public function getBatchForm(int $number): ?Form
     {
         switch ($number) {
             case 1:
@@ -125,84 +121,81 @@ class Plugin extends MacrosPlugin
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function run(Process $process, ?ApiFilterSortPaginate $fsp)
+    public function handler(): callable
     {
-        $session = Session::current();
+        return function (Process $process, Batch $batch) {
+            $iterator = new OrdersFetcherIterator($process, $batch->getApiClient(), $batch->getFsp());
 
-        $iterator = new OrdersFetcherIterator($process, $session->getApiClient(), $fsp);
+            $settings = $this->getSettingsForm()->getData();
+            $fields = $settings->get('main.fields');
 
-        $settings = $this->getSettingsForm()->getData();
-        $fields = $settings->get('main.fields');
+            $format = current($batch->getOptions(1)->get('options.format'));
+            $ext = '.' . $format;
+            $filePath = PathHelper::getPublicOutput()->down($batch->getId() . $ext);
+            $fileUri = (new Path($_ENV['LV_PLUGIN_SELF_URI']))->down('output')->down($batch->getId() . $ext);
 
-        $format = current($this->getRunForm(1)->getData()->get('options.format'));
-        $ext = '.' . $format;
-        $filePath = PathHelper::getPublicOutput()->down($session->getId() . $ext);
-        $fileUri = (new Path($_ENV['LV_PLUGIN_SELF_URI']))->down('output')->down($session->getId() . $ext);
-
-        switch ($format) {
-            case 'xlsx':
-                $writer = WriterEntityFactory::createXLSXWriter();
-                break;
-            case 'ods':
-                $writer = WriterEntityFactory::createODSWriter();
-                break;
-            case 'csv':
-                $writer = WriterEntityFactory::createCSVWriter();
-                break;
-        }
-
-        $writer->openToFile((string) $filePath);
-
-        if ($settings->get('main.headers')) {
-            $headers = [];
-            $columns = (new Columns())->getList();
-            foreach ($fields as $field) {
-                $headers[] = $columns[$field]['title'];
+            switch ($format) {
+                case 'xlsx':
+                    $writer = WriterEntityFactory::createXLSXWriter();
+                    break;
+                case 'ods':
+                    $writer = WriterEntityFactory::createODSWriter();
+                    break;
+                default:
+                    $writer = WriterEntityFactory::createCSVWriter();
+                    break;
             }
-            $writer->addRow(
-                WriterEntityFactory::createRowFromArray($headers)
-            );
-        }
 
-        $iterator->iterator(
-            Columns::getQueryColumns($fields),
-            function (array $item, Process $process) use ($fields, $writer) {
-                $dot = new Dot($item);
-                $row = [];
+            $writer->openToFile((string) $filePath);
+
+            if ($settings->get('main.headers')) {
+                $headers = [];
+                $columns = (new Columns())->getList();
                 foreach ($fields as $field) {
-                    if (FieldParser::hasFilter($field)) {
-                        $field = new FieldParser($field);
-                        $array = $dot->get($field->getLeftPart());
-                        foreach ($array as $value) {
-                            if (!is_array($value)) {
-                                continue;
-                            }
-                            $part = new Dot($value);
-                            if ($part->get($field->getFilterProperty()) == $field->getFilterValue()) {
-                                $row[] = $part->get($field->getRightPart());
-                                break;
-                            }
-                            $row[] = '';
-                        }
-                    } else {
-                        $row[] = $dot->get($field);
-                    }
+                    $headers[] = $columns[$field]['title'];
                 }
-
                 $writer->addRow(
-                    WriterEntityFactory::createRowFromArray($row)
+                    WriterEntityFactory::createRowFromArray($headers)
                 );
-
-                $process->handle();
-                $process->save();
             }
-        );
 
-        $writer->close();
-        $process->finish((string) $fileUri);
-        $process->save();
+            $iterator->iterator(
+                Columns::getQueryColumns($fields),
+                function (array $item, Process $process) use ($fields, $writer) {
+                    $dot = new Dot($item);
+                    $row = [];
+                    foreach ($fields as $field) {
+                        if (FieldParser::hasFilter($field)) {
+                            $field = new FieldParser($field);
+                            $array = $dot->get($field->getLeftPart());
+                            foreach ($array as $value) {
+                                if (!is_array($value)) {
+                                    continue;
+                                }
+                                $part = new Dot($value);
+                                if ($part->get($field->getFilterProperty()) == $field->getFilterValue()) {
+                                    $row[] = $part->get($field->getRightPart());
+                                    break;
+                                }
+                                $row[] = '';
+                            }
+                        } else {
+                            $row[] = $dot->get($field);
+                        }
+                    }
+
+                    $writer->addRow(
+                        WriterEntityFactory::createRowFromArray($row)
+                    );
+
+                    $process->handle();
+                    $process->save();
+                }
+            );
+
+            $writer->close();
+            $process->finish((string) $fileUri);
+            $process->save();
+        };
     }
 }

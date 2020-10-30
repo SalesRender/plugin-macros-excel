@@ -12,8 +12,8 @@ use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Limit;
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnumDefinition;
 use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
+use Leadvertex\Plugin\Components\Token\GraphqlInputToken;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Core\Macros\Models\Session;
 use Leadvertex\Plugin\Instance\Macros\Components\Values\FormatValues;
 
 class OptionsForm extends Form
@@ -24,7 +24,7 @@ class OptionsForm extends Form
 
     private function __construct()
     {
-        $settings = Session::current()->getSettings();
+        $settings = GraphqlInputToken::getInstance()->getSettings();
         $format = new FormatValues();
         parent::__construct(
             Translator::get(
