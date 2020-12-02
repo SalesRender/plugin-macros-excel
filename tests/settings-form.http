@@ -1,4 +1,4 @@
-GET {{host}}/forms/settings
+GET {{host}}/protected/forms/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

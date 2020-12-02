@@ -1,11 +1,11 @@
-GET {{host}}/data/settings
+GET {{host}}/protected/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT {{host}}/data/settings
+PUT {{host}}/protected/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
@@ -28,7 +28,7 @@ X-PLUGIN-TOKEN: {{token}}
 
 ###
 
-PUT {{host}}/data/settings
+PUT {{host}}/protected/data/settings
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}

@@ -5,7 +5,7 @@
  * @author Timur Kasumov aka XAKEPEHOK
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Components;
+namespace Leadvertex\Plugin\Instance\Excel\Components;
 
 
 use Leadvertex\Plugin\Components\ApiClient\ApiFetcherIterator;

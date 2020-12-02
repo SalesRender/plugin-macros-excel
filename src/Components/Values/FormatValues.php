@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Components\Values;
+namespace Leadvertex\Plugin\Instance\Excel\Components\Values;
 
 
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\FieldDefinition;

@@ -5,26 +5,25 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Forms;
+namespace Leadvertex\Plugin\Instance\Excel\Forms;
 
 
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Limit;
 use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnumDefinition;
 use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Components\Token\GraphqlInputToken;
+use Leadvertex\Plugin\Components\Settings\Settings;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Instance\Macros\Components\Values\FormatValues;
+use Leadvertex\Plugin\Instance\Excel\Components\Values\FormatValues;
 
-class OptionsForm extends Form
+class BatchForm_1 extends Form
 {
 
-    /** @var self */
-    private static $instance;
-
-    private function __construct()
+    public function __construct()
     {
-        $settings = GraphqlInputToken::getInstance()->getSettings();
+        $settings = Settings::find();
+        $settings::guardIntegrity();
+
         $format = new FormatValues();
         parent::__construct(
             Translator::get(
@@ -59,14 +58,6 @@ class OptionsForm extends Form
                 'Выгрузка'
             )
         );
-    }
-
-    public static function getInstance(): self
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static();
-        }
-        return static::$instance;
     }
 
 }

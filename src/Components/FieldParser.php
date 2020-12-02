@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Components;
+namespace Leadvertex\Plugin\Instance\Excel\Components;
 
 
 use InvalidArgumentException;
@@ -15,20 +15,15 @@ class FieldParser
 
     private const REGEXP = '~(.+)\.\[([a-z\d_\.]+)=([^\]]+)\]\.(.+)~';
 
-    /** @var string */
-    private $field;
+    private string $field;
 
-    /** @var string|null */
-    private $left;
+    private ?string $left;
 
-    /** @var string|null */
-    private $right;
+    private ?string $right;
 
-    /** @var string|null */
-    private $property;
+    private ?string $property;
 
-    /** @var string|null */
-    private $value;
+    private ?string $value;
 
     public function __construct(string $field)
     {

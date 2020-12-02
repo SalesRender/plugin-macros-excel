@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Components;
+namespace Leadvertex\Plugin\Instance\Excel;
 
 
 use Adbar\Dot;
@@ -13,28 +13,22 @@ use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Leadvertex\Plugin\Components\Batch\Batch;
 use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
 use Leadvertex\Plugin\Components\Process\Process;
-use Leadvertex\Plugin\Core\Macros\Helpers\PathHelper;
-use Leadvertex\Plugin\Instance\Macros\Plugin;
+use Leadvertex\Plugin\Components\Settings\Settings;
+use Leadvertex\Plugin\Core\Helpers\PathHelper;
+use Leadvertex\Plugin\Instance\Excel\Components\Columns;
+use Leadvertex\Plugin\Instance\Excel\Components\FieldParser;
+use Leadvertex\Plugin\Instance\Excel\Components\OrdersFetcherIterator;
 use XAKEPEHOK\Path\Path;
 
-class BatchHandler implements BatchHandlerInterface
+class ExcelHandler implements BatchHandlerInterface
 {
 
-    /**
-     * @var Plugin
-     */
-    private $plugin;
-
-    public function __construct(Plugin $plugin)
-    {
-        $this->plugin = $plugin;
-    }
 
     public function __invoke(Process $process, Batch $batch)
     {
         $iterator = new OrdersFetcherIterator($process, $batch->getApiClient(), $batch->getFsp());
 
-        $settings = $this->plugin->getSettingsForm()->getData();
+        $settings = Settings::find()->getData();
         $fields = $settings->get('main.fields');
 
         $format = current($batch->getOptions(1)->get('options.format'));

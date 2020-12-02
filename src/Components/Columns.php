@@ -5,18 +5,17 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Macros\Components;
+namespace Leadvertex\Plugin\Instance\Excel\Components;
 
 
+use Leadvertex\Plugin\Components\Access\Token\GraphqlInputToken;
 use Leadvertex\Plugin\Components\ApiClient\ApiClient;
-use Leadvertex\Plugin\Components\Token\GraphqlInputToken;
 use Leadvertex\Plugin\Components\Translations\Translator;
 
 class Columns
 {
 
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
     public function __construct()
     {

@@ -1,4 +1,4 @@
-POST {{host}}/batch/prepare
+POST {{host}}/protected/batch/prepare
 Content-Type: application/json
 Accept-Language: ru_RU
 X-PLUGIN-TOKEN: {{token}}
