@@ -17,7 +17,7 @@ use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\Translations\Translator;
 use Leadvertex\Plugin\Instance\Excel\Components\Columns;
-use Leadvertex\Plugin\Instance\Excel\Components\Values\FormatValues;
+use Leadvertex\Plugin\Instance\Excel\ValuesList\FormatValues;
 
 class SettingsForm extends Form
 {

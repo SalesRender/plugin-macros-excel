@@ -14,7 +14,7 @@ use Leadvertex\Plugin\Components\Form\FieldGroup;
 use Leadvertex\Plugin\Components\Form\Form;
 use Leadvertex\Plugin\Components\Settings\Settings;
 use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Instance\Excel\Components\Values\FormatValues;
+use Leadvertex\Plugin\Instance\Excel\ValuesList\FormatValues;
 
 class BatchForm_1 extends Form
 {
@@ -22,7 +22,11 @@ class BatchForm_1 extends Form
     public function __construct()
     {
         $settings = Settings::find();
-        $settings::guardIntegrity();
+        $defaultFormat = $settings->getData()->get('main.format');
+
+        if (is_null($defaultFormat)) {
+            $settings::guardIntegrity();
+        }
 
         $format = new FormatValues();
         parent::__construct(
