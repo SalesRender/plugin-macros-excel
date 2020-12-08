@@ -1,9 +1,7 @@
 <?php
 
-use Leadvertex\Plugin\Components\Batch\BatchFormRegistry;
-use Leadvertex\Plugin\Components\Batch\BatchHandler;
+use Leadvertex\Plugin\Components\Batch\BatchContainer;
 use Leadvertex\Plugin\Components\Db\Components\Connector;
-use Leadvertex\Plugin\Components\Form\Components\AutocompleteRegistry;
 use Leadvertex\Plugin\Components\Info\Developer;
 use Leadvertex\Plugin\Components\Info\Info;
 use Leadvertex\Plugin\Components\Info\PluginType;
@@ -48,16 +46,13 @@ Info::config(
 # 4. Configure settings form
 Settings::setForm(fn() => new SettingsForm());
 
-# 5. Configure form autocompletes (or return null if dont used)
-AutocompleteRegistry::config(fn($name) => null);
-
-# 6. Configure batch forms (or return null if dont used)
-BatchFormRegistry::config(function (int $number) {
-    switch ($number) {
-        case 1: return new BatchForm_1();
-        default: return null;
-    }
-});
-
-# 6.1 Configure batch handler (or remove this block if dont used)
-BatchHandler::config(fn() => new ExcelHandler());
+# 6. Configure batch forms and handler
+BatchContainer::config(
+    function (int $number) {
+        switch ($number) {
+            case 1: return new BatchForm_1();
+            default: return null;
+        }
+    },
+    new ExcelHandler()
+);
