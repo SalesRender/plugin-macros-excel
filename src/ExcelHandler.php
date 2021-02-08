@@ -10,10 +10,13 @@ namespace Leadvertex\Plugin\Instance\Excel;
 
 use Adbar\Dot;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Exception;
 use Leadvertex\Plugin\Components\Batch\Batch;
 use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
+use Leadvertex\Plugin\Components\Process\Components\Error;
 use Leadvertex\Plugin\Components\Process\Process;
 use Leadvertex\Plugin\Components\Settings\Settings;
+use Leadvertex\Plugin\Components\Translations\Translator;
 use Leadvertex\Plugin\Core\Helpers\PathHelper;
 use Leadvertex\Plugin\Instance\Excel\Components\Columns;
 use Leadvertex\Plugin\Instance\Excel\Components\FieldParser;
@@ -26,8 +29,6 @@ class ExcelHandler implements BatchHandlerInterface
 
     public function __invoke(Process $process, Batch $batch)
     {
-        $iterator = new OrdersFetcherIterator($process, $batch->getApiClient(), $batch->getFsp());
-
         $settings = Settings::find()->getData();
         $fields = $settings->get('main.fields');
 
@@ -61,15 +62,22 @@ class ExcelHandler implements BatchHandlerInterface
             );
         }
 
-        $iterator->iterator(
+        $ordersIterator = new OrdersFetcherIterator(
             Columns::getQueryColumns($fields),
-            function (array $item, Process $process) use ($fields, $writer) {
-                $dot = new Dot($item);
+            $batch->getApiClient(),
+            $batch->getFsp()
+        );
+
+        $process->initialize(count($ordersIterator));
+
+        foreach ($ordersIterator as $id => $order) {
+            try {
+                $order = new Dot($order);
                 $row = [];
                 foreach ($fields as $field) {
                     if (FieldParser::hasFilter($field)) {
                         $field = new FieldParser($field);
-                        $array = $dot->get($field->getLeftPart());
+                        $array = $order->get($field->getLeftPart());
                         foreach ($array as $value) {
                             if (!is_array($value)) {
                                 continue;
@@ -82,7 +90,7 @@ class ExcelHandler implements BatchHandlerInterface
                             $row[] = '';
                         }
                     } else {
-                        $row[] = $dot->get($field);
+                        $row[] = $order->get($field);
                     }
                 }
 
@@ -91,9 +99,14 @@ class ExcelHandler implements BatchHandlerInterface
                 );
 
                 $process->handle();
-                $process->save();
+            } catch (Exception $exception) {
+                $process->addError(new Error(
+                    Translator::get('process', 'Ошибка обработки данных'),
+                    $id
+                ));
             }
-        );
+            $process->save();
+        }
 
         $writer->close();
         $process->finish((string) $fileUri);

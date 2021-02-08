@@ -16,16 +16,15 @@ class OrdersFetcherIterator extends ApiFetcherIterator
 {
 
     /**
-     * @param array $body
+     * @param array $fields
      * @return string
      * @throws InvalidArrayException
      */
-    protected function getQuery(array $body): string
+    protected function getQuery(array $fields): string
     {
-        $fields = ArrayGraphQL::convert($body);
         return '
             query($pagination: Pagination!, $filters: OrderFilter, $sort: OrderSort) {
-                ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . $fields . '
+                ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . ArrayGraphQL::convert($fields) . '
             }
         ';
     }
