@@ -24,7 +24,7 @@ class OrdersFetcherIterator extends ApiFetcherIterator
     {
         $fields = ArrayGraphQL::convert($body);
         return '
-            query($pagination: Pagination!, $filters: OrderFilter, $sort: OrderSort) {
+            query($pagination: Pagination!, $filters: OrderSearchFilter, $sort: OrderSort) {
                 ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . $fields . '
             }
         ';
