@@ -279,22 +279,22 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$typename}.[field.name={$name}].value.raw" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.international" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.international" => Translator::get(
                             'fields',
                             '{label} (международный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.national" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.national" => Translator::get(
                             'fields',
                             '{label} (локальный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.country" => Translator::get(
                             'fields',
                             '{label} (код страны)',
                             ['label' => $label]
