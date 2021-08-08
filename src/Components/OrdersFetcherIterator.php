@@ -23,7 +23,7 @@ class OrdersFetcherIterator extends ApiFetcherIterator
     protected function getQuery(array $fields): string
     {
         return '
-            query($pagination: Pagination!, $filters: OrderFilter, $sort: OrderSort) {
+            query($pagination: Pagination!, $filters: OrderSearchFilter, $sort: OrderSort) {
                 ordersFetcher(pagination: $pagination, filters: $filters, sort: $sort) ' . ArrayGraphQL::convert($fields) . '
             }
         ';
