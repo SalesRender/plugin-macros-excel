@@ -13,7 +13,7 @@ use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Exception;
 use Leadvertex\Plugin\Components\Batch\Batch;
 use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
-use Leadvertex\Plugin\Components\Batch\Process\Components\Error;
+use Leadvertex\Plugin\Components\Batch\Process\Error;
 use Leadvertex\Plugin\Components\Batch\Process\Process;
 use Leadvertex\Plugin\Components\Settings\Settings;
 use Leadvertex\Plugin\Components\Translations\Translator;
