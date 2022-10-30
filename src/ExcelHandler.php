@@ -30,7 +30,7 @@ class ExcelHandler implements BatchHandlerInterface
     public function __invoke(Process $process, Batch $batch)
     {
         $settings = Settings::find()->getData();
-        $fields = $settings->get('main.fields');
+        $fields = $settings->get('main.fields', []);
 
         $format = current($batch->getOptions(1)->get('options.format'));
         $ext = '.' . $format;
