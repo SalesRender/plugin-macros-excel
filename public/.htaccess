@@ -1,6 +1,7 @@
 RewriteEngine On
 RewriteRule ^output - [L]
 RewriteRule ^uploaded - [L]
+RewriteRule ^icon\.png - [L]
 RewriteCond %{REQUEST_FILENAME}  -f [OR]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [L,QSA]
