@@ -149,7 +149,7 @@ class Columns
     {
         $query = <<<QUERY
 query {
-  fieldsFetcher {
+  orderFieldsFetcher {
     fields {
       name
       label
@@ -163,12 +163,12 @@ QUERY;
         $response = $this->client->query($query, [])->getData();
 
         $groups = [];
-        foreach ($response['fieldsFetcher']['fields'] as $fieldData) {
+        foreach ($response['orderFieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
             $label = $fieldData['label'];
             $typename = lcfirst($fieldData['__typename'] . 's');
             switch ($fieldData['__typename']) {
-                case 'BooleanField':
+                case 'BooleanOrderField':
                     $key = Translator::get('fields', 'Логический (да/нет)');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -177,7 +177,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'DatetimeField':
+                case 'DatetimeOrderField':
                     $key = Translator::get('fields', 'Дата и время');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -186,7 +186,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'EnumField':
+                case 'EnumOrderField':
                     $key = Translator::get('fields', 'Списки');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -195,7 +195,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'EmailField':
+                case 'EmailOrderField':
                     $key = Translator::get('fields', 'Email');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -209,7 +209,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'FileField':
+                case 'FileOrderField':
                     $key = Translator::get('fields', 'Файлы');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -232,7 +232,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'FloatField':
+                case 'FloatOrderField':
                     $key = Translator::get('fields', 'Дробные числа');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -241,7 +241,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'ImageField':
+                case 'ImageOrderField':
                     $key = Translator::get('fields', 'Изображения');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -264,7 +264,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'IntegerField':
+                case 'IntegerOrderField':
                     $key = Translator::get('fields', 'Целые числа');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -273,7 +273,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'PhoneField':
+                case 'PhoneOrderField':
                     $key = Translator::get('fields', 'Телефоны');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -306,7 +306,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'StringField':
+                case 'StringOrderField':
                     $key = Translator::get('fields', 'Строки');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -315,7 +315,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'AddressField':
+                case 'AddressOrderField':
                     $key = Translator::get('fields', 'Адреса');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -348,7 +348,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'HumanNameField':
+                case 'HumanNameOrderField':
                     $key = Translator::get('fields', 'Ф.И.О');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -366,7 +366,7 @@ QUERY;
                         ),
                     ];
                     break;
-                case 'UserField':
+                case 'UserOrderField':
                     $key = Translator::get('fields', 'Пользователи');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
