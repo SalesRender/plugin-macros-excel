@@ -4,7 +4,6 @@
 use Leadvertex\Plugin\Core\Macros\Factories\ConsoleAppFactory;
 
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/bootstrap.php';
 
 $factory = new ConsoleAppFactory();
 $application = $factory->build();

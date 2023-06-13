@@ -21,7 +21,7 @@ class Columns
     {
         $token = GraphqlInputToken::getInstance();
         $this->client = new ApiClient(
-            $token->getBackendUri() . 'companies/stark-industries/CRM',
+            "{$token->getBackendUri()}companies/{$token->getPluginReference()->getCompanyId()}/CRM",
             (string) $token->getOutputToken()
         );
     }
@@ -80,27 +80,19 @@ class Columns
 
             'createdAt' => Translator::get('fields', 'Дата создания'),
             'updatedAt' => Translator::get('fields', 'Дата изменения'),
-            'canceledAt' => Translator::get('fields', 'Дата отмены'),
-            'approvedAt' => Translator::get('fields', 'Дата подтверждения'),
-            'shippedAt' => Translator::get('fields', 'Дата отправки'),
-            'deliveredAt' => Translator::get('fields', 'Дата доставки'),
-            'undeliveredAt' => Translator::get('fields', 'Дата неудачной доставки'),
-            'refundedAt' => Translator::get('fields', 'Дата возврата'),
+            'statusChangedAt' => Translator::get('fields', 'Дата смены статуса'),
 
             'warehouse.id' => Translator::get('fields', 'Склад (ID)'),
             'warehouse.name' => Translator::get('fields', 'Склад (название)'),
 
             'vat.price' => Translator::get('fields', 'Налог (сумма)'),
             'vat.percent' => Translator::get('fields', 'Налог (процент)'),
-            'vat.includeShipping' => Translator::get('fields', 'Налог (включает доставку)'),
+            'vat.includeLogistic' => Translator::get('fields', 'Налог (включает доставку)'),
 
             'lead.webmaster.id' => Translator::get('fields', 'Lead (ID вебмастера)'),
             'lead.webmaster.email' => Translator::get('fields', 'Lead (email вебмастера)'),
             'lead.offer.id' => Translator::get('fields', 'Lead (ID оффера)'),
             'lead.rewardMethod' => Translator::get('fields', 'Lead (метод вознаграждения)'),
-            'lead.bid.type' => Translator::get('fields', 'Lead (тип ставки)'),
-            'lead.bid.value' => Translator::get('fields', 'Lead (ставка)'),
-            'lead.bid.currency' => Translator::get('fields', 'Lead (валюта)'),
             'lead.reward.amount' => Translator::get('fields', 'Lead (сумма вознаграждение)'),
             'lead.reward.currency' => Translator::get('fields', 'Lead (валюта вознаграждение)'),
             'lead.status' => Translator::get('fields', 'Lead (статус)'),
@@ -109,7 +101,13 @@ class Columns
 
             'source.uri' => Translator::get('fields', 'Источник (uri)'),
             'source.refererUri' => Translator::get('fields', 'Источник (referer)'),
-            'source.ip' => Translator::get('fields', 'Источник (IP)'),
+            'source.ip.ip.address' => Translator::get('fields', 'Источник (IP адрес)'),
+            'source.ip.ip.country' => Translator::get('fields', 'Источник (IP страна)'),
+            'source.ip.ip.city' => Translator::get('fields', 'Источник (IP город)'),
+            'source.ip.ip.timezone' => Translator::get('fields', 'Источник (IP часовой пояс)'),
+            'source.ip.ip.location.latitude' => Translator::get('fields', 'Источник (IP широта)'),
+            'source.ip.ip.location.longitude' => Translator::get('fields', 'Источник (IP долгота)'),
+            'source.ip.duplicates' => Translator::get('fields', 'Источник (IP дубликаты)'),
             'source.utm_source' => Translator::get('fields', 'Источник (utm_source)'),
             'source.utm_medium' => Translator::get('fields', 'Источник (utm_medium)'),
             'source.utm_campaign' => Translator::get('fields', 'Источник (utm_campaign)'),
@@ -117,6 +115,27 @@ class Columns
             'source.utm_term' => Translator::get('fields', 'Источник (utm_term)'),
             'source.subid_1' => Translator::get('fields', 'Источник (subid_1)'),
             'source.subid_2' => Translator::get('fields', 'Источник (subid_2)'),
+
+            'logistic.waybill.track' => Translator::get('fields', 'Накладная (Трек-номер)'),
+            'logistic.waybill.price' => Translator::get('fields', 'Накладная (Стоимость доставки)'),
+            'logistic.waybill.deliveryTerms.minHours' => Translator::get('fields', 'Накладная (Время доставки (c))'),
+            'logistic.waybill.deliveryTerms.maxHours' => Translator::get('fields', 'Накладная (Время доставки (по))'),
+            'logistic.waybill.deliveryType' => Translator::get('fields', 'Накладная (Тип доставки)'),
+            'logistic.waybill.cod' => Translator::get('fields', 'Накладная (Наложенный платеж)'),
+
+            'logistic.plugin.id' => Translator::get('fields', 'Логистический плагин (ID)'),
+            'logistic.plugin.name' => Translator::get('fields', 'Логистический плагин (Название)'),
+
+            'logistic.status.code' => Translator::get('fields', 'Статус доставки (Код)'),
+            'logistic.status.text' => Translator::get('fields', 'Статус доставки (Описание)'),
+            'logistic.status.assignmentAt' => Translator::get('fields', 'Статус доставки (Время получения статуса)'),
+            'logistic.status.office.address.postcode' => Translator::get('fields', 'Статус доставки (Офис, почтовый индекс)'),
+            'logistic.status.office.address.region' => Translator::get('fields', 'Статус доставки (Офис, регион)'),
+            'logistic.status.office.address.city' => Translator::get('fields', 'Статус доставки (Офис, город)'),
+            'logistic.status.office.address.address_1' => Translator::get('fields', 'Статус доставки (Офис, адрес)'),
+            'logistic.status.office.address.address_2' => Translator::get('fields', 'Статус доставки (Офис, адрес (дополнительный))'),
+            'logistic.status.office.address.country' => Translator::get('fields', 'Статус доставки (Офис, страна)'),
+            'logistic.status.office.phones' => Translator::get('fields', 'Статус доставки (Офис, контакты)'),
         ];
 
         $result = [];

@@ -10,6 +10,7 @@ namespace Leadvertex\Plugin\Instance\Excel;
 
 use Adbar\Dot;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use DateTime;
 use Exception;
 use Leadvertex\Plugin\Components\Batch\Batch;
 use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
@@ -78,8 +79,13 @@ class ExcelHandler implements BatchHandlerInterface
                     if (FieldParser::hasFilter($field)) {
                         $field = new FieldParser($field);
                         $array = $order->get($field->getLeftPart());
+                        if (empty($array)) {
+                            $row[] = '';
+                            continue;
+                        }
                         foreach ($array as $value) {
                             if (!is_array($value)) {
+                                $row[] = '';
                                 continue;
                             }
                             $part = new Dot($value);
@@ -90,7 +96,25 @@ class ExcelHandler implements BatchHandlerInterface
                             $row[] = '';
                         }
                     } else {
-                        $row[] = $order->get($field);
+                        switch ($field) {
+                            case 'createdAt':
+                            case 'updatedAt':
+                            case 'statusChangedAt':
+                            case 'logistic.status.assignmentAt':
+                                $date = new DateTime($order->get($field));
+                                $row[] = $date->format('Y-m-d H:i:s (\U\T\C e)');
+                                break;
+                            case 'vat.price':
+                            case 'lead.reward.amount':
+                            case 'cart.total':
+                                $row[] = (float)$order->get($field) / 100;
+                                break;
+                            case 'logistic.status.logisticOffice.phones':
+                                $row[] = implode(', ', $order->get($field));
+                                break;
+                            default:
+                                $row[] = $order->get($field);
+                        }
                     }
                 }
 
