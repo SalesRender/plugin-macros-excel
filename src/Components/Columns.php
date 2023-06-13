@@ -89,7 +89,7 @@ class Columns
             'vat.percent' => Translator::get('fields', 'Налог (процент)'),
             'vat.includeLogistic' => Translator::get('fields', 'Налог (включает доставку)'),
 
-            'lead.webfmaster.id' => Translator::get('fields', 'Lead (ID вебмастера)'),
+            'lead.webmaster.id' => Translator::get('fields', 'Lead (ID вебмастера)'),
             'lead.webmaster.email' => Translator::get('fields', 'Lead (email вебмастера)'),
             'lead.offer.id' => Translator::get('fields', 'Lead (ID оффера)'),
             'lead.rewardMethod' => Translator::get('fields', 'Lead (метод вознаграждения)'),
