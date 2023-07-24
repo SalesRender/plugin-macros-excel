@@ -365,6 +365,11 @@ QUERY;
                             '{label} (адрес 2)',
                             ['label' => $label]
                         ),
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
+                            'fields',
+                            '{label} (страна)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
                 case 'HumanNameOrderField':
