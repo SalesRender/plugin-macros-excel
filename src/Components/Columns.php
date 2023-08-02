@@ -365,6 +365,11 @@ QUERY;
                             '{label} (адрес 2)',
                             ['label' => $label]
                         ),
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
+                            'fields',
+                            '{label} (страна)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
                 case 'HumanNameField':
@@ -409,6 +414,16 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value.name.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
+                            ['label' => $label]
+                        ),
+                        "data.{$typename}.[field.name={$name}].value.role.id" => Translator::get(
+                            'fields',
+                            '{label} (роль, id)',
+                            ['label' => $label]
+                        ),
+                        "data.{$typename}.[field.name={$name}].value.role.name" => Translator::get(
+                            'fields',
+                            '{label} (роль, название)',
                             ['label' => $label]
                         ),
                     ];
