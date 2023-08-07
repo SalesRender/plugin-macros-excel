@@ -185,7 +185,7 @@ QUERY;
         foreach ($response['orderFieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
             $label = $fieldData['label'];
-            $typename = lcfirst($fieldData['__typename'] . 's');
+            $typename = str_replace("Order", '', lcfirst($fieldData['__typename'] . 's'));
             switch ($fieldData['__typename']) {
                 case 'BooleanOrderField':
                     $key = Translator::get('fields', 'Логический (да/нет)');
@@ -193,7 +193,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'DatetimeOrderField':
@@ -202,7 +202,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EnumOrderField':
@@ -211,7 +211,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'EmailOrderField':
@@ -220,8 +220,8 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.raw" => $label,
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.duplicates" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.raw" => $label,
+                        "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
@@ -234,17 +234,17 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.clientFileName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.clientFileName" => Translator::get(
                             'fields',
                             '{label} (исходное имя файла)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.size" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.size" => Translator::get(
                             'fields',
                             '{label} (размер в байтах)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.uri" => Translator::get(
                             'fields',
                             '{label} (ссылка)',
                             ['label' => $label]
@@ -257,7 +257,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'ImageOrderField':
@@ -266,17 +266,17 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.large.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.large.uri" => Translator::get(
                             'fields',
                             '{label} (большой размер)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.medium.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.medium.uri" => Translator::get(
                             'fields',
                             '{label} (средний размер)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.small.uri" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.small.uri" => Translator::get(
                             'fields',
                             '{label} (маленький размер)',
                             ['label' => $label]
@@ -289,7 +289,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'PhoneOrderField':
@@ -298,27 +298,27 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.phone.raw" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.phone.international" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.international" => Translator::get(
                             'fields',
                             '{label} (международный)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.phone.national" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.national" => Translator::get(
                             'fields',
                             '{label} (локальный)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.phone.country" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.phone.country" => Translator::get(
                             'fields',
                             '{label} (код страны)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.duplicates" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
@@ -331,7 +331,7 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value" => $label,
+                        "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
                 case 'AddressOrderField':
@@ -340,32 +340,32 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.postcode" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.postcode" => Translator::get(
                             'fields',
                             '{label} (почтовый индекс)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.region" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.region" => Translator::get(
                             'fields',
                             '{label} (регион)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.city" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.city" => Translator::get(
                             'fields',
                             '{label} (город)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.address_1" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.address_1" => Translator::get(
                             'fields',
                             '{label} (адрес 1)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.address_2" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.address_2" => Translator::get(
                             'fields',
                             '{label} (адрес 2)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.country" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
                             'fields',
                             '{label} (страна)',
                             ['label' => $label]
@@ -378,12 +378,12 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.firstName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.lastName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]
@@ -396,32 +396,32 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.id" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.id" => Translator::get(
                             'fields',
                             '{label} (ID)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.email" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.email" => Translator::get(
                             'fields',
                             '{label} (email)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.name.firstName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.name.firstName" => Translator::get(
                             'fields',
                             '{label} (имя)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.name.lastName" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.name.lastName" => Translator::get(
                             'fields',
                             '{label} (фамилия)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.role.id" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.role.id" => Translator::get(
                             'fields',
                             '{label} (роль, id)',
                             ['label' => $label]
                         ),
-                        "data.{$this->trimOrderType($typename)}.[field.name={$name}].value.role.name" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.role.name" => Translator::get(
                             'fields',
                             '{label} (роль, название)',
                             ['label' => $label]
