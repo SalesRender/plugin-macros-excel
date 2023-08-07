@@ -442,10 +442,4 @@ QUERY;
         }
         return $result;
     }
-
-    private function trimOrderType(string $type): string
-    {
-        return str_replace("Order", '', $type);
-    }
-
 }
