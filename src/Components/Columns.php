@@ -185,7 +185,7 @@ QUERY;
         foreach ($response['orderFieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
             $label = $fieldData['label'];
-            $typename = lcfirst($fieldData['__typename'] . 's');
+            $typename = str_replace("Order", '', lcfirst($fieldData['__typename'] . 's'));
             switch ($fieldData['__typename']) {
                 case 'BooleanOrderField':
                     $key = Translator::get('fields', 'Логический (да/нет)');
@@ -365,6 +365,11 @@ QUERY;
                             '{label} (адрес 2)',
                             ['label' => $label]
                         ),
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
+                            'fields',
+                            '{label} (страна)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
                 case 'HumanNameOrderField':
@@ -411,6 +416,16 @@ QUERY;
                             '{label} (фамилия)',
                             ['label' => $label]
                         ),
+                        "data.{$typename}.[field.name={$name}].value.role.id" => Translator::get(
+                            'fields',
+                            '{label} (роль, id)',
+                            ['label' => $label]
+                        ),
+                        "data.{$typename}.[field.name={$name}].value.role.name" => Translator::get(
+                            'fields',
+                            '{label} (роль, название)',
+                            ['label' => $label]
+                        ),
                     ];
                     break;
             }
@@ -427,5 +442,4 @@ QUERY;
         }
         return $result;
     }
-
 }
