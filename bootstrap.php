@@ -20,8 +20,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 # 1. Configure DB (for SQLite *.db file and parent directory should be writable)
 Connector::config(new Medoo([
-    'database_type' => 'sqlite',
-    'database_file' => Path::root()->down('db/database.db')
+    'database_type' => $_ENV['DATABASE_TYPE'],
+    'server' => $_ENV['DATABASE_SERVER'],
+    'database_name' => $_ENV['DATABASE_NAME'],
+    'username' => $_ENV['DATABASE_USER'],
+    'password' => $_ENV['DATABASE_PASS']
 ]));
 
 # 2. Set plugin default language
