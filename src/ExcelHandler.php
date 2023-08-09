@@ -76,6 +76,7 @@ class ExcelHandler implements BatchHandlerInterface
                 $order = new Dot($order);
                 $row = [];
                 foreach ($fields as $field) {
+                    $rowValue = '';
                     if (FieldParser::hasFilter($field)) {
                         $field = new FieldParser($field);
                         $array = $order->get($field->getLeftPart());
@@ -90,11 +91,11 @@ class ExcelHandler implements BatchHandlerInterface
                             }
                             $part = new Dot($value);
                             if ($part->get($field->getFilterProperty()) == $field->getFilterValue()) {
-                                $row[] = $part->get($field->getRightPart());
+                                $rowValue = $part->get($field->getRightPart());
                                 break;
                             }
-                            $row[] = '';
                         }
+                        $row[] = $rowValue;
                     } else {
                         switch ($field) {
                             case 'createdAt':
