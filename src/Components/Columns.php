@@ -134,6 +134,8 @@ class Columns
             'logistic.status.office.address.city' => Translator::get('fields', 'Статус доставки (Офис, город)'),
             'logistic.status.office.address.address_1' => Translator::get('fields', 'Статус доставки (Офис, адрес)'),
             'logistic.status.office.address.address_2' => Translator::get('fields', 'Статус доставки (Офис, адрес (дополнительный))'),
+            'logistic.status.office.address.building' => Translator::get('fields', 'Статус доставки (Офис, адрес (дом/строение))'),
+            'logistic.status.office.address.apartment' => Translator::get('fields', 'Статус доставки (Офис, адрес (квартира))'),
             'logistic.status.office.address.country' => Translator::get('fields', 'Статус доставки (Офис, страна)'),
             'logistic.status.office.phones' => Translator::get('fields', 'Статус доставки (Офис, контакты)'),
         ];
@@ -196,7 +198,7 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value" => $label,
                     ];
                     break;
-                case 'DatetimeOrderField':
+                case 'DateTimeOrderField':
                     $key = Translator::get('fields', 'Дата и время');
                     if (!key_exists($key, $groups)) {
                         $groups[$key] = [];
@@ -363,6 +365,16 @@ QUERY;
                         "data.{$typename}.[field.name={$name}].value.address_2" => Translator::get(
                             'fields',
                             '{label} (адрес 2)',
+                            ['label' => $label]
+                        ),
+                        "data.{$typename}.[field.name={$name}].value.building" => Translator::get(
+                            'fields',
+                            '{label} (дом/строение)',
+                            ['label' => $label]
+                        ),
+                        "data.{$typename}.[field.name={$name}].value.apartment" => Translator::get(
+                            'fields',
+                            '{label} (квартира)',
                             ['label' => $label]
                         ),
                         "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
