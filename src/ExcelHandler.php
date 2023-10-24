@@ -102,6 +102,10 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'updatedAt':
                             case 'statusChangedAt':
                             case 'logistic.status.assignmentAt':
+                                if ($order->get($field) === null) {
+                                    $row[] = '';
+                                    break;
+                                }
                                 $date = new DateTime($order->get($field));
                                 $row[] = $date->format('Y-m-d H:i:s (\U\T\C e)');
                                 break;
