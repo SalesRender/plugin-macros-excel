@@ -50,7 +50,7 @@ class ExcelHandler implements BatchHandlerInterface
                 break;
         }
 
-        $writer->openToFile((string) $filePath);
+        $writer->openToFile((string)$filePath);
 
         if ($settings->get('main.headers')) {
             $headers = [];
@@ -102,6 +102,10 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'updatedAt':
                             case 'statusChangedAt':
                             case 'logistic.status.assignmentAt':
+                                if ($order->get($field) === null) {
+                                    $row[] = '';
+                                    break;
+                                }
                                 $date = new DateTime($order->get($field));
                                 $row[] = $date->format('Y-m-d H:i:s (\U\T\C e)');
                                 break;
@@ -109,6 +113,42 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'lead.reward.amount':
                             case 'cart.total':
                                 $row[] = (float)$order->get($field) / 100;
+                                break;
+                            case 'cart.items.price':
+                            case 'cart.items.total':
+                                $pricing = $this->getRowFromCartItems($order->get('cart'), $field);
+                                $pricing = array_map(function ($value) {
+                                    return $value / 100;
+                                }, $pricing);
+                                $row[] = implode(', ', $pricing);
+                                break;
+                            case 'cart.promotions.price':
+                            case 'cart.promotions.total':
+                                $pricing = $this->getRowFromCartPromotions($order->get('cart'), $field);
+                                $pricing = array_map(function ($value) {
+                                    return $value / 100;
+                                }, $pricing);
+                                $row[] = implode(', ', $pricing);
+                                break;
+                            case 'cart.items.sku.item.id':
+                            case 'cart.items.sku.item.name':
+                            case 'cart.items.sku.item.description':
+                            case 'cart.items.sku.item.weight':
+                            case 'cart.items.sku.item.dimensions.length':
+                            case 'cart.items.sku.item.dimensions.width':
+                            case 'cart.items.sku.item.dimensions.height':
+                            case 'cart.items.sku.variation.number':
+                            case 'cart.items.sku.variation.property':
+                            case 'cart.items.quantity':
+                                $row[] =  implode(', ', $this->getRowFromCartItems($order->get('cart'), $field));
+                                break;
+                            case 'cart.promotions.promotion.id':
+                            case 'cart.promotions.promotion.name':
+                            case 'cart.promotions.promotion.dimensions.length':
+                            case 'cart.promotions.promotion.dimensions.width':
+                            case 'cart.promotions.promotion.dimensions.height':
+                            case 'cart.promotions.quantity':
+                                $row[] = implode(', ', $this->getRowFromCartPromotions($order->get('cart'), $field));
                                 break;
                             case 'logistic.status.logisticOffice.phones':
                                 $row[] = implode(', ', $order->get($field));
@@ -134,7 +174,37 @@ class ExcelHandler implements BatchHandlerInterface
         }
 
         $writer->close();
-        $process->finish((string) $fileUri);
+        $process->finish((string)$fileUri);
         $process->save();
+    }
+
+    private function getRowFromCartItems(array $cart, string $path): array
+    {
+        $row = [];
+        $cart = new Dot($cart);
+        if ($cart->has('items')) {
+            $array = $cart->get('items');
+            foreach ($array as $arrayItem) {
+                $arrayItem = new Dot($arrayItem);
+                $row[] = $arrayItem->get(str_replace('cart.items.', '', $path), '');
+            }
+        }
+
+        return $row;
+    }
+
+    private function getRowFromCartPromotions(array $cart, string $path): array
+    {
+        $row = [];
+        $cart = new Dot($cart);
+        if ($cart->has('promotions')) {
+            $array = $cart->get('promotions');
+            foreach ($array as $arrayItem) {
+                $arrayItem = new Dot($arrayItem);
+                $row[] = $arrayItem->get(str_replace('cart.promotions.', '', $path), '');
+            }
+        }
+
+        return $row;
     }
 }

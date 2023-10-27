@@ -154,6 +154,26 @@ class Columns
     {
         $fields = [
             'cart.total' => Translator::get('fields', 'Корзина (сумма)'),
+            'cart.items.sku.item.id' => Translator::get('fields', 'Корзина (id товара)'),
+            'cart.items.sku.item.name' => Translator::get('fields', 'Корзина (название товара)'),
+            'cart.items.sku.item.description' => Translator::get('fields', 'Корзина (описание товара)'),
+            'cart.items.sku.item.weight' => Translator::get('fields', 'Корзина (вес товара)'),
+            'cart.items.sku.item.dimensions.length' => Translator::get('fields', 'Корзина (габариты, длина товара)'),
+            'cart.items.sku.item.dimensions.width' => Translator::get('fields', 'Корзина (габариты, ширина товара)'),
+            'cart.items.sku.item.dimensions.height' => Translator::get('fields', 'Корзина (габариты, высота товара)'),
+            'cart.items.sku.variation.number' => Translator::get('fields', 'Корзина (вариация товара, порядковый номер)'),
+            'cart.items.sku.variation.property' => Translator::get('fields', 'Корзина (вариация товара, название)'),
+            'cart.items.quantity' => Translator::get('fields', 'Корзина (кол-во товара)'),
+            'cart.items.price' => Translator::get('fields', 'Корзина (цена за ед. товара)'),
+            'cart.items.total' => Translator::get('fields', 'Корзина (сумма товара)'),
+            'cart.promotions.promotion.id' => Translator::get('fields', 'Корзина (id акции)'),
+            'cart.promotions.promotion.name' => Translator::get('fields', 'Корзина (название акции)'),
+            'cart.promotions.promotion.dimensions.length' => Translator::get('fields', 'Корзина (габариты, длина акции)'),
+            'cart.promotions.promotion.dimensions.width' => Translator::get('fields', 'Корзина (габариты, ширина акции)'),
+            'cart.promotions.promotion.dimensions.height' => Translator::get('fields', 'Корзина (габариты, высота акции)'),
+            'cart.promotions.quantity' => Translator::get('fields', 'Корзина (кол-во акций)'),
+            'cart.promotions.price' => Translator::get('fields', 'Корзина (цена акции)'),
+            'cart.promotions.total' => Translator::get('fields', 'Корзина (сумма акций)'),
         ];
 
         $result = [];
