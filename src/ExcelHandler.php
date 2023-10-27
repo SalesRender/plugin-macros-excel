@@ -50,7 +50,7 @@ class ExcelHandler implements BatchHandlerInterface
                 break;
         }
 
-        $writer->openToFile((string) $filePath);
+        $writer->openToFile((string)$filePath);
 
         if ($settings->get('main.headers')) {
             $headers = [];
@@ -114,6 +114,22 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.total':
                                 $row[] = (float)$order->get($field) / 100;
                                 break;
+                            case 'cart.items.price':
+                            case 'cart.items.total':
+                                $pricing = $this->getRowFromCartItems($order->get('cart'), $field);
+                                $pricing = array_map(function ($value) {
+                                    return $value / 100;
+                                }, $pricing);
+                                $row[] = implode(', ', $pricing);
+                                break;
+                            case 'cart.promotions.price':
+                            case 'cart.promotions.total':
+                                $pricing = $this->getRowFromCartPromotions($order->get('cart'), $field);
+                                $pricing = array_map(function ($value) {
+                                    return $value / 100;
+                                }, $pricing);
+                                $row[] = implode(', ', $pricing);
+                                break;
                             case 'cart.items.sku.item.id':
                             case 'cart.items.sku.item.name':
                             case 'cart.items.sku.item.description':
@@ -124,17 +140,15 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.sku.variation.number':
                             case 'cart.items.sku.variation.property':
                             case 'cart.items.quantity':
+                                $row[] =  implode(', ', $this->getRowFromCartItems($order->get('cart'), $field));
+                                break;
                             case 'cart.promotions.promotion.id':
                             case 'cart.promotions.promotion.name':
                             case 'cart.promotions.promotion.dimensions.length':
                             case 'cart.promotions.promotion.dimensions.width':
                             case 'cart.promotions.promotion.dimensions.height':
                             case 'cart.promotions.quantity':
-                            case 'cart.items.price':
-                            case 'cart.items.total':
-                            case 'cart.promotions.price':
-                            case 'cart.promotions.total':
-                                $row[] = $this->getRowFromCart($order->get('cart'), $field);
+                                $row[] = implode(', ', $this->getRowFromCartPromotions($order->get('cart'), $field));
                                 break;
                             case 'logistic.status.logisticOffice.phones':
                                 $row[] = implode(', ', $order->get($field));
@@ -160,51 +174,37 @@ class ExcelHandler implements BatchHandlerInterface
         }
 
         $writer->close();
-        $process->finish((string) $fileUri);
+        $process->finish((string)$fileUri);
         $process->save();
     }
 
-    private function getRowFromCart(array $cart, string $path): string
+    private function getRowFromCartItems(array $cart, string $path): array
     {
         $row = [];
         $cart = new Dot($cart);
-        if (str_contains($path, 'cart.items.') && $cart->has('items')) {
+        if ($cart->has('items')) {
             $array = $cart->get('items');
             foreach ($array as $arrayItem) {
                 $arrayItem = new Dot($arrayItem);
                 $row[] = $arrayItem->get(str_replace('cart.items.', '', $path), '');
             }
-        } else if (str_contains($path, 'cart.promotions.') && $cart->has('promotions')) {
+        }
+
+        return $row;
+    }
+
+    private function getRowFromCartPromotions(array $cart, string $path): array
+    {
+        $row = [];
+        $cart = new Dot($cart);
+        if ($cart->has('promotions')) {
             $array = $cart->get('promotions');
             foreach ($array as $arrayItem) {
                 $arrayItem = new Dot($arrayItem);
                 $row[] = $arrayItem->get(str_replace('cart.promotions.', '', $path), '');
             }
-        } else {
-            return json_encode($cart->all(), JSON_UNESCAPED_UNICODE);
         }
 
-        switch ($path) {
-            case 'cart.items.price':
-            case 'cart.items.total':
-            case 'cart.promotions.price':
-            case 'cart.promotions.total':
-                $row = array_map(function ($value) {
-                    return $value / 100;
-                }, $row);
-                break;
-            case 'cart.items.sku.item.weight':
-            case 'cart.items.sku.item.dimensions.length':
-            case 'cart.items.sku.item.dimensions.width':
-            case 'cart.items.sku.item.dimensions.height':
-            case 'cart.promotions.promotion.dimensions.length':
-            case 'cart.promotions.promotion.dimensions.width':
-            case 'cart.promotions.promotion.dimensions.height':
-                $row = array_map(function ($value) {
-                    return ($value === '') ? 0 : $value;
-                }, $row);
-        }
-
-        return implode(', ', $row);
+        return $row;
     }
 }
