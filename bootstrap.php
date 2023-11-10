@@ -1,18 +1,18 @@
 <?php
 
-use Leadvertex\Plugin\Components\Batch\BatchContainer;
-use Leadvertex\Plugin\Components\Db\Components\Connector;
-use Leadvertex\Plugin\Components\Info\Developer;
-use Leadvertex\Plugin\Components\Info\Info;
-use Leadvertex\Plugin\Components\Info\PluginType;
-use Leadvertex\Plugin\Components\Purpose\PluginClass;
-use Leadvertex\Plugin\Components\Purpose\PluginEntity;
-use Leadvertex\Plugin\Components\Purpose\PluginPurpose;
-use Leadvertex\Plugin\Components\Settings\Settings;
-use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Instance\Excel\ExcelHandler;
-use Leadvertex\Plugin\Instance\Excel\Forms\BatchForm_1;
-use Leadvertex\Plugin\Instance\Excel\Forms\SettingsForm;
+use SalesRender\Plugin\Components\Batch\BatchContainer;
+use SalesRender\Plugin\Components\Db\Components\Connector;
+use SalesRender\Plugin\Components\Info\Developer;
+use SalesRender\Plugin\Components\Info\Info;
+use SalesRender\Plugin\Components\Info\PluginType;
+use SalesRender\Plugin\Components\Purpose\PluginClass;
+use SalesRender\Plugin\Components\Purpose\PluginEntity;
+use SalesRender\Plugin\Components\Purpose\PluginPurpose;
+use SalesRender\Plugin\Components\Settings\Settings;
+use SalesRender\Plugin\Components\Translations\Translator;
+use SalesRender\Plugin\Instance\Excel\ExcelHandler;
+use SalesRender\Plugin\Instance\Excel\Forms\BatchForm_1;
+use SalesRender\Plugin\Instance\Excel\Forms\SettingsForm;
 use Medoo\Medoo;
 use XAKEPEHOK\Path\Path;
 

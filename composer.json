@@ -1,25 +1,25 @@
 {
-  "name": "leadvertex/plugin-macros-excel",
-  "description": "Plugin for export orders from leadvertex.com in Excel (xlsx, ods, csv) format",
+  "name": "salesrender/plugin-macros-excel",
+  "description": "Plugin for export orders from salesrender.com in Excel (xlsx, ods, csv) format",
   "type": "project",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
       "name": "Timur Kasumov aka XAKEPEHOK",
-      "email": "support@leadvertex.com"
+      "email": "support@salesrender.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Leadvertex\\Plugin\\Instance\\Excel\\": "src/"
+      "SalesRender\\Plugin\\Instance\\Excel\\": "src/"
     }
   },
   "require": {
     "php": ">=7.4.0",
     "ext-json": "*",
     "box/spout": "^3.1",
-    "leadvertex/plugin-core-macros": "^0.18.0",
-    "leadvertex/plugin-component-purpose": "^1.3"
+    "salesrender/plugin-core-macros": "^0.18.0",
+    "salesrender/plugin-component-purpose": "^1.3"
   }
 }

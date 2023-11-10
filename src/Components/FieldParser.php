@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Excel\Components;
+namespace SalesRender\Plugin\Instance\Excel\Components;
 
 
 use InvalidArgumentException;

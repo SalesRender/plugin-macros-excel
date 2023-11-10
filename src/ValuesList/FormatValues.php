@@ -5,13 +5,13 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Excel\ValuesList;
+namespace SalesRender\Plugin\Instance\Excel\ValuesList;
 
 
-use Leadvertex\Plugin\Components\Form\FieldDefinitions\FieldDefinition;
-use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Values\StaticValues;
-use Leadvertex\Plugin\Components\Form\FormData;
-use Leadvertex\Plugin\Components\Translations\Translator;
+use SalesRender\Plugin\Components\Form\FieldDefinitions\FieldDefinition;
+use SalesRender\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Values\StaticValues;
+use SalesRender\Plugin\Components\Form\FormData;
+use SalesRender\Plugin\Components\Translations\Translator;
 
 class FormatValues extends StaticValues
 {

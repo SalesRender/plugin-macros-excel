@@ -5,16 +5,16 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Instance\Excel\Forms;
+namespace SalesRender\Plugin\Instance\Excel\Forms;
 
 
-use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Limit;
-use Leadvertex\Plugin\Components\Form\FieldDefinitions\ListOfEnumDefinition;
-use Leadvertex\Plugin\Components\Form\FieldGroup;
-use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Components\Settings\Settings;
-use Leadvertex\Plugin\Components\Translations\Translator;
-use Leadvertex\Plugin\Instance\Excel\ValuesList\FormatValues;
+use SalesRender\Plugin\Components\Form\FieldDefinitions\ListOfEnum\Limit;
+use SalesRender\Plugin\Components\Form\FieldDefinitions\ListOfEnumDefinition;
+use SalesRender\Plugin\Components\Form\FieldGroup;
+use SalesRender\Plugin\Components\Form\Form;
+use SalesRender\Plugin\Components\Settings\Settings;
+use SalesRender\Plugin\Components\Translations\Translator;
+use SalesRender\Plugin\Instance\Excel\ValuesList\FormatValues;
 
 class BatchForm_1 extends Form
 {

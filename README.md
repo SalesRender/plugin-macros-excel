@@ -3,7 +3,7 @@
 Run this command from the directory in which you want to install your new application.
 
 ```shell script
-composer create-project leadvertex/plugin-macros-excel
+composer create-project salesrender/plugin-macros-excel
 ```
 
 * Create `const.php` from `const.php.example` and set environment values

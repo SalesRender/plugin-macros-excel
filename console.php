@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Leadvertex\Plugin\Core\Macros\Factories\ConsoleAppFactory;
+use SalesRender\Plugin\Core\Macros\Factories\ConsoleAppFactory;
 
 require __DIR__ . '/vendor/autoload.php';
 
