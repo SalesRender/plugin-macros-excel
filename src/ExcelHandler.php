@@ -5,34 +5,41 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace SalesRender\Plugin\Instance\Excel;
+namespace Leadvertex\Plugin\Instance\Excel;
 
 
 use Adbar\Dot;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use DateTime;
 use Exception;
-use SalesRender\Plugin\Components\Batch\Batch;
-use SalesRender\Plugin\Components\Batch\BatchHandlerInterface;
-use SalesRender\Plugin\Components\Batch\Process\Error;
-use SalesRender\Plugin\Components\Batch\Process\Process;
-use SalesRender\Plugin\Components\Settings\Settings;
-use SalesRender\Plugin\Components\Translations\Translator;
-use SalesRender\Plugin\Core\Helpers\PathHelper;
-use SalesRender\Plugin\Instance\Excel\Components\Columns;
-use SalesRender\Plugin\Instance\Excel\Components\FieldParser;
-use SalesRender\Plugin\Instance\Excel\Components\OrdersFetcherIterator;
+use Leadvertex\Plugin\Components\ApiClient\ApiClient;
+use Leadvertex\Plugin\Components\Batch\Batch;
+use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
+use Leadvertex\Plugin\Components\Batch\Process\Error;
+use Leadvertex\Plugin\Components\Batch\Process\Process;
+use Leadvertex\Plugin\Components\Settings\Settings;
+use Leadvertex\Plugin\Components\Translations\Translator;
+use Leadvertex\Plugin\Core\Helpers\PathHelper;
+use Leadvertex\Plugin\Instance\Excel\Components\Columns;
+use Leadvertex\Plugin\Instance\Excel\Components\FieldParser;
+use Leadvertex\Plugin\Instance\Excel\Components\OrdersFetcherIterator;
 use XAKEPEHOK\Path\Path;
 
 class ExcelHandler implements BatchHandlerInterface
 {
 
+    private ApiClient $client;
 
     public function __invoke(Process $process, Batch $batch)
     {
         $settings = Settings::find()->getData();
         $fields = $settings->get('main.fields', []);
 
+        $token = $batch->getToken();
+        $this->client = new ApiClient(
+            "{$token->getBackendUri()}companies/{$token->getPluginReference()->getCompanyId()}/CRM",
+            (string)$token->getOutputToken()
+        );
         $format = current($batch->getOptions(1)->get('options.format'));
         $ext = '.' . $format;
         $filePath = PathHelper::getPublicOutput()->down($batch->getId() . $ext);
@@ -153,6 +160,9 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'logistic.status.logisticOffice.phones':
                                 $row[] = implode(', ', $order->get($field));
                                 break;
+                            case 'cart.cartInString':
+                                $row[] = implode(";\r\n", $this->getCartInOneString($order->get('cart'), $this->getCompanyCurrency()));
+                                break;
                             default:
                                 $row[] = $order->get($field);
                         }
@@ -206,5 +216,44 @@ class ExcelHandler implements BatchHandlerInterface
         }
 
         return $row;
+    }
+
+    private function getCartInOneString(array $cart, string $currencyName): array
+    {
+        $row = [];
+        $cart = new Dot($cart);
+
+        foreach ($cart->get('items') as $item) {
+            $item = new Dot($item);
+            $row[] = "{$item->get('sku.item.name')}/{$item->get('sku.variation.property')}, {$item->get('quantity')} {$item->get('sku.item.units')}, " . (int)($item->get('total') / 100) . " {$currencyName}";
+        }
+
+        foreach ($cart->get('promotions') as $promotion) {
+            $promotion = new Dot($promotion);
+            $row[] = "{$promotion->get('promotion.name')}, {$promotion->get('quantity')} ". Translator::get('process', 'шт.') .", " . (int)($promotion->get('total') / 100) . " {$currencyName}";
+        }
+
+        return $row;
+    }
+
+    private function getCompanyCurrency(): string
+    {
+        $query = <<<QUERY
+query {
+  company {
+    pricing {
+      pricing {
+        currency
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->client->query($query, [])->getData();
+
+        $response = new Dot($response);
+
+        return $response->get('company.pricing.pricing.currency');
     }
 }

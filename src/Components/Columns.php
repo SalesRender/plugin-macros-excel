@@ -50,14 +50,44 @@ class Columns
 
         $fields = [];
         foreach ($handledFields as $field) {
-            $items = array_reverse(explode('.', $field));
-            $tree = [];
-            foreach ($items as $item) {
-                if (empty($tree)) {
-                    $tree[] = $item;
-                } else {
-                    $tree = [$item => $tree];
-                }
+
+            switch ($field) {
+                case 'cart.cartInString':
+                    $tree = [
+                        'cart' => [
+                            'items' => [
+                                'total',
+                                'quantity',
+                                'sku' => [
+                                    'item' => [
+                                        'name',
+                                        'units'
+                                    ],
+                                    'variation' => [
+                                        'property'
+                                    ]
+                                ]
+                            ],
+                            'promotions' => [
+                                'total',
+                                'quantity',
+                                'promotion' => [
+                                    'name'
+                                ]
+                            ]
+                        ]
+                    ];
+                    break;
+                default:
+                    $items = array_reverse(explode('.', $field));
+                    $tree = [];
+                    foreach ($items as $item) {
+                        if (empty($tree)) {
+                            $tree[] = $item;
+                        } else {
+                            $tree = [$item => $tree];
+                        }
+                    }
             }
             $fields = array_merge_recursive($fields, $tree);
         }
@@ -174,6 +204,7 @@ class Columns
             'cart.promotions.quantity' => Translator::get('fields', 'Корзина (кол-во акций)'),
             'cart.promotions.price' => Translator::get('fields', 'Корзина (цена акции)'),
             'cart.promotions.total' => Translator::get('fields', 'Корзина (сумма акций)'),
+            'cart.cartInString' => Translator::get('fields', 'Корзина (состав одной строкой)'),
         ];
 
         $result = [];
