@@ -179,8 +179,9 @@ class ExcelHandler implements BatchHandlerInterface
                     Translator::get('process', 'Ошибка обработки данных'),
                     $id
                 ));
+            } finally {
+                $process->save();
             }
-            $process->save();
         }
 
         $writer->close();
