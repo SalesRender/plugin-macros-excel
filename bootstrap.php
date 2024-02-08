@@ -16,6 +16,10 @@ use SalesRender\Plugin\Instance\Excel\Forms\SettingsForm;
 use Medoo\Medoo;
 use XAKEPEHOK\Path\Path;
 
+if (!empty($_ENV['APP_SENTRY'])) {
+    \Sentry\init(['dsn' => $_ENV['APP_SENTRY']]);
+}
+
 # 1. Configure DB (for SQLite *.db file and parent directory should be writable)
 switch ($_ENV['DATABASE_TYPE'] ?? 'sqlite') {
     default:
