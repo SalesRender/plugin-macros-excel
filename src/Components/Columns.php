@@ -78,6 +78,16 @@ class Columns
                         ]
                     ];
                     break;
+                case 'shipping.attachments':
+                    $tree = [
+                        'shipping' => [
+                            'attachments' => [
+                                'name',
+                                'uri'
+                            ]
+                        ]
+                    ];
+                    break;
                 default:
                     $items = array_reverse(explode('.', $field));
                     $tree = [];
