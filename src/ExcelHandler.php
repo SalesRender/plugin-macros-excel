@@ -150,7 +150,7 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.quantity':
                                 $row[] =  implode(', ', $this->getRowFromCartItems($order->get('cart'), $field));
                                 break;
-                            case 'shipping.attachment':
+                            case 'shipping.attachments':
                                 $row[] =  implode(
                                     ', ',
                                     array_map(
