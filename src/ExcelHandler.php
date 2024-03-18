@@ -109,6 +109,7 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'updatedAt':
                             case 'statusChangedAt':
                             case 'logistic.status.assignmentAt':
+                            case 'shipping.createdAt':
                                 if ($order->get($field) === null) {
                                     $row[] = '';
                                     break;
@@ -148,6 +149,15 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.sku.variation.property':
                             case 'cart.items.quantity':
                                 $row[] =  implode(', ', $this->getRowFromCartItems($order->get('cart'), $field));
+                                break;
+                            case 'shipping.attachment':
+                                $row[] =  implode(
+                                    ', ',
+                                    array_map(
+                                        function ($attachment) {return "{$attachment['name']}: {$attachment['uri']}";},
+                                        $order->get($field)
+                                    )
+                                );
                                 break;
                             case 'cart.promotions.promotion.id':
                             case 'cart.promotions.promotion.name':

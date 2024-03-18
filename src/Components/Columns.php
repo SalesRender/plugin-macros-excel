@@ -128,6 +128,8 @@ class Columns
             'lead.status' => Translator::get('fields', 'Lead (статус)'),
             'lead.holdTo' => Translator::get('fields', 'Lead (холд до)'),
             'lead.finished' => Translator::get('fields', 'Lead (завершен)'),
+            'lead.externalId' => Translator::get('fields', 'Lead (Внешний ID)'),
+            'lead.externalTag' => Translator::get('fields', 'Lead (Внешний тег)'),
 
             'source.uri' => Translator::get('fields', 'Источник (uri)'),
             'source.refererUri' => Translator::get('fields', 'Источник (referer)'),
@@ -168,6 +170,16 @@ class Columns
             'logistic.status.office.address.apartment' => Translator::get('fields', 'Статус доставки (Офис, адрес (квартира))'),
             'logistic.status.office.address.country' => Translator::get('fields', 'Статус доставки (Офис, страна)'),
             'logistic.status.office.phones' => Translator::get('fields', 'Статус доставки (Офис, контакты)'),
+
+            'shipping.id' => Translator::get('fields', 'Отправка (ID)'),
+            'shipping.createdAt' => Translator::get('fields', 'Отправка (Дата)'),
+            'shipping.plugin.id' => Translator::get('fields', 'Отправка (Плагин, ID)'),
+            'shipping.plugin.name' => Translator::get('fields', 'Отправка (Плагин, название)'),
+            'shipping.warehouse.id' => Translator::get('fields', 'Отправка (Склад, ID)'),
+            'shipping.warehouse.name' => Translator::get('fields', 'Отправка (Склад, название)'),
+            'shipping.status' => Translator::get('fields', 'Отправка (Статус)'),
+            'shipping.orders' => Translator::get('fields', 'Отправка (Количество заказов)'),
+            'shipping.attachments' => Translator::get('fields', 'Отправка (Вложения)'),
         ];
 
         $result = [];
