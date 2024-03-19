@@ -24,6 +24,7 @@ class SettingsForm extends Form
 
     const FIELDS_DEFAULT = ['id', 'createdAt', 'cart.total'];
     const SHOW_HEADERS_DEFAULT = true;
+    const FORMAT_DEFAULT = ['xlsx'];
 
     public function __construct()
     {
@@ -118,7 +119,7 @@ class SettingsForm extends Form
                             $format->getValidator(),
                             $format,
                             new Limit(1, 1),
-                            ['xlsx']
+                            self::FORMAT_DEFAULT
                         ),
                     ]
                 )
