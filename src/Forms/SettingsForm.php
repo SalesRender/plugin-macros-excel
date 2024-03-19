@@ -22,6 +22,9 @@ use SalesRender\Plugin\Instance\Excel\ValuesList\FormatValues;
 class SettingsForm extends Form
 {
 
+    const FIELDS_DEFAULT = ['id', 'createdAt', 'cart.total'];
+    const SHOW_HEADERS_DEFAULT = true;
+
     public function __construct()
     {
         $columns = new Columns();
@@ -60,7 +63,7 @@ class SettingsForm extends Form
                                 }
                                 return $errors;
                             },
-                            true
+                            self::SHOW_HEADERS_DEFAULT
                         ),
                         'fields' => new ListOfEnumDefinition(
                             Translator::get(
@@ -101,7 +104,7 @@ class SettingsForm extends Form
                             },
                             new StaticValues($columns->getList()),
                             new Limit(1, null),
-                            ['id', 'createdAt', 'cart.total']
+                            self::FIELDS_DEFAULT
                         ),
                         'format' => new ListOfEnumDefinition(
                             Translator::get(
