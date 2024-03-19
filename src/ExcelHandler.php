@@ -23,6 +23,7 @@ use SalesRender\Plugin\Core\Helpers\PathHelper;
 use SalesRender\Plugin\Instance\Excel\Components\Columns;
 use SalesRender\Plugin\Instance\Excel\Components\FieldParser;
 use SalesRender\Plugin\Instance\Excel\Components\OrdersFetcherIterator;
+use SalesRender\Plugin\Instance\Excel\Forms\SettingsForm;
 use XAKEPEHOK\Path\Path;
 
 class ExcelHandler implements BatchHandlerInterface
@@ -33,7 +34,7 @@ class ExcelHandler implements BatchHandlerInterface
     public function __invoke(Process $process, Batch $batch)
     {
         $settings = Settings::find()->getData();
-        $fields = $settings->get('main.fields', []);
+        $fields = $settings->get('main.fields', SettingsForm::FIELDS_DEFAULT);
 
         $token = $batch->getToken();
         $this->client = new ApiClient(
@@ -59,7 +60,7 @@ class ExcelHandler implements BatchHandlerInterface
 
         $writer->openToFile((string)$filePath);
 
-        if ($settings->get('main.headers')) {
+        if ($settings->get('main.headers', SettingsForm::SHOW_HEADERS_DEFAULT)) {
             $headers = [];
             $columns = (new Columns())->getList();
             foreach ($fields as $field) {

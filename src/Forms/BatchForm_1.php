@@ -22,11 +22,6 @@ class BatchForm_1 extends Form
     public function __construct()
     {
         $settings = Settings::find();
-        $defaultFormat = $settings->getData()->get('main.format');
-
-        if (is_null($defaultFormat)) {
-            $settings::guardIntegrity();
-        }
 
         $format = new FormatValues();
         parent::__construct(
@@ -52,7 +47,7 @@ class BatchForm_1 extends Form
                             $format->getValidator(),
                             $format,
                             new Limit(1, 1),
-                            $settings->getData()->get('main.format')
+                            $settings->getData()->get('main.format', SettingsForm::FORMAT_DEFAULT)
                         ),
                     ]
                 )
