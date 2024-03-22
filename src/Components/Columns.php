@@ -58,6 +58,7 @@ class Columns
                             'items' => [
                                 'total',
                                 'quantity',
+                                'purchasePrice',
                                 'sku' => [
                                     'item' => [
                                         'name',
@@ -216,6 +217,7 @@ class Columns
             'cart.items.sku.variation.number' => Translator::get('fields', 'Корзина (вариация товара, порядковый номер)'),
             'cart.items.sku.variation.property' => Translator::get('fields', 'Корзина (вариация товара, название)'),
             'cart.items.quantity' => Translator::get('fields', 'Корзина (кол-во товара)'),
+            'cart.items.purchasePrice' => Translator::get('fields', 'Корзина (закупочная цена товара)'),
             'cart.items.price' => Translator::get('fields', 'Корзина (цена за ед. товара)'),
             'cart.items.total' => Translator::get('fields', 'Корзина (сумма товара)'),
             'cart.promotions.promotion.id' => Translator::get('fields', 'Корзина (id акции)'),
