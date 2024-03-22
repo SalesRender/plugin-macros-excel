@@ -125,6 +125,7 @@ class ExcelHandler implements BatchHandlerInterface
                                 break;
                             case 'cart.items.price':
                             case 'cart.items.total':
+                            case 'cart.items.purchasePrice':
                                 $pricing = $this->getRowFromCartItems($order->get('cart'), $field);
                                 $pricing = array_map(function ($value) {
                                     return $value / 100;
@@ -133,7 +134,6 @@ class ExcelHandler implements BatchHandlerInterface
                                 break;
                             case 'cart.promotions.price':
                             case 'cart.promotions.total':
-                            case 'cart.items.purchasePrice':
                                 $pricing = $this->getRowFromCartPromotions($order->get('cart'), $field);
                                 $pricing = array_map(function ($value) {
                                     return $value / 100;
