@@ -237,12 +237,17 @@ class ExcelHandler implements BatchHandlerInterface
 
         foreach ($cart->get('items') as $item) {
             $item = new Dot($item);
-            $row[] = "{$item->get('sku.item.name')}/{$item->get('sku.variation.property')}, {$item->get('quantity')} {$item->get('sku.item.units')}, " . (int)($item->get('total') / 100) . " {$currencyName}";
+            $row[] = "{$item->get('sku.item.name')}/{$item->get('sku.variation.property')}, " .
+                "{$item->get('quantity')} {$item->get('sku.item.units')}, " .
+                (int)($item->get('purchasePrice') / 100) . " {$currencyName}" .
+                (int)($item->get('total') / 100) . " {$currencyName}";
         }
 
         foreach ($cart->get('promotions') as $promotion) {
             $promotion = new Dot($promotion);
-            $row[] = "{$promotion->get('promotion.name')}, {$promotion->get('quantity')} ". Translator::get('process', 'шт.') .", " . (int)($promotion->get('total') / 100) . " {$currencyName}";
+            $row[] = "{$promotion->get('promotion.name')}, {$promotion->get('quantity')} " .
+                Translator::get('process', 'шт.') . ", " .
+                (int)($promotion->get('total') / 100) . " {$currencyName}";
         }
 
         return $row;
