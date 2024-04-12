@@ -24,7 +24,9 @@ use SalesRender\Plugin\Instance\Excel\Components\Columns;
 use SalesRender\Plugin\Instance\Excel\Components\FieldParser;
 use SalesRender\Plugin\Instance\Excel\Components\OrdersFetcherIterator;
 use SalesRender\Plugin\Instance\Excel\Forms\SettingsForm;
+use Throwable;
 use XAKEPEHOK\Path\Path;
+use function Sentry\captureException;
 
 class ExcelHandler implements BatchHandlerInterface
 {
@@ -186,7 +188,8 @@ class ExcelHandler implements BatchHandlerInterface
                 );
 
                 $process->handle();
-            } catch (Exception $exception) {
+            } catch (Throwable $exception) {
+                captureException($exception);
                 $process->addError(new Error(
                     Translator::get('process', 'Ошибка обработки данных'),
                     $id
