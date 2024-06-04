@@ -224,7 +224,7 @@ class ExcelHandler implements BatchHandlerInterface
     private function getRowFromCartItemsAndPromotionItems(array $cart, $path): array
     {
         $row = [];
-        file_put_contents(__DIR__ . "/path.txt", $path);
+
         $cart = new Dot($cart);
 
         if ($cart->has('items')) {
@@ -236,16 +236,20 @@ class ExcelHandler implements BatchHandlerInterface
             }
         }
         if ($cart->has('promotions')) {
-            $items = $cart->get('promotions.0.items');
+            $quantity = $cart->get('promotions.0.quantity');
 
+
+            $items = $cart->get('promotions.0.items');
             $promotionItems = [];
             foreach ($items as $item) {
                 $item = new Dot($item);
                 $id = $item->get('sku.item.id');
                 $name = $item->get('sku.item.name');
 
+
                 if (!array_key_exists($id, $promotionItems)) {
                     $promotionItems[$id]['name'] = $name;
+
                     $promotionItems[$id]['value'] = 1;
                 } else {
                     $promotionItems[$id]['value'] += 1;
@@ -254,7 +258,7 @@ class ExcelHandler implements BatchHandlerInterface
 
             foreach ($promotionItems as $item) {
                 if ($path === 'cart.items.quantity') {
-                    $row[] = $item['value'];
+                    $row[] = $item['value'] * $quantity;
                 } elseif ($path === 'cart.items.sku.item.name') {
                     $row[] = $item['name'];
                 }
@@ -300,6 +304,7 @@ class ExcelHandler implements BatchHandlerInterface
                     (int)($promotion->get('total', 0) / 100) . " {$currencyName}";
             }
         } elseif ($path === 'cart.cartInStringWithPromotionItems') {
+            $quantity = $cart->get('promotions.0.quantity');
             $items = $cart->get('promotions.0.items');
 
             $promotionItems = [];
@@ -307,9 +312,15 @@ class ExcelHandler implements BatchHandlerInterface
                 $item = new Dot($item);
                 $id = $item->get('sku.item.id');
                 $name = $item->get('sku.item.name');
+                $price = $item->get('sku.item.price');
+                $variation = $item->get('sku.variation.property');
+                $purchasePrice = $item->get('purchasePrice');
 
                 if (!array_key_exists($id, $promotionItems)) {
                     $promotionItems[$id]['name'] = $name;
+                    $promotionItems[$id]['price'] = $price;
+                    $promotionItems[$id]['variation'] = $variation;
+                    $promotionItems[$id]['purchasePrice'] = $purchasePrice;
                     $promotionItems[$id]['value'] = 1;
                 } else {
                     $promotionItems[$id]['value'] += 1;
@@ -317,7 +328,10 @@ class ExcelHandler implements BatchHandlerInterface
             }
 
             foreach ($promotionItems as $item) {
-                    $row[] = "{$item['name']} {$item['value']}" . Translator::get('process', 'шт.');
+                $number = (int) $item['value'] * $quantity;
+                    $row[] = "{$item['name']}/{$item['variation']}, {$number}"
+                        . Translator::get('process', 'шт.') .
+                    ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, " . (int) ($item['price'] / 100) . " {$currencyName};";
                 }
             }
 
