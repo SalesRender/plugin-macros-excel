@@ -102,13 +102,13 @@ class Columns
                                     'sku' => [
                                         'item' => [
                                             'id',
-                                            'name',
-                                            'price'
+                                            'name'
                                         ],
                                         'variation' => [
                                             'property'
                                         ]
                                     ],
+                                    'price',
                                     'purchasePrice'
                                 ]
                             ]

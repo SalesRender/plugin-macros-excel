@@ -312,7 +312,7 @@ class ExcelHandler implements BatchHandlerInterface
                 $item = new Dot($item);
                 $id = $item->get('sku.item.id');
                 $name = $item->get('sku.item.name');
-                $price = $item->get('sku.item.price');
+                $price = $item->get('price');
                 $variation = $item->get('sku.variation.property');
                 $purchasePrice = $item->get('purchasePrice');
 
@@ -329,9 +329,10 @@ class ExcelHandler implements BatchHandlerInterface
 
             foreach ($promotionItems as $item) {
                 $number = (int) $item['value'] * $quantity;
+                $totalPrice = round($item['price'] / 100 * $quantity);
                     $row[] = "{$item['name']}/{$item['variation']}, {$number}"
                         . Translator::get('process', 'шт.') .
-                    ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, " . (int) ($item['price'] / 100) . " {$currencyName};";
+                    ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, {$totalPrice} {$currencyName}";
                 }
             }
 
