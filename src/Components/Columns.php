@@ -52,6 +52,26 @@ class Columns
         foreach ($handledFields as $field) {
 
             switch ($field) {
+
+                case 'cart.items.quantity':
+                    $tree = [
+                        'cart' => [
+                            'items' => [
+                                'quantity'
+                            ],
+                            'promotions' => [
+                                'items' => [
+                                    'sku' => [
+                                        'item' => [
+                                            'id'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
+                    break;
+
                 case 'cart.cartInString':
                     $tree = [
                         'cart' => [

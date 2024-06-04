@@ -151,7 +151,6 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.sku.item.dimensions.height':
                             case 'cart.items.sku.variation.number':
                             case 'cart.items.sku.variation.property':
-                            case 'cart.items.quantity':
                                 $row[] =  implode(', ', $this->getRowFromCartItems($order->get('cart'), $field));
                                 break;
                             case 'shipping.attachments':
@@ -176,6 +175,9 @@ class ExcelHandler implements BatchHandlerInterface
                                 break;
                             case 'cart.cartInString':
                                 $row[] = implode(";\r\n", $this->getCartInOneString($order->get('cart'), $this->getCompanyCurrency()));
+                                break;
+                            case 'cart.items.quantity':
+                                $row[] =  implode(', ', $this->getQuantityFromCartItemsAndPromotionItems($order->get('cart')));
                                 break;
                             default:
                                 $row[] = $order->get($field);
@@ -218,6 +220,40 @@ class ExcelHandler implements BatchHandlerInterface
 
         return $row;
     }
+    private function getQuantityFromCartItemsAndPromotionItems(array $cart): array
+    {
+        $row = [];
+
+        $cart = new Dot($cart);
+
+        if ($cart->has('items')) {
+            $array = $cart->get('items');
+
+            foreach ($array as $arrayItem) {
+                $arrayItem = new Dot($arrayItem);
+                $row[] = $arrayItem->get(str_replace('cart.items.', '', 'quantity'), '');
+            }
+        }
+        if ($cart->has('promotions')) {
+            $items = $cart->get('promotions.0.items');
+
+            $ids = [];
+            foreach ($items as $item) {
+                $item = new Dot($item);
+                $id = $item->get('sku.item.id');
+
+                if (!array_key_exists($id, $ids)) {
+                    $ids[$id] = 1;
+                } else {
+                    $ids[$id] += 1;
+                }
+            }
+
+            $row = array_merge($row, array_values($ids));
+        }
+
+        return $row;
+    }
 
     private function getRowFromCartPromotions(array $cart, string $path): array
     {
@@ -253,7 +289,6 @@ class ExcelHandler implements BatchHandlerInterface
                 Translator::get('process', 'шт.') . ", " .
                 (int)($promotion->get('total', 0) / 100) . " {$currencyName}";
         }
-
         return $row;
     }
 
