@@ -143,7 +143,6 @@ class ExcelHandler implements BatchHandlerInterface
                                 $row[] = implode(', ', $pricing);
                                 break;
                             case 'cart.items.sku.item.id':
-                            case 'cart.items.sku.item.name':
                             case 'cart.items.sku.item.description':
                             case 'cart.items.sku.item.weight':
                             case 'cart.items.sku.item.dimensions.length':
@@ -174,10 +173,12 @@ class ExcelHandler implements BatchHandlerInterface
                                 $row[] = implode(', ', $order->get($field));
                                 break;
                             case 'cart.cartInString':
-                                $row[] = implode(";\r\n", $this->getCartInOneString($order->get('cart'), $this->getCompanyCurrency()));
+                            case 'cart.cartInStringWithPromotionItems':
+                                $row[] = implode(";\r\n", $this->getCartInOneString($order->get('cart'), $this->getCompanyCurrency(), $field));
                                 break;
                             case 'cart.items.quantity':
-                                $row[] =  implode(', ', $this->getQuantityFromCartItemsAndPromotionItems($order->get('cart')));
+                            case 'cart.items.sku.item.name':
+                                $row[] =  implode(', ', $this->getRowFromCartItemsAndPromotionItems($order->get('cart'), $field));
                                 break;
                             default:
                                 $row[] = $order->get($field);
@@ -220,10 +221,10 @@ class ExcelHandler implements BatchHandlerInterface
 
         return $row;
     }
-    private function getQuantityFromCartItemsAndPromotionItems(array $cart): array
+    private function getRowFromCartItemsAndPromotionItems(array $cart, $path): array
     {
         $row = [];
-
+        file_put_contents(__DIR__ . "/path.txt", $path);
         $cart = new Dot($cart);
 
         if ($cart->has('items')) {
@@ -231,25 +232,33 @@ class ExcelHandler implements BatchHandlerInterface
 
             foreach ($array as $arrayItem) {
                 $arrayItem = new Dot($arrayItem);
-                $row[] = $arrayItem->get(str_replace('cart.items.', '', 'quantity'), '');
+                $row[] = $arrayItem->get(str_replace('cart.items.', '', $path), '');
             }
         }
         if ($cart->has('promotions')) {
             $items = $cart->get('promotions.0.items');
 
-            $ids = [];
+            $promotionItems = [];
             foreach ($items as $item) {
                 $item = new Dot($item);
                 $id = $item->get('sku.item.id');
+                $name = $item->get('sku.item.name');
 
-                if (!array_key_exists($id, $ids)) {
-                    $ids[$id] = 1;
+                if (!array_key_exists($id, $promotionItems)) {
+                    $promotionItems[$id]['name'] = $name;
+                    $promotionItems[$id]['value'] = 1;
                 } else {
-                    $ids[$id] += 1;
+                    $promotionItems[$id]['value'] += 1;
                 }
             }
 
-            $row = array_merge($row, array_values($ids));
+            foreach ($promotionItems as $item) {
+                if ($path === 'cart.items.quantity') {
+                    $row[] = $item['value'];
+                } elseif ($path === 'cart.items.sku.item.name') {
+                    $row[] = $item['name'];
+                }
+            }
         }
 
         return $row;
@@ -270,7 +279,7 @@ class ExcelHandler implements BatchHandlerInterface
         return $row;
     }
 
-    private function getCartInOneString(array $cart, string $currencyName): array
+    private function getCartInOneString(array $cart, string $currencyName, $path): array
     {
         $row = [];
         $cart = new Dot($cart);
@@ -283,12 +292,35 @@ class ExcelHandler implements BatchHandlerInterface
                 (int)($item->get('total', 0) / 100) . " {$currencyName}";
         }
 
-        foreach ($cart->get('promotions') as $promotion) {
-            $promotion = new Dot($promotion);
-            $row[] = "{$promotion->get('promotion.name')}, {$promotion->get('quantity')} " .
-                Translator::get('process', 'шт.') . ", " .
-                (int)($promotion->get('total', 0) / 100) . " {$currencyName}";
-        }
+        if ($path === 'cart.cartInString') {
+            foreach ($cart->get('promotions') as $promotion) {
+                $promotion = new Dot($promotion);
+                $row[] = "{$promotion->get('promotion.name')}, {$promotion->get('quantity')} " .
+                    Translator::get('process', 'шт.') . ", " .
+                    (int)($promotion->get('total', 0) / 100) . " {$currencyName}";
+            }
+        } elseif ($path === 'cart.cartInStringWithPromotionItems') {
+            $items = $cart->get('promotions.0.items');
+
+            $promotionItems = [];
+            foreach ($items as $item) {
+                $item = new Dot($item);
+                $id = $item->get('sku.item.id');
+                $name = $item->get('sku.item.name');
+
+                if (!array_key_exists($id, $promotionItems)) {
+                    $promotionItems[$id]['name'] = $name;
+                    $promotionItems[$id]['value'] = 1;
+                } else {
+                    $promotionItems[$id]['value'] += 1;
+                }
+            }
+
+            foreach ($promotionItems as $item) {
+                    $row[] = "{$item['name']} {$item['value']}" . Translator::get('process', 'шт.');
+                }
+            }
+
         return $row;
     }
 
