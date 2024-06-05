@@ -33,32 +33,29 @@ class SettingsForm extends Form
         parent::__construct(
             Translator::get(
                 'settings',
-                'Настройки выгрузки в Excel'
+                'UPLOAD_SETTINGS'
             ),
-            Translator::get(
-                'settings',
-                'Здесь вы можете настроить и порядок набор столбцов, которые будут выгружены в Excel'
-            ),
+            null,
             [
                 'main' => new FieldGroup(
-                    Translator::get('settings', 'Основные настройки'),
+                    Translator::get('settings', 'BASIC_SETTINGS'),
                     null,
                     [
                         'headers' => new BooleanDefinition(
                             Translator::get(
                                 'settings',
-                                'Заголовки столбцов'
+                                'COLUMN_HEADERS'
                             ),
                             Translator::get(
                                 'settings',
-                                'Добавляет в начало документа строку с заголовками для каждого столбца'
+                                'ADD_HEADERS'
                             ),
                             function ($value, FieldDefinition $definition) {
                                 $errors = [];
                                 if (!is_bool($value) && !is_int($value)) {
                                     $errors[] = Translator::get(
                                         'errors',
-                                        'Некорректное значение поля {field}',
+                                        'INVALID_FIELD_VALUE {field}',
                                         ['field' => $definition->getTitle()]
                                     );
                                 }
@@ -69,17 +66,17 @@ class SettingsForm extends Form
                         'fields' => new ListOfEnumDefinition(
                             Translator::get(
                                 'settings',
-                                'Столбцы'
+                                'COLUMNS'
                             ),
                             Translator::get(
                                 'settings',
-                                'Выберите данные, которые вы хотите выгружать'
+                                'SELECT_DATA'
                             ),
                             function ($values) use ($columns) {
                                 if (!is_array($values)) {
                                     return [Translator::get(
                                         'errors',
-                                        'Некорректное значение'
+                                        'INVALID_VALUE'
                                     )];
                                 }
 
@@ -87,7 +84,7 @@ class SettingsForm extends Form
                                 if (count($values) < 1) {
                                     $errors[] = Translator::get(
                                         'errors',
-                                        'Необходимо выбрать минимум одно поле для выгрузки'
+                                        'LEAST_ONE_FIELD'
                                     );
                                 }
 
@@ -95,7 +92,7 @@ class SettingsForm extends Form
                                     if (!isset($columns->getList()[$value])) {
                                         $errors[] = Translator::get(
                                             'errors',
-                                            'Выбрано несуществующее поле "{field}"',
+                                            'NONEXISTENT_FIELD "{field}"',
                                             ['field' => $value]
                                         );
                                     }
@@ -110,11 +107,11 @@ class SettingsForm extends Form
                         'format' => new ListOfEnumDefinition(
                             Translator::get(
                                 'settings',
-                                'Формат файла по-умолчанию'
+                                'DEFAULT_FILE_FORMAT'
                             ),
                             Translator::get(
                                 'settings',
-                                'Выберите формат по-умолчанию, в котором вы хотите получить выгруженные данные'
+                                'SELECT_DEFAULT_FORMAT'
                             ),
                             $format->getValidator(),
                             $format,
@@ -126,7 +123,7 @@ class SettingsForm extends Form
             ],
             Translator::get(
                 'settings',
-                'Сохранить настройки'
+                'SAVE_SETTINGS'
             )
         );
     }

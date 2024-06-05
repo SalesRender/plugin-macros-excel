@@ -1,0 +1,318 @@
+{
+  "process_errors": [
+    {
+      "source": "MAXIMUM_ORDERS_COUNT_EXCEEDED_ERROR {maximumOrdersCount}",
+      "translated": "Количество выбранных заказов превышает максимальное ({maximumOrdersCount})"
+    },
+    {
+      "source": "PROCESS_UNKNOWN_ERROR {errorMessage}",
+      "translated": "Во время обработки возникла неизвестная ошибка: {errorMessage}"
+    }
+  ],
+  "validation": [
+    {
+      "source": "NON_EMPTY",
+      "translated": "Поле не может быть пустым"
+    },
+    {
+      "source": "URI_VALIDATION_ERROR",
+      "translated": "Введите корректный uri"
+    },
+    {
+      "source": "EMAIL_VALIDATION_ERROR",
+      "translated": "Введите корректный email"
+    },
+    {
+      "source": "DATE_VALIDATION_ERROR",
+      "translated": "Введите корректую дату формата дд.мм.гггг"
+    },
+    {
+      "source": "REMINDER_DATE_ERROR",
+      "translated": "Дата должна быть больше текущей"
+    },
+    {
+      "source": "REMINDER_VALIDATION_ERROR",
+      "translated": "Введите корректую дату формата дд.мм.гггг чч:мм"
+    },
+    {
+      "source": "BOOLEAN_VALIDATION_ERROR",
+      "translated": "Введите корректное значение"
+    },
+    {
+      "source": "PHONE_VALIDATION_ERROR",
+      "translated": "Введите корректный номер телефона формата +XXXXXXXXXX"
+    }
+  ],
+  "reminder_fields": [
+    {
+      "source": "DATETIME_LABEL",
+      "translated": "Дата и время напоминания"
+    },
+    {
+      "source": "COMMENT_LABEL",
+      "translated": "Комментарий напоминания"
+    },
+    {
+      "source": "FIELD_NAME",
+      "translated": "Напоминание"
+    }
+  ],
+  "timezone_fields": [
+    {
+      "source": "TIMEZONE_LABEL",
+      "translated": "Часовой пояс"
+    },
+    {
+      "source": "FIELD_NAME",
+      "translated": "Часовой пояс"
+    }
+  ],
+  "address_fields": [
+    {
+      "source": "POSTCODE",
+      "translated": "Почтовый индекс"
+    },
+    {
+      "source": "REGION",
+      "translated": "Регион"
+    },
+    {
+      "source": "CITY",
+      "translated": "Город"
+    },
+    {
+      "source": "ADDRESS_1",
+      "translated": "Адрес 1"
+    },
+    {
+      "source": "ADDRESS_2",
+      "translated": "Адрес 2"
+    },
+    {
+      "source": "BUILDING",
+      "translated": "Дом"
+    },
+    {
+      "source": "APARTMENT",
+      "translated": "Квартира"
+    },
+    {
+      "source": "COUNTRY",
+      "translated": "Страна"
+    }
+  ],
+  "human_name_fields": [
+    {
+      "source": "FIRST_NAME",
+      "translated": "Имя"
+    },
+    {
+      "source": "LAST_NAME",
+      "translated": "Фамилия"
+    }
+  ],
+  "description_of_fields": [
+    {
+      "source": "ENTER_EMAIL",
+      "translated": "Введите email"
+    },
+    {
+      "source": "ENTER_PHONE",
+      "translated": "Введите номер телефона формата +7**********"
+    },
+    {
+      "source": "ENTER_DATE",
+      "translated": "Введите дату в формате дд.мм.гггг"
+    },
+    {
+      "source": "SELECT_FIELD",
+      "translated": "Выберите значение"
+    },
+    {
+      "source": "ENTER_URI",
+      "translated": "Введите адрес ссылки"
+    },
+    {
+      "source": "ENTER_DATETIME",
+      "translated": "Введите дату и время в формате чч.мм.гггг чч:мм"
+    },
+    {
+      "source": "ENTER_REMINDER_COMMENT",
+      "translated": "Введите комментарий для напоминания"
+    },
+    {
+      "source": "SELECT_TIMEZONE",
+      "translated": "Выберите часовой пояс"
+    }
+  ],
+  "countries": [
+    {
+      "source": "COUNTRIES",
+      "translated": "Страны"
+    }
+  ],
+  "batch_settings": [
+    {
+      "source": "UNLOADING_EXCEL",
+      "translated": "Выгрузка Excel"
+    },
+    {
+      "source": "UNLOADING_PARAMETERS",
+      "translated": "Параметры выгрузки"
+    },
+    {
+      "source": "FILE_FORMAT",
+      "translated": "Формат файла"
+    },
+    {
+      "source": "SELECT_FORMAT",
+      "translated": "Выберите формат, в котором вы хотите получить выгруженные данные"
+    },
+    {
+      "source": "UNLOADING",
+      "translated": "Выгрузка"
+    }
+  ],
+  "settings": [
+    {
+      "source": "UPLOAD_SETTINGS",
+      "translated": "Настройки выгрузки в Excel"
+    },
+    {
+      "source": "BASIC_SETTINGS",
+      "translated": "Основные настройки"
+    },
+    {
+      "source": "COLUMN_HEADERS",
+      "translated": "Заголовки столбцов"
+    },
+    {
+      "source": "ADD_HEADERS",
+      "translated": "Добавляет в начало документа строку с заголовками для каждого столбца"
+    },
+    {
+      "source": "COLUMNS",
+      "translated": "Столбцы"
+    },
+    {
+      "source": "SELECT_DATA",
+      "translated": "Выберите данные, которые вы хотите выгружать"
+    },
+    {
+      "source": "DEFAULT_FILE_FORMAT",
+      "translated": "Формат файла по-умолчанию"
+    },
+    {
+      "source": "SELECT_DEFAULT_FORMAT",
+      "translated": "Выберите формат по-умолчанию, в котором вы хотите получить выгруженные данные"
+    },
+    {
+      "source": "SAVE_SETTINGS",
+      "translated": "Сохранить настройки"
+    }
+  ],
+  "settings_errors": [
+    {
+      "source": "INVALID_FIELD_VALUE {field}",
+      "translated": "Некорректное значение поля {field}"
+    },
+    {
+      "source": "INVALID_VALUE",
+      "translated": "Некорректное значение"
+    },
+    {
+      "source": "LEAST_ONE_FIELD",
+      "translated": "Необходимо выбрать минимум одно поле для выгрузки"
+    },
+    {
+      "source": "NONEXISTENT_FIELD \"{field}\"",
+      "translated": "Выбрано несуществующее поле \"{field}\""
+    }
+  ],
+  "plugin-addon-enum-fields": [
+    {
+      "source": "Value can not be null",
+      "translated": "Значение не может быть пустым"
+    },
+    {
+      "source": "Incorrect value",
+      "translated": "Некорректное значение"
+    },
+    {
+      "source": "You should choose minimum of {option} option(s)",
+      "translated": "Вам следует выбрать минимум {option} опций"
+    },
+    {
+      "source": "You should choose less than {option} option(s)",
+      "translated": "Вам следует выбрать менее {option} вариантов."
+    },
+    {
+      "source": "Invalid value \"{value}\"",
+      "translated": "Недопустимое значение \"{value}\""
+    },
+    {
+      "source": "Address fields",
+      "translated": "Адрес"
+    },
+    {
+      "source": "Boolean fields",
+      "translated": "Логический (да/нет)"
+    },
+    {
+      "source": "Datetime fields",
+      "translated": "Дата"
+    },
+    {
+      "source": "Email fields",
+      "translated": "Email"
+    },
+    {
+      "source": "Enum fields",
+      "translated": "Список"
+    },
+    {
+      "source": "File fields",
+      "translated": "Файл"
+    },
+    {
+      "source": "Float fields",
+      "translated": "Дробное число"
+    },
+    {
+      "source": "Human name fields",
+      "translated": "Имя/Фамилия"
+    },
+    {
+      "source": "Image fields",
+      "translated": "Изображение"
+    },
+    {
+      "source": "Integer fields",
+      "translated": "Целое число"
+    },
+    {
+      "source": "Phone fields",
+      "translated": "Телефон"
+    },
+    {
+      "source": "String fields",
+      "translated": "Строка"
+    },
+    {
+      "source": "Uri fields",
+      "translated": "Uri"
+    },
+    {
+      "source": "User fields",
+      "translated": "Пользователь"
+    },
+    {
+      "source": "Reminder fields",
+      "translated": "Напоминание"
+    },
+    {
+      "source": "Timezone fields",
+      "translated": "Часовой пояс"
+    }
+  ]
+}

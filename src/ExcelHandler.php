@@ -331,8 +331,9 @@ class ExcelHandler implements BatchHandlerInterface
                 $number = (int) $item['value'] * $quantity;
                 $totalPrice = round($item['price'] / 100 * $quantity);
                     $row[] = "{$item['name']}/{$item['variation']}, {$number}"
-                        . Translator::get('process', 'шт.') .
-                    ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, {$totalPrice} {$currencyName}";
+                        . Translator::get('process', 'шт.') . ", "
+                        . (int) ($item['purchasePrice'] / 100)
+                        . " {$currencyName}, {$totalPrice} {$currencyName}";
                 }
             }
 
