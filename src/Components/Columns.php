@@ -52,7 +52,6 @@ class Columns
         foreach ($handledFields as $field) {
 
             switch ($field) {
-
                 case 'cart.items.quantity':
                 case 'cart.items.sku.item.name':
                     $tree = [
@@ -70,6 +69,7 @@ class Columns
                                 ]
                             ],
                             'promotions' => [
+                                'quantity',
                                 'items' => [
                                     'sku' => [
                                         'item' => [
@@ -84,6 +84,7 @@ class Columns
                     break;
 
                 case 'cart.cartInString':
+                case 'cart.cartInStringWithPromotionItems':
                     $tree = [
                         'cart' => [
                             'items' => [
@@ -105,6 +106,19 @@ class Columns
                                 'quantity',
                                 'promotion' => [
                                     'name'
+                                ],
+                                'items' => [
+                                    'sku' => [
+                                        'item' => [
+                                            'id',
+                                            'name'
+                                        ],
+                                        'variation' => [
+                                            'property'
+                                        ]
+                                    ],
+                                    'price',
+                                    'purchasePrice'
                                 ]
                             ]
                         ]
@@ -260,6 +274,7 @@ class Columns
             'cart.promotions.price' => Translator::get('fields', 'Корзина (цена акции)'),
             'cart.promotions.total' => Translator::get('fields', 'Корзина (сумма акций)'),
             'cart.cartInString' => Translator::get('fields', 'Корзина (состав одной строкой)'),
+            'cart.cartInStringWithPromotionItems' => Translator::get('fields', 'Корзина (состав одной строкой с разбивкой акций на товары)')
         ];
 
         $result = [];
