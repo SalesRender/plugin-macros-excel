@@ -26,22 +26,22 @@ class BatchForm_1 extends Form
         $format = new FormatValues();
         parent::__construct(
             Translator::get(
-                'options',
+                'batch_settings',
                 'UNLOADING_EXCEL'
             ),
             null,
             [
                 'options' => new FieldGroup(
-                    Translator::get('settings', 'UNLOADING_PARAMETERS'),
+                    Translator::get('batch_settings', 'UNLOADING_PARAMETERS'),
                     null,
                     [
                         'format' => new ListOfEnumDefinition(
                             Translator::get(
-                                'settings',
+                                'batch_settings',
                                 'FILE_FORMAT'
                             ),
                             Translator::get(
-                                'settings',
+                                'batch_settings',
                                 'SELECT_FORMAT'
                             ),
                             $format->getValidator(),
@@ -53,7 +53,7 @@ class BatchForm_1 extends Form
                 )
             ],
             Translator::get(
-                'settings',
+                'batch_settings',
                 'UNLOADING'
             )
         );

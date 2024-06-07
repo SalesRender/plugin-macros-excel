@@ -58,7 +58,16 @@ class Columns
                     $tree = [
                         'cart' => [
                             'items' => [
-                                'quantity'
+                                'quantity',
+                                'sku' => [
+                                    'item' => [
+                                        'name',
+                                        'units'
+                                    ],
+                                    'variation' => [
+                                        'property'
+                                    ]
+                                ]
                             ],
                             'promotions' => [
                                 'items' => [

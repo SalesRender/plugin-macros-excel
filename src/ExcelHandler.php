@@ -224,17 +224,19 @@ class ExcelHandler implements BatchHandlerInterface
     private function getRowFromCartItemsAndPromotionItems(array $cart, $path): array
     {
         $row = [];
-
         $cart = new Dot($cart);
+
 
         if ($cart->has('items')) {
             $array = $cart->get('items');
-
             foreach ($array as $arrayItem) {
                 $arrayItem = new Dot($arrayItem);
                 $row[] = $arrayItem->get(str_replace('cart.items.', '', $path), '');
             }
         }
+
+
+
         if ($cart->has('promotions')) {
             $quantity = $cart->get('promotions.0.quantity');
 
