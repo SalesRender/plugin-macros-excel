@@ -26,23 +26,23 @@ class BatchForm_1 extends Form
         $format = new FormatValues();
         parent::__construct(
             Translator::get(
-                'options',
-                'Выгрузка Excel'
+                'batch_settings',
+                'UNLOADING_EXCEL'
             ),
             null,
             [
                 'options' => new FieldGroup(
-                    Translator::get('settings', 'Параметры выгрузки'),
+                    Translator::get('batch_settings', 'UNLOADING_PARAMETERS'),
                     null,
                     [
                         'format' => new ListOfEnumDefinition(
                             Translator::get(
-                                'settings',
-                                'Формат файла'
+                                'batch_settings',
+                                'FILE_FORMAT'
                             ),
                             Translator::get(
-                                'settings',
-                                'Выберите формат, в котором вы хотите получить выгруженные данные'
+                                'batch_settings',
+                                'SELECT_FORMAT'
                             ),
                             $format->getValidator(),
                             $format,
@@ -53,8 +53,8 @@ class BatchForm_1 extends Form
                 )
             ],
             Translator::get(
-                'settings',
-                'Выгрузка'
+                'batch_settings',
+                'UNLOADING'
             )
         );
     }
