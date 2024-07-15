@@ -231,6 +231,10 @@
   ],
   "fields": [
     {
+      "source": "Корзина (кол-во товара общее)",
+      "translated": "Shopping cart (total quantity of goods)"
+    },
+    {
       "source": "Проект (ID)",
       "translated": "Project (ID)"
     },
