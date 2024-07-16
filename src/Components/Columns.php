@@ -53,6 +53,7 @@ class Columns
 
             switch ($field) {
                 case 'cart.items.quantity':
+                case 'cart.items.totalQuantity':
                 case 'cart.items.sku.item.name':
                     $tree = [
                         'cart' => [
@@ -262,6 +263,7 @@ class Columns
             'cart.items.sku.variation.number' => Translator::get('fields', 'Корзина (вариация товара, порядковый номер)'),
             'cart.items.sku.variation.property' => Translator::get('fields', 'Корзина (вариация товара, название)'),
             'cart.items.quantity' => Translator::get('fields', 'Корзина (кол-во товара)'),
+            'cart.items.totalQuantity' => Translator::get('fields', 'Корзина (кол-во товара общее)'),
             'cart.items.purchasePrice' => Translator::get('fields', 'Корзина (закупочная цена товара)'),
             'cart.items.price' => Translator::get('fields', 'Корзина (цена за ед. товара)'),
             'cart.items.total' => Translator::get('fields', 'Корзина (сумма товара)'),

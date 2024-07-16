@@ -180,6 +180,9 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.sku.item.name':
                                 $row[] =  implode(', ', $this->getRowFromCartItemsAndPromotionItems($order->get('cart'), $field));
                                 break;
+                            case 'cart.items.totalQuantity':
+                                $row[] =  $this->getRowTotalQuantity($order->get('cart'));
+                                break;
                             default:
                                 $row[] = $order->get($field);
                         }
@@ -207,6 +210,23 @@ class ExcelHandler implements BatchHandlerInterface
         $process->save();
     }
 
+    private function getRowTotalQuantity(array $cart): int
+    {
+        $cart = new Dot($cart);
+        $quantityCartItems = 0;
+        if ($cart->has('items')) {
+            $quantityCartItems = count($cart->get('items'));
+        }
+
+        if ($cart->has('promotions')) {
+            $promotions = $cart->get('promotions');
+        }
+        $quantityPromotionItems = 0;
+        foreach ($promotions as $promotion) {
+            $quantityPromotionItems += $promotion['quantity'] * count($promotion['items']);
+        }
+        return $quantityCartItems + $quantityPromotionItems;
+    }
     private function getRowFromCartItems(array $cart, string $path): array
     {
         $row = [];
@@ -235,30 +255,33 @@ class ExcelHandler implements BatchHandlerInterface
         }
 
         if ($cart->has('promotions')) {
-            $quantity = $cart->get('promotions.0.quantity');
-            $items = $cart->get('promotions.0.items');
-            $promotionItems = [];
-            foreach ($items as $item) {
-                $item = new Dot($item);
-                $id = $item->get('sku.item.id');
-                $name = $item->get('sku.item.name');
+            $promotions = $cart->get('promotions');
+            foreach ($promotions as $promotion) {
+                $items = $promotion['items'];
 
-                if (!array_key_exists($id, $promotionItems)) {
-                    $promotionItems[$id]['name'] = $name;
-                    $promotionItems[$id]['value'] = 1;
-                } else {
-                    $promotionItems[$id]['value'] += 1;
+                $promotionItems = [];
+                foreach ($items as $item) {
+                    $item = new Dot($item);
+                    $id = $item->get('sku.item.id');
+                    $name = $item->get('sku.item.name');
+                    if (!array_key_exists($id, $promotionItems)) {
+                        $promotionItems[$id]['name'] = $name;
+                        $promotionItems[$id]['value'] = 1;
+                    } else {
+                        $promotionItems[$id]['value'] += 1;
+                    }
                 }
-            }
 
-            foreach ($promotionItems as $item) {
-                if ($path === 'cart.items.quantity') {
-                    $row[] = $item['value'] * $quantity;
-                } elseif ($path === 'cart.items.sku.item.name') {
-                    $row[] = $item['name'];
+                foreach ($promotionItems as $item) {
+                    if ($path === 'cart.items.quantity') {
+                        $row[] = $item['value'] * $promotion['quantity'];
+                    } elseif ($path === 'cart.items.sku.item.name') {
+                        $row[] = $item['name'];
+                    }
                 }
             }
         }
+
         return $row;
     }
 
@@ -298,37 +321,40 @@ class ExcelHandler implements BatchHandlerInterface
                     (int)($promotion->get('total', 0) / 100) . " {$currencyName}";
             }
         } elseif ($path === 'cart.cartInStringWithPromotionItems') {
-            $quantity = $cart->get('promotions.0.quantity');
-            $items = $cart->get('promotions.0.items');
-            $promotionItems = [];
+            $promotions = $cart->get('promotions');
+            foreach ($promotions as $promotion) {
+                $items = $promotion['items'];
+                $promotionItems = [];
+                foreach ($items as $item) {
+                    $item = new Dot($item);
+                    $id = $item->get('sku.item.id');
+                    $variation = $item->get('sku.variation.property');
+                    $id = "$id/$variation";
+                    $name = $item->get('sku.item.name');
+                    $price = $item->get('price');
+                    $variation = $item->get('sku.variation.property');
+                    $purchasePrice = $item->get('purchasePrice');
 
-            foreach ($items as $item) {
-                $item = new Dot($item);
-                $id = $item->get('sku.item.id');
-                $name = $item->get('sku.item.name');
-                $price = $item->get('price');
-                $variation = $item->get('sku.variation.property');
-                $purchasePrice = $item->get('purchasePrice');
-
-                if (!array_key_exists($id, $promotionItems)) {
-                    $promotionItems[$id]['name'] = $name;
-                    $promotionItems[$id]['price'] = $price;
-                    $promotionItems[$id]['variation'] = $variation;
-                    $promotionItems[$id]['purchasePrice'] = $purchasePrice;
-                    $promotionItems[$id]['value'] = 1;
-                } else {
-                    $promotionItems[$id]['value'] += 1;
+                    if (!array_key_exists($id, $promotionItems)) {
+                        $promotionItems[$id]['name'] = $name;
+                        $promotionItems[$id]['price'] = $price;
+                        $promotionItems[$id]['variation'] = $variation;
+                        $promotionItems[$id]['purchasePrice'] = $purchasePrice;
+                        $promotionItems[$id]['value'] = 1;
+                    } else {
+                        $promotionItems[$id]['value'] += 1;
+                    }
                 }
-            }
 
-            foreach ($promotionItems as $item) {
-                $number = (int) $item['value'] * $quantity;
-                $totalPrice = round($item['price'] / 100 * $quantity);
+                foreach ($promotionItems as $item) {
+                    $number = (int) $item['value'] * $promotion['quantity'];
+                    $totalPrice = round($item['price'] / 100 * $promotion['quantity']);
                     $row[] = "{$item['name']}/{$item['variation']}, {$number}"
                         . Translator::get('process', 'шт.') .
-                    ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, {$totalPrice} {$currencyName}";
+                        ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, {$totalPrice} {$currencyName}";
                 }
             }
+        }
 
         return $row;
     }
