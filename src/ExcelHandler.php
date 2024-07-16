@@ -181,7 +181,7 @@ class ExcelHandler implements BatchHandlerInterface
                                 $row[] =  implode(', ', $this->getRowFromCartItemsAndPromotionItems($order->get('cart'), $field));
                                 break;
                             case 'cart.items.totalQuantity':
-                                $row[] =  implode(', ', $this->getRowTotalQuantity($order->get('cart')));
+                                $row[] =  $this->getRowTotalQuantity($order->get('cart'));
                                 break;
                             default:
                                 $row[] = $order->get($field);
@@ -210,7 +210,7 @@ class ExcelHandler implements BatchHandlerInterface
         $process->save();
     }
 
-    private function getRowTotalQuantity(array $cart): array
+    private function getRowTotalQuantity(array $cart): int
     {
         $cart = new Dot($cart);
         $quantityCartItems = 0;
@@ -225,7 +225,7 @@ class ExcelHandler implements BatchHandlerInterface
         foreach ($promotions as $promotion) {
             $quantityPromotionItems += $promotion['quantity'] * count($promotion['items']);
         }
-        return [$quantityCartItems + $quantityPromotionItems];
+        return $quantityCartItems + $quantityPromotionItems;
     }
     private function getRowFromCartItems(array $cart, string $path): array
     {
