@@ -183,6 +183,9 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.items.totalQuantity':
                                 $row[] =  $this->getRowTotalQuantity($order->get('cart'));
                                 break;
+                            case 'urlLinkOrder':
+                                $row[] = "https://{$_ENV['FRONTEND_URI']}/{$token->getPluginReference()->getCompanyId()}/work-mode/orders/{$order->get('id')}";
+                                break;
                             default:
                                 $row[] = $order->get($field);
                         }

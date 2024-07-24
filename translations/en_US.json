@@ -231,6 +231,10 @@
   ],
   "fields": [
     {
+      "source": "Ссылка на заказ",
+      "translated": "Link to the order"
+    },
+    {
       "source": "Корзина (кол-во товара общее)",
       "translated": "Shopping cart (total quantity of goods)"
     },
