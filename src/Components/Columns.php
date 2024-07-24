@@ -52,6 +52,9 @@ class Columns
         foreach ($handledFields as $field) {
 
             switch ($field) {
+                case 'urlLinkOrder':
+                    $tree = [];
+                    break;
                 case 'cart.items.quantity':
                 case 'cart.items.totalQuantity':
                 case 'cart.items.sku.item.name':
@@ -83,7 +86,6 @@ class Columns
                         ]
                     ];
                     break;
-
                 case 'cart.cartInString':
                 case 'cart.cartInStringWithPromotionItems':
                     $tree = [
@@ -150,6 +152,7 @@ class Columns
         }
 
         $fields[] = 'id';
+
         return ['orders' => $fields];
     }
 
@@ -237,6 +240,7 @@ class Columns
             'shipping.status' => Translator::get('fields', 'Отправка (Статус)'),
             'shipping.orders' => Translator::get('fields', 'Отправка (Количество заказов)'),
             'shipping.attachments' => Translator::get('fields', 'Отправка (Вложения)'),
+            'urlLinkOrder' => Translator::get('fields', 'Ссылка на заказ')
         ];
 
         $result = [];
