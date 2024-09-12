@@ -367,7 +367,7 @@ class ExcelHandler implements BatchHandlerInterface
         $query = <<<QUERY
 query {
   company {
-    pricing {
+    subscription {
       pricing {
         currency
       }
@@ -380,6 +380,6 @@ QUERY;
 
         $response = new Dot($response);
 
-        return $response->get('company.pricing.pricing.currency');
+        return $response->get('company.subscription.pricing.currency');
     }
 }

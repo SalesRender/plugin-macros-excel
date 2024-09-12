@@ -297,11 +297,13 @@ class Columns
     {
         $query = <<<QUERY
 query {
-  orderFieldsFetcher {
-    fields {
-      name
-      label
-      __typename
+  fields {
+    orderFieldsFetcher {
+      fields {
+        name
+        label
+        __typename
+      }
     }
   }
 }
@@ -311,7 +313,8 @@ QUERY;
         $response = $this->client->query($query, [])->getData();
 
         $groups = [];
-        foreach ($response['orderFieldsFetcher']['fields'] as $fieldData) {
+
+        foreach ($response['fields']['orderFieldsFetcher']['fields'] as $fieldData) {
             $name = $fieldData['name'];
             $label = $fieldData['label'];
             $typename = str_replace("Order", '', lcfirst($fieldData['__typename'] . 's'));
@@ -427,27 +430,27 @@ QUERY;
                         $groups[$key] = [];
                     }
                     $groups[$key] += [
-                        "data.{$typename}.[field.name={$name}].value.phone.raw" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.raw" => Translator::get(
                             'fields',
                             '{label} (исходный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.phone.international" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.international" => Translator::get(
                             'fields',
                             '{label} (международный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.phone.national" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.national" => Translator::get(
                             'fields',
                             '{label} (локальный)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.phone.country" => Translator::get(
+                        "data.{$typename}.[field.name={$name}].value.country" => Translator::get(
                             'fields',
                             '{label} (код страны)',
                             ['label' => $label]
                         ),
-                        "data.{$typename}.[field.name={$name}].value.duplicates" => Translator::get(
+                        "contacts.phones.[field.name={$name}].duplicates" => Translator::get(
                             'fields',
                             '{label} (дублей)',
                             ['label' => $label]
