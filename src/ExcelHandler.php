@@ -32,6 +32,7 @@ class ExcelHandler implements BatchHandlerInterface
 {
 
     private ApiClient $client;
+    private string $currency;
 
     public function __invoke(Process $process, Batch $batch)
     {
@@ -364,6 +365,10 @@ class ExcelHandler implements BatchHandlerInterface
 
     private function getCompanyCurrency(): string
     {
+        if (isset($this->currency)) {
+            return $this->currency;
+        }
+
         $query = <<<QUERY
 query {
   company {
@@ -377,9 +382,9 @@ query {
 QUERY;
 
         $response = $this->client->query($query, [])->getData();
-
         $response = new Dot($response);
 
-        return $response->get('company.subscription.pricing.currency');
+        $this->currency = $response->get('company.subscription.pricing.currency');
+        return $this->currency;
     }
 }
