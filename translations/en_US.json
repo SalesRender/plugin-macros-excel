@@ -751,6 +751,10 @@
       "translated": "Users"
     },
     {
+      "source": "Uri",
+      "translated": "Uri"
+    },
+    {
       "source": "{label} (роль, id)",
       "translated": "{label} (role, id)"
     },
