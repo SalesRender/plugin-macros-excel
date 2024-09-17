@@ -380,7 +380,7 @@ QUERY;
         $response = $this->client->query($query, [])->getData();
         $response = new Dot($response);
 
-        $this->currency = $response->get('company.subscription.pricing.currency');
+        $this->currency = $response->get('company.currency');
         return $this->currency;
     }
 }
