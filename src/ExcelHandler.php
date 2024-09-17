@@ -372,11 +372,7 @@ class ExcelHandler implements BatchHandlerInterface
         $query = <<<QUERY
 query {
   company {
-    subscription {
-      pricing {
-        currency
-      }
-    }
+    currency
   }
 }
 QUERY;
