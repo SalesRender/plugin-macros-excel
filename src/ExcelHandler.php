@@ -137,7 +137,7 @@ class ExcelHandler implements BatchHandlerInterface
                                 break;
                             case 'cart.promotions.price':
                             case 'cart.promotions.total':
-                                $pricing = $this->getRowFromCartPromotions($order->get('cart') ?? [], $field);
+                                $pricing = $this->getRowFromCartPromotions($order->get('cart'), $field);
                                 $pricing = array_map(function ($value) {
                                     return $value / 100;
                                 }, $pricing);
@@ -182,7 +182,7 @@ class ExcelHandler implements BatchHandlerInterface
                                 $row[] =  implode(', ', $this->getRowFromCartItemsAndPromotionItems($order->get('cart'), $field));
                                 break;
                             case 'cart.items.totalQuantity':
-                                $row[] =  $this->getRowTotalQuantity($order->get('cart'));
+                                $row[] =  $this->getRowTotalQuantity($order->get('cart')) ?? '';
                                 break;
                             case 'urlLinkOrder':
                                 $row[] = "https://{$_ENV['FRONTEND_URI']}/{$token->getPluginReference()->getCompanyId()}/work-mode/orders/{$order->get('id')}";
@@ -214,8 +214,12 @@ class ExcelHandler implements BatchHandlerInterface
         $process->save();
     }
 
-    private function getRowTotalQuantity(array $cart): int
+    private function getRowTotalQuantity(?array $cart): ?int
     {
+        if (is_null($cart)) {
+            return null;
+        }
+
         $cart = new Dot($cart);
         $quantityCartItems = 0;
         if ($cart->has('items')) {
@@ -231,10 +235,11 @@ class ExcelHandler implements BatchHandlerInterface
         }
         return $quantityCartItems + $quantityPromotionItems;
     }
-    private function getRowFromCartItems(array $cart, string $path): array
+
+    private function getRowFromCartItems(?array $cart, string $path): array
     {
         $row = [];
-        $cart = new Dot($cart);
+        $cart = new Dot($cart ?? []);
         if ($cart->has('items')) {
             $array = $cart->get('items');
             foreach ($array as $arrayItem) {
@@ -245,10 +250,11 @@ class ExcelHandler implements BatchHandlerInterface
 
         return $row;
     }
-    private function getRowFromCartItemsAndPromotionItems(array $cart, $path): array
+
+    private function getRowFromCartItemsAndPromotionItems(?array $cart, $path): array
     {
         $row = [];
-        $cart = new Dot($cart);
+        $cart = new Dot($cart ?? []);
         if ($cart->has('items')) {
             $array = $cart->get('items');
 
@@ -289,10 +295,10 @@ class ExcelHandler implements BatchHandlerInterface
         return $row;
     }
 
-    private function getRowFromCartPromotions(array $cart, string $path): array
+    private function getRowFromCartPromotions(?array $cart, string $path): array
     {
         $row = [];
-        $cart = new Dot($cart);
+        $cart = new Dot($cart ?? []);
         if ($cart->has('promotions')) {
             $array = $cart->get('promotions');
             foreach ($array as $arrayItem) {
@@ -304,10 +310,10 @@ class ExcelHandler implements BatchHandlerInterface
         return $row;
     }
 
-    private function getCartInOneString(array $cart, string $currencyName, $path): array
+    private function getCartInOneString(?array $cart, string $currencyName, $path): array
     {
         $row = [];
-        $cart = new Dot($cart);
+        $cart = new Dot($cart ?? []);
 
         foreach ($cart->get('items') as $item) {
             $item = new Dot($item);
