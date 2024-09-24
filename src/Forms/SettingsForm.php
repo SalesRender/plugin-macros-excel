@@ -17,6 +17,7 @@ use SalesRender\Plugin\Components\Form\FieldGroup;
 use SalesRender\Plugin\Components\Form\Form;
 use SalesRender\Plugin\Components\Translations\Translator;
 use SalesRender\Plugin\Instance\Excel\Components\Columns;
+use SalesRender\Plugin\Instance\Excel\Components\UpdateSettings;
 use SalesRender\Plugin\Instance\Excel\ValuesList\FormatValues;
 
 class SettingsForm extends Form
@@ -30,6 +31,9 @@ class SettingsForm extends Form
     {
         $columns = new Columns();
         $format = new FormatValues();
+
+        UpdateSettings::updatesOutdatedFields();
+
         parent::__construct(
             Translator::get(
                 'settings',
