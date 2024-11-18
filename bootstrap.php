@@ -47,8 +47,8 @@ Translator::config('ru_RU');
 # 3. Configure info about plugin
 Info::config(
     new PluginType(PluginType::MACROS),
-    fn() => Translator::get('info', 'Excel'),
-    fn() => Translator::get('info', 'Позволяет осуществлять выгрузку заказов в Excel'),
+    fn() => Translator::get('info', 'INFO'),
+    fn() => Translator::get('info', 'DESC'),
     new PluginPurpose(
         new MacrosPluginClass(MacrosPluginClass::CLASS_EXPORTER),
         new PluginEntity(PluginEntity::ENTITY_ORDER)

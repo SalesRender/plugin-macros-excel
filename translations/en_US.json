@@ -1,4 +1,14 @@
 {
+  "info": [
+    {
+      "source": "INFO",
+      "translated": "Export orders to Excel"
+    },
+    {
+      "source": "DESC",
+      "translated": "Allow export orders to Excel"
+    }
+  ],
   "process_errors": [
     {
       "source": "MAXIMUM_ORDERS_COUNT_EXCEEDED_ERROR {maximumOrdersCount}",

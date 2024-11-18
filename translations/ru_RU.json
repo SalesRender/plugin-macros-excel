@@ -1,4 +1,14 @@
 {
+  "info": [
+    {
+      "source": "INFO",
+      "translated": "Скачивание заказов в Excel"
+    },
+    {
+      "source": "DESC",
+      "translated": "Позволяет осуществлять выгрузку заказов в Excel"
+    }
+  ],
   "process_errors": [
     {
       "source": "MAXIMUM_ORDERS_COUNT_EXCEEDED_ERROR {maximumOrdersCount}",
