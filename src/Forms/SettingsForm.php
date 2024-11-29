@@ -17,6 +17,7 @@ use SalesRender\Plugin\Components\Form\FieldGroup;
 use SalesRender\Plugin\Components\Form\Form;
 use SalesRender\Plugin\Components\Translations\Translator;
 use SalesRender\Plugin\Instance\Excel\Components\Columns;
+use SalesRender\Plugin\Instance\Excel\ValuesList\DateTimeFormatValues;
 use SalesRender\Plugin\Instance\Excel\ValuesList\FormatValues;
 
 class SettingsForm extends Form
@@ -25,11 +26,13 @@ class SettingsForm extends Form
     const FIELDS_DEFAULT = ['id', 'createdAt', 'cart.total'];
     const SHOW_HEADERS_DEFAULT = true;
     const FORMAT_DEFAULT = ['xlsx'];
+    const DATE_TIME_FORMAT_DEFAULT = ['Y-m-d H:i:s (\U\T\C e)'];
 
     public function __construct()
     {
         $columns = new Columns();
         $format = new FormatValues();
+        $dateTimeformat = new DateTimeFormatValues();
         parent::__construct(
             Translator::get(
                 'settings',
@@ -121,6 +124,20 @@ class SettingsForm extends Form
                             new Limit(1, 1),
                             self::FORMAT_DEFAULT
                         ),
+                        'dateTimeformat' => new ListOfEnumDefinition(
+                            Translator::get(
+                                'settings',
+                                'Формат отображения даты и времени в файле'
+                            ),
+                            Translator::get(
+                                'settings',
+                                'Выберите формат, в котором будет отображаться дата и время в файле'
+                            ),
+                            $dateTimeformat->getValidator(),
+                            $dateTimeformat,
+                            new Limit(1, 1),
+                            self::DATE_TIME_FORMAT_DEFAULT
+                        )
                     ]
                 )
             ],

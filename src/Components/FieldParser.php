@@ -15,6 +15,8 @@ class FieldParser
 
     private const REGEXP = '~(.+)\.\[([a-z\d_\.]+)=([^\]]+)\]\.(.+)~';
 
+    const DATE_TIME_FIELD_LEFT_PART = 'data.dateTimeFields';
+
     private string $field;
 
     private ?string $left;

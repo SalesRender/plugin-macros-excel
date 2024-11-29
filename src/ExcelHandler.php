@@ -38,6 +38,7 @@ class ExcelHandler implements BatchHandlerInterface
     {
         $settings = Settings::find()->getData();
         $fields = $settings->get('main.fields', SettingsForm::FIELDS_DEFAULT);
+        $dateTimeFormat = $settings->get('main.dateTimeformat.0', (SettingsForm::DATE_TIME_FORMAT_DEFAULT)[0]);
 
         $token = $batch->getToken();
         $this->client = new ApiClient(
@@ -106,7 +107,14 @@ class ExcelHandler implements BatchHandlerInterface
                                 break;
                             }
                         }
+
+                        if (!empty($rowValue) && $field->getLeftPart() === FieldParser::DATE_TIME_FIELD_LEFT_PART) {
+                            $date = new DateTime($rowValue);
+                            $rowValue = $date->format($dateTimeFormat);
+                        }
+
                         $row[] = $rowValue;
+
                     } else {
                         switch ($field) {
                             case 'createdAt':
@@ -119,7 +127,7 @@ class ExcelHandler implements BatchHandlerInterface
                                     break;
                                 }
                                 $date = new DateTime($order->get($field));
-                                $row[] = $date->format('Y-m-d H:i:s (\U\T\C e)');
+                                $row[] = $date->format($dateTimeFormat);
                                 break;
                             case 'vat.price':
                             case 'lead.reward.amount':
