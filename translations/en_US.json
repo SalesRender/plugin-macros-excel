@@ -186,7 +186,11 @@
   "settings": [
     {
       "source": "UPLOAD_SETTINGS",
-      "translated": "Upload settings in Excel"
+      "translated": "Export to Excel settings"
+    },
+    {
+      "source": "SETTINGS_DESCRIPTION",
+      "translated": "Here you can adjust the order of fields which will be exported to Excel"
     },
     {
       "source": "BASIC_SETTINGS",
@@ -219,6 +223,14 @@
     {
       "source": "SAVE_SETTINGS",
       "translated": "Save Settings"
+    },
+    {
+      "source": "DEFAULT_DATE_TIME_FORMAT",
+      "translated": "Default file format"
+    },
+    {
+      "source": "SELECT_DEFAULT_DATE_TIME_FORMAT",
+      "translated": "Date/time format in an exported file"
     }
   ],
   "settings_errors": [
