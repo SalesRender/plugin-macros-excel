@@ -36,25 +36,25 @@ class SettingsForm extends Form
         parent::__construct(
             Translator::get(
                 'settings',
-                'Настройки выгрузки в Excel'
+                'UPLOAD_SETTINGS'
             ),
             Translator::get(
                 'settings',
-                'Здесь вы можете настроить и порядок набор столбцов, которые будут выгружены в Excel'
+                'SETTINGS_DESCRIPTION'
             ),
             [
                 'main' => new FieldGroup(
-                    Translator::get('settings', 'Основные настройки'),
+                    Translator::get('settings', 'BASIC_SETTINGS'),
                     null,
                     [
                         'headers' => new BooleanDefinition(
                             Translator::get(
                                 'settings',
-                                'Заголовки столбцов'
+                                'COLUMN_HEADERS'
                             ),
                             Translator::get(
                                 'settings',
-                                'Добавляет в начало документа строку с заголовками для каждого столбца'
+                                'ADD_HEADERS'
                             ),
                             function ($value, FieldDefinition $definition) {
                                 $errors = [];
@@ -72,11 +72,11 @@ class SettingsForm extends Form
                         'fields' => new ListOfEnumDefinition(
                             Translator::get(
                                 'settings',
-                                'Столбцы'
+                                'COLUMNS'
                             ),
                             Translator::get(
                                 'settings',
-                                'Выберите данные, которые вы хотите выгружать'
+                                'SELECT_DATA'
                             ),
                             function ($values) use ($columns) {
                                 if (!is_array($values)) {
@@ -113,11 +113,11 @@ class SettingsForm extends Form
                         'format' => new ListOfEnumDefinition(
                             Translator::get(
                                 'settings',
-                                'Формат файла по-умолчанию'
+                                'DEFAULT_FILE_FORMAT'
                             ),
                             Translator::get(
                                 'settings',
-                                'Выберите формат по-умолчанию, в котором вы хотите получить выгруженные данные'
+                                'SELECT_DEFAULT_FORMAT'
                             ),
                             $format->getValidator(),
                             $format,
@@ -127,11 +127,11 @@ class SettingsForm extends Form
                         'dateTimeformat' => new ListOfEnumDefinition(
                             Translator::get(
                                 'settings',
-                                'Формат отображения даты и времени в файле'
+                                'DEFAULT_DATE_TIME_FORMAT'
                             ),
                             Translator::get(
                                 'settings',
-                                'Выберите формат, в котором будет отображаться дата и время в файле'
+                                'Default file format'
                             ),
                             $dateTimeformat->getValidator(),
                             $dateTimeformat,
@@ -143,7 +143,7 @@ class SettingsForm extends Form
             ],
             Translator::get(
                 'settings',
-                'Сохранить настройки'
+                'SAVE_SETTINGS'
             )
         );
     }

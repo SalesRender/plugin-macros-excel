@@ -189,6 +189,10 @@
       "translated": "Настройки выгрузки в Excel"
     },
     {
+      "source": "SETTINGS_DESCRIPTION",
+      "translated": "Здесь вы можете настроить и порядок набор столбцов, которые будут выгружены в Excel"
+    },
+    {
       "source": "BASIC_SETTINGS",
       "translated": "Основные настройки"
     },
@@ -219,6 +223,14 @@
     {
       "source": "SAVE_SETTINGS",
       "translated": "Сохранить настройки"
+    },
+    {
+      "source": "DEFAULT_DATE_TIME_FORMAT",
+      "translated": "Формат отображения даты и времени в файле"
+    },
+    {
+      "source": "SELECT_DEFAULT_DATE_TIME_FORMAT",
+      "translated": "Выберите формат, в котором будет отображаться дата и время в файле"
     }
   ],
   "settings_errors": [
