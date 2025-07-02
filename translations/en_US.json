@@ -258,7 +258,7 @@
     },
     {
       "source": "Корзина (кол-во товара общее)",
-      "translated": "Shopping cart (total quantity of goods)"
+      "translated": "Cart (total quantity of items)"
     },
     {
       "source": "Проект (ID)",
@@ -282,15 +282,15 @@
     },
     {
       "source": "Дата создания",
-      "translated": "Date of creation"
+      "translated": "Creation date"
     },
     {
       "source": "Дата изменения",
-      "translated": "Date of change"
+      "translated": "Update date"
     },
     {
       "source": "Дата смены статуса",
-      "translated": "Date of status change"
+      "translated": "Status change date"
     },
     {
       "source": "Склад (ID)",
@@ -310,11 +310,11 @@
     },
     {
       "source": "Налог (включает доставку)",
-      "translated": "VAT (includes shipping)"
+      "translated": "VAT (including shipping)"
     },
     {
       "source": "Lead (ID вебмастера)",
-      "translated": "Lead (Webmaster's ID)"
+      "translated": "Lead (Webmaster ID)"
     },
     {
       "source": "Lead (email вебмастера)",
@@ -342,11 +342,11 @@
     },
     {
       "source": "Lead (холд до)",
-      "translated": "Lead (hold to)"
+      "translated": "Lead (hold)"
     },
     {
       "source": "Lead (завершен)",
-      "translated": "Lead (completed)"
+      "translated": "Lead (finished)"
     },
     {
       "source": "Lead (Внешний ID)",
@@ -454,67 +454,67 @@
     },
     {
       "source": "Статус доставки (Код)",
-      "translated": "Delivery Status (Code)"
+      "translated": "Logistics status (Code)"
     },
     {
       "source": "Статус доставки (Описание)",
-      "translated": "Delivery Status (Description)"
+      "translated": "Logistics status (Description)"
     },
     {
       "source": "Статус доставки (Время получения статуса)",
-      "translated": "Delivery status (Time of receipt of the status)"
+      "translated": "Logistics status (Status update time)"
     },
     {
       "source": "Статус доставки (Офис, почтовый индекс)",
-      "translated": "Delivery status (Office, Postal code)"
+      "translated": "Logistics status (Office, Postal code)"
     },
     {
       "source": "Статус доставки (Офис, регион)",
-      "translated": "Delivery status (Office, region)"
+      "translated": "Logistics status (Office, region)"
     },
     {
       "source": "Статус доставки (Офис, город)",
-      "translated": "Delivery status (Office, city)"
+      "translated": "Logistics status (Office, city)"
     },
     {
       "source": "Статус доставки (Офис, адрес)",
-      "translated": "Delivery status (Office, address)"
+      "translated": "Logistics status (Office, address)"
     },
     {
       "source": "Статус доставки (Офис, адрес (дополнительный))",
-      "translated": "Delivery status (Office, address (optional))"
+      "translated": "Logistics status (Office, address (optional))"
     },
     {
       "source": "Статус доставки (Офис, адрес (дом/строение))",
-      "translated": "Delivery status (Office, address (house/building))"
+      "translated": "Logistics status (Office, address (house/building))"
     },
     {
       "source": "Статус доставки (Офис, адрес (квартира))",
-      "translated": "Delivery status (Office, address (apartment))"
+      "translated": "Logistics status (Office, address (apartment))"
     },
     {
       "source": "Статус доставки (Офис, страна)",
-      "translated": "Delivery status (Office, country)"
+      "translated": "Logistics statuss (Office, country)"
     },
     {
       "source": "Статус доставки (Офис, контакты)",
-      "translated": "Delivery status (Office, contacts)"
+      "translated": "Logistics status (Office, contacts)"
     },
     {
       "source": "Отправка (ID)",
-      "translated": "Sending (ID)"
+      "translated": "Shipping (ID)"
     },
     {
       "source": "Отправка (Дата)",
-      "translated": "Sending (Date)"
+      "translated": "Shipping (Date)"
     },
     {
       "source": "Отправка (Плагин, ID)",
-      "translated": "Sending (Plugin, ID)"
+      "translated": "Shipping (Plugin, ID)"
     },
     {
       "source": "Отправка (Плагин, название)",
-      "translated": "Sending (Plugin, name)"
+      "translated": "Shipping (Plugin, name)"
     },
     {
       "source": "Отправка (Склад, ID)",
@@ -526,7 +526,7 @@
     },
     {
       "source": "Отправка (Статус)",
-      "translated": "Sending (Status)"
+      "translated": "Shipping (Status)"
     },
     {
       "source": "Отправка (Количество заказов)",
@@ -534,7 +534,7 @@
     },
     {
       "source": "Отправка (Вложения)",
-      "translated": "Sending (Attachments)"
+      "translated": "Shipping (Attachments)"
     },
     {
       "source": "Системные",
@@ -542,99 +542,99 @@
     },
     {
       "source": "Корзина (сумма)",
-      "translated": "Shopping cart (amount)"
+      "translated": "Cart (amount)"
     },
     {
       "source": "Корзина (id товара)",
-      "translated": "Shopping cart (product id)"
+      "translated": "Cart (item id)"
     },
     {
       "source": "Корзина (название товара)",
-      "translated": "Shopping cart (product name)"
+      "translated": "Cart (item name)"
     },
     {
       "source": "Корзина (описание товара)",
-      "translated": "Shopping cart (product description)"
+      "translated": "Cart (item description)"
     },
     {
       "source": "Корзина (вес товара)",
-      "translated": "Shopping cart (product weight)"
+      "translated": "Cart (item weight)"
     },
     {
       "source": "Корзина (габариты, длина товара)",
-      "translated": "Shopping cart (dimensions, length of the product)"
+      "translated": "Cart (dimensions, length of the item)"
     },
     {
       "source": "Корзина (габариты, ширина товара)",
-      "translated": "Shopping cart (dimensions, width of the product)"
+      "translated": "Cart (dimensions, width of the item)"
     },
     {
       "source": "Корзина (габариты, высота товара)",
-      "translated": "Shopping cart (dimensions, height of the product)"
+      "translated": "Cart (dimensions, height of the item)"
     },
     {
       "source": "Корзина (вариация товара, порядковый номер)",
-      "translated": "Shopping cart (product variation, serial number)"
+      "translated": "Cart (item variation, serial number)"
     },
     {
       "source": "Корзина (вариация товара, название)",
-      "translated": "Shopping cart (product variation, name)"
+      "translated": "Cart (item variation ID)"
     },
     {
       "source": "Корзина (кол-во товара)",
-      "translated": "Shopping cart (quantity of goods)"
+      "translated": "Cart (quantity of items)"
     },
     {
       "source": "Корзина (закупочная цена товара)",
-      "translated": "Shopping cart (purchase price of the product)"
+      "translated": "Cart (purchase price of the item)"
     },
     {
       "source": "Корзина (цена за ед. товара)",
-      "translated": "Shopping cart (price per unit product)"
+      "translated": "Cart (price per unit item)"
     },
     {
       "source": "Корзина (сумма товара)",
-      "translated": "Shopping cart (the amount of the product)"
+      "translated": "Cart (the amount of the item)"
     },
     {
       "source": "Корзина (id акции)",
-      "translated": "Shopping cart (promotion id)"
+      "translated": "Cart (promotion id)"
     },
     {
       "source": "Корзина (название акции)",
-      "translated": "Shopping cart (name of the promotion)"
+      "translated": "Cart (name of the promotion)"
     },
     {
       "source": "Корзина (габариты, длина акции)",
-      "translated": "Shopping cart (dimensions, length of the promotion)"
+      "translated": "Cart (dimensions, length of the promotion)"
     },
     {
       "source": "Корзина (габариты, ширина акции)",
-      "translated": "Shopping cart (dimensions, width of the promotion)"
+      "translated": "Cart (dimensions, width of the promotion)"
     },
     {
       "source": "Корзина (габариты, высота акции)",
-      "translated": "Shopping cart (dimensions, height of the promotion)"
+      "translated": "Cart (dimensions, height of the promotion)"
     },
     {
       "source": "Корзина (кол-во акций)",
-      "translated": "Shopping cart (number of shares)"
+      "translated": "Cart (number of promotions)"
     },
     {
       "source": "Корзина (цена акции)",
-      "translated": "Shopping cart (share price)"
+      "translated": "Cart (promotion price)"
     },
     {
       "source": "Корзина (сумма акций)",
-      "translated": "Shopping cart (amount of shares)"
+      "translated": "Cart (promotion total price)"
     },
     {
       "source": "Корзина (состав одной строкой)",
-      "translated": "Shopping cart (composition in one line)"
+      "translated": "Cart (composition in one line)"
     },
     {
       "source": "Корзина (состав одной строкой с разбивкой акций на товары)",
-      "translated": "Shopping cart (made up of one line with a breakdown of stocks into products)"
+      "translated": "Cart (composition in one line with division by promotions)"
     },
     {
       "source": "Корзина",
@@ -782,7 +782,7 @@
     },
     {
       "source": "{label} (роль, название)",
-      "translated": "{label} (role, title)"
+      "translated": "{label} (role, name)"
     }
   ],
   "plugin-addon-enum-fields": [
