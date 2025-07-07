@@ -202,7 +202,7 @@
     },
     {
       "source": "ADD_HEADERS",
-      "translated": "Adds a row with headings for each column to the beginning of the document"
+      "translated": "Adds a row with headings for each column to the top of the document"
     },
     {
       "source": "COLUMNS",
