@@ -329,7 +329,7 @@ QUERY;
 
                     $subfields = [
                         'postcode' => Translator::get('address_subfields', 'почтовый индекс'),
-//                        'country' => Translator::get('address_subfields', 'страна'), //todo countryCode -> country
+                        'country' => Translator::get('address_subfields', 'страна'),
                         'region' => Translator::get('address_subfields', 'регион'),
                         'city' => Translator::get('address_subfields', 'город'),
                         'address_1' => Translator::get('address_subfields', 'адрес 1'),
@@ -343,8 +343,12 @@ QUERY;
                     ];
 
                     foreach ($fieldData['subfields'] as $subfieldData) {
+                        $subfield = $subfieldData['subfield'];
+                        if ($subfield == 'countryCode') {
+                            $subfield = 'country';
+                        }
                         if (!empty($subfieldData['label'])) {
-                            $subfields[$subfieldData['subfield']] = $subfieldData['label'];
+                            $subfields[$subfield] = $subfieldData['label'];
                         }
                     }
 
