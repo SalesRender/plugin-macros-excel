@@ -1,340 +1,680 @@
 {
-  "info": [
-    {
-      "source": "INFO",
-      "translated": "Скачивание заказов в Excel"
-    },
-    {
-      "source": "DESC",
-      "translated": "Позволяет осуществлять выгрузку заказов в Excel"
-    }
-  ],
-  "process_errors": [
-    {
-      "source": "MAXIMUM_ORDERS_COUNT_EXCEEDED_ERROR {maximumOrdersCount}",
-      "translated": "Количество выбранных заказов превышает максимальное ({maximumOrdersCount})"
-    },
-    {
-      "source": "PROCESS_UNKNOWN_ERROR {errorMessage}",
-      "translated": "Во время обработки возникла неизвестная ошибка: {errorMessage}"
-    }
-  ],
-  "validation": [
-    {
-      "source": "NON_EMPTY",
-      "translated": "Поле не может быть пустым"
-    },
-    {
-      "source": "URI_VALIDATION_ERROR",
-      "translated": "Введите корректный uri"
-    },
-    {
-      "source": "EMAIL_VALIDATION_ERROR",
-      "translated": "Введите корректный email"
-    },
-    {
-      "source": "DATE_VALIDATION_ERROR",
-      "translated": "Введите корректую дату формата дд.мм.гггг"
-    },
-    {
-      "source": "REMINDER_DATE_ERROR",
-      "translated": "Дата должна быть больше текущей"
-    },
-    {
-      "source": "REMINDER_VALIDATION_ERROR",
-      "translated": "Введите корректую дату формата дд.мм.гггг чч:мм"
-    },
-    {
-      "source": "BOOLEAN_VALIDATION_ERROR",
-      "translated": "Введите корректное значение"
-    },
-    {
-      "source": "PHONE_VALIDATION_ERROR",
-      "translated": "Введите корректный номер телефона формата +XXXXXXXXXX"
-    }
-  ],
-  "reminder_fields": [
-    {
-      "source": "DATETIME_LABEL",
-      "translated": "Дата и время напоминания"
-    },
-    {
-      "source": "COMMENT_LABEL",
-      "translated": "Комментарий напоминания"
-    },
-    {
-      "source": "FIELD_NAME",
-      "translated": "Напоминание"
-    }
-  ],
-  "timezone_fields": [
-    {
-      "source": "TIMEZONE_LABEL",
-      "translated": "Часовой пояс"
-    },
-    {
-      "source": "FIELD_NAME",
-      "translated": "Часовой пояс"
-    }
-  ],
-  "address_fields": [
-    {
-      "source": "POSTCODE",
-      "translated": "Почтовый индекс"
-    },
-    {
-      "source": "REGION",
-      "translated": "Регион"
-    },
-    {
-      "source": "CITY",
-      "translated": "Город"
-    },
-    {
-      "source": "ADDRESS_1",
-      "translated": "Адрес 1"
-    },
-    {
-      "source": "ADDRESS_2",
-      "translated": "Адрес 2"
-    },
-    {
-      "source": "BUILDING",
-      "translated": "Дом"
-    },
-    {
-      "source": "APARTMENT",
-      "translated": "Квартира"
-    },
-    {
-      "source": "COUNTRY",
-      "translated": "Страна"
-    }
-  ],
-  "human_name_fields": [
-    {
-      "source": "FIRST_NAME",
-      "translated": "Имя"
-    },
-    {
-      "source": "LAST_NAME",
-      "translated": "Фамилия"
-    }
-  ],
-  "description_of_fields": [
-    {
-      "source": "ENTER_EMAIL",
-      "translated": "Введите email"
-    },
-    {
-      "source": "ENTER_PHONE",
-      "translated": "Введите номер телефона формата +7**********"
-    },
-    {
-      "source": "ENTER_DATE",
-      "translated": "Введите дату в формате дд.мм.гггг"
-    },
-    {
-      "source": "SELECT_FIELD",
-      "translated": "Выберите значение"
-    },
-    {
-      "source": "ENTER_URI",
-      "translated": "Введите адрес ссылки"
-    },
-    {
-      "source": "ENTER_DATETIME",
-      "translated": "Введите дату и время в формате чч.мм.гггг чч:мм"
-    },
-    {
-      "source": "ENTER_REMINDER_COMMENT",
-      "translated": "Введите комментарий для напоминания"
-    },
-    {
-      "source": "SELECT_TIMEZONE",
-      "translated": "Выберите часовой пояс"
-    }
-  ],
-  "countries": [
-    {
-      "source": "COUNTRIES",
-      "translated": "Страны"
-    }
-  ],
-  "batch_settings": [
-    {
-      "source": "UNLOADING_EXCEL",
-      "translated": "Выгрузка Excel"
-    },
-    {
-      "source": "UNLOADING_PARAMETERS",
-      "translated": "Параметры выгрузки"
-    },
-    {
-      "source": "FILE_FORMAT",
-      "translated": "Формат файла"
-    },
-    {
-      "source": "SELECT_FORMAT",
-      "translated": "Выберите формат, в котором вы хотите получить выгруженные данные"
-    },
-    {
-      "source": "UNLOADING",
-      "translated": "Выгрузка"
-    }
-  ],
-  "settings": [
-    {
-      "source": "UPLOAD_SETTINGS",
-      "translated": "Настройки выгрузки в Excel"
-    },
-    {
-      "source": "SETTINGS_DESCRIPTION",
-      "translated": "Здесь вы можете настроить и порядок набор столбцов, которые будут выгружены в Excel"
-    },
-    {
-      "source": "BASIC_SETTINGS",
-      "translated": "Основные настройки"
-    },
-    {
-      "source": "COLUMN_HEADERS",
-      "translated": "Заголовки столбцов"
-    },
-    {
-      "source": "ADD_HEADERS",
-      "translated": "Добавляет в начало документа строку с заголовками для каждого столбца"
-    },
-    {
-      "source": "COLUMNS",
-      "translated": "Столбцы"
-    },
-    {
-      "source": "SELECT_DATA",
-      "translated": "Выберите данные, которые вы хотите выгружать"
-    },
-    {
-      "source": "DEFAULT_FILE_FORMAT",
-      "translated": "Формат файла по-умолчанию"
-    },
-    {
-      "source": "SELECT_DEFAULT_FORMAT",
-      "translated": "Выберите формат по-умолчанию, в котором вы хотите получить выгруженные данные"
-    },
-    {
-      "source": "SAVE_SETTINGS",
-      "translated": "Сохранить настройки"
-    },
-    {
-      "source": "DEFAULT_DATE_TIME_FORMAT",
-      "translated": "Формат отображения даты и времени в файле"
-    },
-    {
-      "source": "SELECT_DEFAULT_DATE_TIME_FORMAT",
-      "translated": "Выберите формат, в котором будет отображаться дата и время в файле"
-    }
-  ],
-  "settings_errors": [
-    {
-      "source": "INVALID_FIELD_VALUE {field}",
-      "translated": "Некорректное значение поля {field}"
-    },
-    {
-      "source": "INVALID_VALUE",
-      "translated": "Некорректное значение"
-    },
-    {
-      "source": "LEAST_ONE_FIELD",
-      "translated": "Необходимо выбрать минимум одно поле для выгрузки"
-    },
-    {
-      "source": "NONEXISTENT_FIELD \"{field}\"",
-      "translated": "Выбрано несуществующее поле \"{field}\""
-    }
-  ],
-  "plugin-addon-enum-fields": [
-    {
-      "source": "Value can not be null",
-      "translated": "Значение не может быть пустым"
-    },
-    {
-      "source": "Incorrect value",
-      "translated": "Некорректное значение"
-    },
-    {
-      "source": "You should choose minimum of {option} option(s)",
-      "translated": "Вам следует выбрать минимум {option} опций"
-    },
-    {
-      "source": "You should choose less than {option} option(s)",
-      "translated": "Вам следует выбрать менее {option} вариантов."
-    },
-    {
-      "source": "Invalid value \"{value}\"",
-      "translated": "Недопустимое значение \"{value}\""
-    },
-    {
-      "source": "Address fields",
-      "translated": "Адрес"
-    },
-    {
-      "source": "Boolean fields",
-      "translated": "Логический (да/нет)"
-    },
-    {
-      "source": "Datetime fields",
-      "translated": "Дата"
-    },
-    {
-      "source": "Email fields",
-      "translated": "Email"
-    },
-    {
-      "source": "Enum fields",
-      "translated": "Список"
-    },
-    {
-      "source": "File fields",
-      "translated": "Файл"
-    },
-    {
-      "source": "Float fields",
-      "translated": "Дробное число"
-    },
-    {
-      "source": "Human name fields",
-      "translated": "Имя/Фамилия"
-    },
-    {
-      "source": "Image fields",
-      "translated": "Изображение"
-    },
-    {
-      "source": "Integer fields",
-      "translated": "Целое число"
-    },
-    {
-      "source": "Phone fields",
-      "translated": "Телефон"
-    },
-    {
-      "source": "String fields",
-      "translated": "Строка"
-    },
-    {
-      "source": "Uri fields",
-      "translated": "Uri"
-    },
-    {
-      "source": "User fields",
-      "translated": "Пользователь"
-    },
-    {
-      "source": "Reminder fields",
-      "translated": "Напоминание"
-    },
-    {
-      "source": "Timezone fields",
-      "translated": "Часовой пояс"
-    }
-  ]
+    "process": [
+        {
+            "source": "Ошибка обработки данных",
+            "translated": ""
+        },
+        {
+            "source": "шт.",
+            "translated": ""
+        }
+    ],
+    "fields": [
+        {
+            "source": "Проект (ID)",
+            "translated": ""
+        },
+        {
+            "source": "Проект (название)",
+            "translated": ""
+        },
+        {
+            "source": "Статус (ID)",
+            "translated": ""
+        },
+        {
+            "source": "Статус (название)",
+            "translated": ""
+        },
+        {
+            "source": "Статус (группа)",
+            "translated": ""
+        },
+        {
+            "source": "Дата создания",
+            "translated": ""
+        },
+        {
+            "source": "Дата изменения",
+            "translated": ""
+        },
+        {
+            "source": "Дата смены статуса",
+            "translated": ""
+        },
+        {
+            "source": "Склад (ID)",
+            "translated": ""
+        },
+        {
+            "source": "Склад (название)",
+            "translated": ""
+        },
+        {
+            "source": "Налог (сумма)",
+            "translated": ""
+        },
+        {
+            "source": "Налог (процент)",
+            "translated": ""
+        },
+        {
+            "source": "Налог (включает доставку)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (ID вебмастера)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (email вебмастера)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (ID оффера)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (метод вознаграждения)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (сумма вознаграждение)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (валюта вознаграждение)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (статус)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (холд до)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (завершен)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (Внешний ID)",
+            "translated": ""
+        },
+        {
+            "source": "Lead (Внешний тег)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (uri)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (referer)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP адрес)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP страна)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP город)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP часовой пояс)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP широта)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP долгота)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (IP дубликаты)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (utm_source)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (utm_medium)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (utm_campaign)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (utm_content)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (utm_term)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (subid_1)",
+            "translated": ""
+        },
+        {
+            "source": "Источник (subid_2)",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Трек-номер)",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Стоимость доставки)",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Время доставки (c))",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Время доставки (по))",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Тип доставки)",
+            "translated": ""
+        },
+        {
+            "source": "Накладная (Наложенный платеж)",
+            "translated": ""
+        },
+        {
+            "source": "Логистический плагин (ID)",
+            "translated": ""
+        },
+        {
+            "source": "Логистический плагин (Название)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Код)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Описание)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Время получения статуса)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, почтовый индекс)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, регион)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, город)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, адрес)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, адрес (дополнительный))",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, адрес (дом\/строение))",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, адрес (квартира))",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, страна)",
+            "translated": ""
+        },
+        {
+            "source": "Статус доставки (Офис, контакты)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (ID)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Дата)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Плагин, ID)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Плагин, название)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Склад, ID)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Склад, название)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Статус)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Количество заказов)",
+            "translated": ""
+        },
+        {
+            "source": "Отправка (Вложения)",
+            "translated": ""
+        },
+        {
+            "source": "Ссылка на заказ",
+            "translated": ""
+        },
+        {
+            "source": "Системные",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (сумма)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (id товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (название товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (описание товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (вес товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, длина товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, ширина товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, высота товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (вариация товара, порядковый номер)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (вариация товара, название)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (кол-во товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (кол-во товара общее)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (закупочная цена товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (цена за ед. товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (сумма товара)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (id акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (название акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, длина акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, ширина акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (габариты, высота акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (кол-во акций)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (цена акции)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (сумма акций)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (состав одной строкой)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина (состав одной строкой с разбивкой акций на товары)",
+            "translated": ""
+        },
+        {
+            "source": "Корзина",
+            "translated": ""
+        },
+        {
+            "source": "Адреса",
+            "translated": ""
+        },
+        {
+            "source": "Логический (да\/нет)",
+            "translated": ""
+        },
+        {
+            "source": "Дата и время",
+            "translated": ""
+        },
+        {
+            "source": "Email",
+            "translated": ""
+        },
+        {
+            "source": "{label} (дублей)",
+            "translated": ""
+        },
+        {
+            "source": "Списки",
+            "translated": ""
+        },
+        {
+            "source": "Файлы",
+            "translated": ""
+        },
+        {
+            "source": "{label} (исходное имя файла)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (размер в байтах)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (ссылка)",
+            "translated": ""
+        },
+        {
+            "source": "Дробные числа",
+            "translated": ""
+        },
+        {
+            "source": "Ф.И.О",
+            "translated": ""
+        },
+        {
+            "source": "{label} (имя)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (фамилия)",
+            "translated": ""
+        },
+        {
+            "source": "Изображения",
+            "translated": ""
+        },
+        {
+            "source": "{label} (большой размер)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (средний размер)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (маленький размер)",
+            "translated": ""
+        },
+        {
+            "source": "Целые числа",
+            "translated": ""
+        },
+        {
+            "source": "Телефоны",
+            "translated": ""
+        },
+        {
+            "source": "{label} (исходный)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (международный)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (локальный)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (код страны)",
+            "translated": ""
+        },
+        {
+            "source": "Строки",
+            "translated": ""
+        },
+        {
+            "source": "Uri",
+            "translated": ""
+        },
+        {
+            "source": "Пользователи",
+            "translated": ""
+        },
+        {
+            "source": "{label} (ID)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (email)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (роль, id)",
+            "translated": ""
+        },
+        {
+            "source": "{label} (роль, название)",
+            "translated": ""
+        }
+    ],
+    "address_subfields": [
+        {
+            "source": "почтовый индекс",
+            "translated": ""
+        },
+        {
+            "source": "регион",
+            "translated": ""
+        },
+        {
+            "source": "город",
+            "translated": ""
+        },
+        {
+            "source": "адрес 1",
+            "translated": ""
+        },
+        {
+            "source": "адрес 2",
+            "translated": ""
+        },
+        {
+            "source": "дом\/строение",
+            "translated": ""
+        },
+        {
+            "source": "квартира",
+            "translated": ""
+        },
+        {
+            "source": "доп.поле 1",
+            "translated": ""
+        },
+        {
+            "source": "доп.поле 2",
+            "translated": ""
+        },
+        {
+            "source": "доп.поле 3",
+            "translated": ""
+        }
+    ],
+    "batch_settings": [
+        {
+            "source": "UNLOADING_EXCEL",
+            "translated": "Выгрузка Excel"
+        },
+        {
+            "source": "UNLOADING_PARAMETERS",
+            "translated": "Параметры выгрузки"
+        },
+        {
+            "source": "FILE_FORMAT",
+            "translated": "Формат файла"
+        },
+        {
+            "source": "SELECT_FORMAT",
+            "translated": "Выберите формат, в котором вы хотите получить выгруженные данные"
+        },
+        {
+            "source": "UNLOADING",
+            "translated": "Выгрузка"
+        }
+    ],
+    "settings": [
+        {
+            "source": "UPLOAD_SETTINGS",
+            "translated": "Настройки выгрузки в Excel"
+        },
+        {
+            "source": "SETTINGS_DESCRIPTION",
+            "translated": "Здесь вы можете настроить и порядок набор столбцов, которые будут выгружены в Excel"
+        },
+        {
+            "source": "BASIC_SETTINGS",
+            "translated": "Основные настройки"
+        },
+        {
+            "source": "COLUMN_HEADERS",
+            "translated": "Заголовки столбцов"
+        },
+        {
+            "source": "ADD_HEADERS",
+            "translated": "Добавляет в начало документа строку с заголовками для каждого столбца"
+        },
+        {
+            "source": "COLUMNS",
+            "translated": "Столбцы"
+        },
+        {
+            "source": "SELECT_DATA",
+            "translated": "Выберите данные, которые вы хотите выгружать"
+        },
+        {
+            "source": "DEFAULT_FILE_FORMAT",
+            "translated": "Формат файла по-умолчанию"
+        },
+        {
+            "source": "SELECT_DEFAULT_FORMAT",
+            "translated": "Выберите формат по-умолчанию, в котором вы хотите получить выгруженные данные"
+        },
+        {
+            "source": "DEFAULT_DATE_TIME_FORMAT",
+            "translated": "Формат отображения даты и времени в файле"
+        },
+        {
+            "source": "Default file format",
+            "translated": "Формат файла выгрузки по умолчанию"
+        },
+        {
+            "source": "SAVE_SETTINGS",
+            "translated": "Сохранить настройки"
+        }
+    ],
+    "errors": [
+        {
+            "source": "Некорректное значение поля {field}",
+            "translated": ""
+        },
+        {
+            "source": "Некорректное значение",
+            "translated": ""
+        },
+        {
+            "source": "Необходимо выбрать минимум одно поле для выгрузки",
+            "translated": ""
+        },
+        {
+            "source": "Выбрано несуществующее поле \"{field}\"",
+            "translated": ""
+        },
+        {
+            "source": "Некорректный формат даты",
+            "translated": ""
+        },
+        {
+            "source": "Некорректный формат файла",
+            "translated": ""
+        }
+    ],
+    "format": [
+        {
+            "source": "Форматы отображения даты и времени в Excel",
+            "translated": ""
+        },
+        {
+            "source": "Microsoft Office",
+            "translated": ""
+        },
+        {
+            "source": "Другие",
+            "translated": ""
+        }
+    ]
 }
