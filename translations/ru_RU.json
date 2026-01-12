@@ -1,4 +1,14 @@
 {
+    "info": [
+        {
+            "source": "INFO",
+            "translated": "Скачивание заказов в Excel"
+        },
+        {
+            "source": "DESC",
+            "translated": "Позволяет осуществлять выгрузку заказов в Excel"
+        }
+    ]
     "batch_settings": [
         {
             "source": "UNLOADING_EXCEL",
