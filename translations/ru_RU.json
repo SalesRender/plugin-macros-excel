@@ -8,7 +8,7 @@
             "source": "DESC",
             "translated": "Позволяет осуществлять выгрузку заказов в Excel"
         }
-    ]
+    ],
     "batch_settings": [
         {
             "source": "UNLOADING_EXCEL",
