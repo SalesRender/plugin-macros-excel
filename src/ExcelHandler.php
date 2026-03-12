@@ -325,9 +325,10 @@ class ExcelHandler implements BatchHandlerInterface
 
         foreach ($cart->get('items') as $item) {
             $item = new Dot($item);
+            $purchasePriceString = !empty($item->get('purchasePrice', 0)) ? ((int) ($item->get('purchasePrice', 0) / 100)) .  " $currencyName, " : '';
             $row[] = "{$item->get('sku.item.name')}/{$item->get('sku.variation.property')}, " .
                 "{$item->get('quantity')} {$item->get('sku.item.units')}, " .
-                (int)($item->get('purchasePrice', 0) / 100) . " {$currencyName}, " .
+                $purchasePriceString .
                 (int)($item->get('total', 0) / 100) . " {$currencyName}";
         }
 
@@ -367,9 +368,9 @@ class ExcelHandler implements BatchHandlerInterface
                 foreach ($promotionItems as $item) {
                     $number = (int) $item['value'] * $promotion['quantity'];
                     $totalPrice = round($item['price'] / 100 * $promotion['quantity']);
+                    $purchasePriceString = !empty($item['purchasePrice']) ? ((int) ($item['purchasePrice'] / 100)) .  " $currencyName, " : '';
                     $row[] = "{$item['name']}/{$item['variation']}, {$number}"
-                        . Translator::get('process', 'шт.') .
-                        ", " . (int) ($item['purchasePrice'] / 100) . " {$currencyName}, {$totalPrice} {$currencyName}";
+                        . Translator::get('process', 'шт.') . ", " . $purchasePriceString . "{$totalPrice} {$currencyName}";
                 }
             }
         }
