@@ -239,7 +239,7 @@ class Columns
             'logistic.status.office.address.country' => Translator::get('fields', 'Статус доставки (Офис, страна)'),
             'logistic.status.office.phones' => Translator::get('fields', 'Статус доставки (Офис, контакты)'),
 
-            'logistic.tag' => Translator::get('fields', 'Логистический тэг'),
+            'logistic.tag' => Translator::get('fields', 'Логистический тег'),
 
             'shipping.id' => Translator::get('fields', 'Отправка (ID)'),
             'shipping.createdAt' => Translator::get('fields', 'Отправка (Дата)'),
