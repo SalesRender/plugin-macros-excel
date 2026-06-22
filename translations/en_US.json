@@ -253,6 +253,10 @@
             "translated": "Logistics status (Description)"
         },
         {
+            "source": "Логистический тег",
+            "translated": "Logistics tag"
+        },
+        {
             "source": "Статус доставки (Время получения статуса)",
             "translated": "Logistics status (Status update time)"
         },
