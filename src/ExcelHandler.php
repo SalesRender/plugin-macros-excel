@@ -134,6 +134,19 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'cart.total':
                                 $row[] = (float)$order->get($field) / 100;
                                 break;
+                            case 'logistic.waybill.price':
+                                // shippingCost — в основных единицах (руб.), price — устаревшее
+                                // поле в мелких единицах (коп.) для старых заказов.
+                                $shippingCost = $order->get('logistic.waybill.shippingCost');
+                                $price = $order->get('logistic.waybill.price');
+                                if ($shippingCost !== null && $shippingCost !== '') {
+                                    $row[] = (float)$shippingCost;
+                                } elseif ($price !== null && $price !== '') {
+                                    $row[] = (float)$price / 100;
+                                } else {
+                                    $row[] = '';
+                                }
+                                break;
                             case 'cart.items.price':
                             case 'cart.items.total':
                             case 'cart.items.purchasePrice':
