@@ -137,6 +137,16 @@ class Columns
                         ]
                     ];
                     break;
+                case 'logistic.waybill.price':
+                    $tree = [
+                        'logistic' => [
+                            'waybill' => [
+                                'shippingCost',
+                                'price',
+                            ]
+                        ]
+                    ];
+                    break;
                 default:
                     $items = array_reverse(explode('.', $field));
                     $tree = [];
