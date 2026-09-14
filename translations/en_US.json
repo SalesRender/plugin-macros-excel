@@ -6,7 +6,7 @@
         },
         {
             "source": "DESC",
-            "translated": "Allow export orders to Excel"
+            "translated": "The plugin allows exporting orders to files in xlsx, csv, and ods formats."
         }
     ],
     "process": [
@@ -640,7 +640,7 @@
         },
         {
             "source": "SETTINGS_DESCRIPTION",
-            "translated": "Here you can adjust the order of fields which will be exported to Excel"
+            "translated": "**Plugin settings.**\n\nThis plugin macros allows you to mass download orders from the CRM into Excel files (xlsx, csv, ods). You can use the plugin on the orders page — go to **Work Mode - Orders, and below the orders table you will see the button Export - Download orders to Excel.** Before using the plugin, fill in the settings below.\n\n1. Column Pass column headers.\nIf you want to pass order field names into column headers, leave the \"Yes\" value enabled.\n2. Columns.\nIn this field you can add all the columns with data available in the order card in the CRM. If you want to sort the columns, use the \"Sort elements\" button in the right corner of the field with the selected columns.\n3. Select the file format in which you want to download the data.\n4. Select the date format for the downloaded file.\n\n**The settings are ready!**\n\nIf you want to download orders using different templates, you can add several plugin macros with different settings and rename them for ease of use. To rename a plugin, click on its name on the page with all the plugin macros."
         },
         {
             "source": "BASIC_SETTINGS",
@@ -648,7 +648,7 @@
         },
         {
             "source": "COLUMN_HEADERS",
-            "translated": "Column headers"
+            "translated": "Pass column headers"
         },
         {
             "source": "ADD_HEADERS",

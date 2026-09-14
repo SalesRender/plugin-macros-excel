@@ -42,7 +42,7 @@ switch ($_ENV['DATABASE_TYPE'] ?? 'sqlite') {
 Connector::config(new Medoo($params));
 
 # 2. Set plugin default language
-Translator::config('ru_RU');
+Translator::config('en_US');
 
 # 3. Configure info about plugin
 Info::config(
