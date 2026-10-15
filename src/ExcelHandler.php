@@ -238,7 +238,17 @@ class ExcelHandler implements BatchHandlerInterface
     private function normalizeRow(array $row): array
     {
         return array_map(function ($value) {
-            return $value === null ? '' : $value;
+            if ($value === null) {
+                return '';
+            }
+
+            if (is_scalar($value) || $value instanceof \DateTimeInterface) {
+                return $value;
+            }
+
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            return $value === false ? '' : $value;
         }, $row);
     }
 
