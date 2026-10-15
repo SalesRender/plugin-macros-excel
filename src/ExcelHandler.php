@@ -215,7 +215,7 @@ class ExcelHandler implements BatchHandlerInterface
                 }
 
                 $writer->addRow(
-                    WriterEntityFactory::createRowFromArray($row)
+                    WriterEntityFactory::createRowFromArray($this->normalizeRow($row))
                 );
 
                 $process->handle();
@@ -233,6 +233,13 @@ class ExcelHandler implements BatchHandlerInterface
         $writer->close();
         $process->finish((string)$fileUri);
         $process->save();
+    }
+
+    private function normalizeRow(array $row): array
+    {
+        return array_map(function ($value) {
+            return $value === null ? '' : $value;
+        }, $row);
     }
 
     private function getRowTotalQuantity(?array $cart): ?int
