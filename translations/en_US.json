@@ -21,6 +21,14 @@
     ],
     "fields": [
         {
+            "source": "Последний звонок (Дата)",
+            "translated": "Last call (Date)"
+        },
+        {
+            "source": "Последний звонок (Попытка прозвона)",
+            "translated": "Last call (Attempt number)"
+        },
+        {
             "source": "Проект (ID)",
             "translated": "Project (ID)"
         },
