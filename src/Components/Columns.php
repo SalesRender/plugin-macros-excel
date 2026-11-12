@@ -181,6 +181,8 @@ class Columns
             'createdAt' => Translator::get('fields', 'Дата создания'),
             'updatedAt' => Translator::get('fields', 'Дата изменения'),
             'statusChangedAt' => Translator::get('fields', 'Дата смены статуса'),
+            'lastCallAttempt.attemptAt' => Translator::get('fields', 'Последний звонок (Дата)'),
+            'lastCallAttempt.attemptNumber' => Translator::get('fields', 'Последний звонок (Попытка прозвона)'),
 
             'warehouse.id' => Translator::get('fields', 'Склад (ID)'),
             'warehouse.name' => Translator::get('fields', 'Склад (название)'),

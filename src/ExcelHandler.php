@@ -120,6 +120,7 @@ class ExcelHandler implements BatchHandlerInterface
                             case 'createdAt':
                             case 'updatedAt':
                             case 'statusChangedAt':
+                            case 'lastCallAttempt.attemptAt':
                             case 'logistic.status.assignmentAt':
                             case 'shipping.createdAt':
                                 if ($order->get($field) === null) {
